@@ -1,5 +1,6 @@
 package yjh.devtoon.webtoon.presentation;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class WebtoonController {
      */
     @PostMapping
     public ResponseEntity<Void> registerWebtoon(
-            @RequestBody final WebtoonCreateRequest request
+            @RequestBody @Valid final WebtoonCreateRequest request
     ) {
         webtoonService.createWebtoon(request);
         return ResponseEntity.ok(null);
