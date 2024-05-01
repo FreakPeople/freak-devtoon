@@ -1,0 +1,8 @@
+### Send POST request with json body
+POST http://localhost:8080/v1/webtoons
+Content-Type: application/json
+
+{
+  "title" : "기기괴괴",
+  "writerName" : "오성대"
+}
