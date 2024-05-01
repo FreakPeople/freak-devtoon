@@ -7,7 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import yjh.devtoon.common.response.Response;
-import java.time.LocalDateTime;
+import yjh.devtoon.common.utils.DateFormatter;
 import java.util.List;
 
 @Slf4j
@@ -19,7 +19,7 @@ public class GlobalControllerAdvice {
         log.error("Error occurs {}", e.toString());
 
         ErrorData errorData = new ErrorData(
-                LocalDateTime.now(),
+                DateFormatter.getCurrentDateTime(),
                 e.getErrorCode().getMessage(),
                 e.getDetailMessage()
         );
@@ -37,7 +37,7 @@ public class GlobalControllerAdvice {
                 .toList();
 
         ErrorData errorData = new ErrorData(
-                LocalDateTime.now(),
+                DateFormatter.getCurrentDateTime(),
                 e.getClass().getSimpleName(),
                 errors
         );
