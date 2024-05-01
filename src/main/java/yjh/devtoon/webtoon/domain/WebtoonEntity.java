@@ -10,7 +10,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yjh.devtoon.common.BaseEntity;
+import yjh.devtoon.common.entity.BaseEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import java.time.LocalDateTime;
 

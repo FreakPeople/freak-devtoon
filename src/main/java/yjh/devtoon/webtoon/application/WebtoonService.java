@@ -3,6 +3,8 @@ package yjh.devtoon.webtoon.application;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yjh.devtoon.common.exception.DevtoonException;
+import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
@@ -24,7 +26,7 @@ public class WebtoonService {
     private void validateTitleDuplicated(String title) {
         webtoonRepository.findByTitle(title)
                 .ifPresent(webtoon -> {
-                    throw new IllegalArgumentException("해당 이름의 웹툰이 존재 합니다.");
+                    throw new DevtoonException(ErrorCode.CONFLICT, "title : '%s' 가 존재합니다.".formatted(title));
                 });
     }
 

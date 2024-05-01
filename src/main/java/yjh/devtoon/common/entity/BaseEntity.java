@@ -1,4 +1,4 @@
-package yjh.devtoon.common;
+package yjh.devtoon.common.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
@@ -20,4 +20,5 @@ public abstract class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated_at")
     protected LocalDateTime updatedAt;
+
 }

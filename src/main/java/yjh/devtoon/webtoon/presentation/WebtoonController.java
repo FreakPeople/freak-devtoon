@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import yjh.devtoon.common.response.Response;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 
@@ -20,10 +21,10 @@ public class WebtoonController {
      * 웹툰 등록
      */
     @PostMapping
-    public ResponseEntity<Void> registerWebtoon(
+    public ResponseEntity<Response> registerWebtoon(
             @RequestBody @Valid final WebtoonCreateRequest request
     ) {
         webtoonService.createWebtoon(request);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Response.success(null));
     }
 }
