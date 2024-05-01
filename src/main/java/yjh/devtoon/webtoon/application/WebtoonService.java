@@ -14,7 +14,18 @@ public class WebtoonService {
 
     @Transactional
     public void createWebtoon(final WebtoonCreateRequest request) {
+        validateTitleDuplicated(request.getTitle());
+
         WebtoonEntity webtoon = WebtoonEntity.create(request);
+
         webtoonRepository.save(webtoon);
     }
+
+    private void validateTitleDuplicated(String title) {
+        webtoonRepository.findByTitle(title)
+                .ifPresent(webtoon -> {
+                    throw new IllegalArgumentException("해당 이름의 웹툰이 존재 합니다.");
+                });
+    }
+
 }
