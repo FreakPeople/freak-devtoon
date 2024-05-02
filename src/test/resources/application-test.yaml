@@ -3,16 +3,14 @@ spring:
         name: devtoon
     config:
         activate:
-            on-profile: dev
+            on-profile: test
     datasource:
-        url: jdbc:mysql://${DEV_MYSQL_URL}
-        username: ${DEV_MYSQL_USER}
-        password: ${DEV_MYSQL_PASSWORD}
+        url: jdbc:mysql://${TEST_MYSQL_URL}
+        username: ${TEST_MYSQL_USER}
+        password: ${TEST_MYSQL_PASSWORD}
     jpa:
         properties:
             hibernate:
                 show_sql: true
                 format_sql: true
         show-sql: true
-
-

@@ -176,3 +176,4 @@ gradle-app.setting
 
 # MySQL 데이터 볼륨 관리
 /db/mysql/data
+/db/mysql_test/data
