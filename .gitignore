@@ -181,3 +181,6 @@ src/test/resources/application.yaml
 # MySQL 데이터 볼륨 관리
 /db/mysql/data
 /db/mysql_test/data
+
+# api 테스트 요청 파일 관리
+/api_test/**
