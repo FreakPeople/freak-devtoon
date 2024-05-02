@@ -13,7 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
-import yjh.devtoon.webtoon.domain.MembershipStatus;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,4 +59,17 @@ public class WebtoonViewerEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
+    public static WebtoonViewerEntity create(
+            final String name,
+            final String email,
+            final String password,
+            final MembershipStatus membershipStatus
+    ) {
+        WebtoonViewerEntity webtoonViewer = new WebtoonViewerEntity();
+        webtoonViewer.name = name;
+        webtoonViewer.email = email;
+        webtoonViewer.password = password;
+        webtoonViewer.membershipStatus = membershipStatus;
+        return webtoonViewer;
+    }
 }

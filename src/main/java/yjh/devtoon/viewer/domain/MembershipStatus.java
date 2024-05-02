@@ -1,4 +1,4 @@
-package yjh.devtoon.webtoon.domain;
+package yjh.devtoon.viewer.domain;
 
 import lombok.Getter;
 
