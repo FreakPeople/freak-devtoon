@@ -13,7 +13,7 @@ class WebtoonEntityTest {
 
     @DisplayName("[create() 테스트] : 웬툰 엔티티 생성 테스트")
     @Test
-    void create() {
+    void createWebtoon_successfully() {
         // given
         WebtoonCreateRequest webtoonCreateRequest = new WebtoonCreateRequest("title", "writer_name");
 
@@ -23,7 +23,7 @@ class WebtoonEntityTest {
 
     @DisplayName("[create() 테스트] : 웬툰 엔티티 생성 필드 테스트")
     @Test
-    void create_field() {
+    void createWebtoon_successfully_and_validateField() {
         // given
         WebtoonCreateRequest webtoonCreateRequest = new WebtoonCreateRequest("title", "writer_name");
 
