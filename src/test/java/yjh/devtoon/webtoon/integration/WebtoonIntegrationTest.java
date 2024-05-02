@@ -2,6 +2,7 @@ package yjh.devtoon.webtoon.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,7 +48,7 @@ public class WebtoonIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 등록 테스트")
-    class RegisterWebtoonTests{
+    class WebtoonRegisterTests{
 
         @DisplayName("웹툰 등록 성공")
         @Test
@@ -65,8 +66,7 @@ public class WebtoonIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
-                    .andExpect(jsonPath("$.data").value(NULL))
-                    .andReturn();
+                    .andExpect(jsonPath("$.data").value(NULL));
         }
 
         @DisplayName("웹툰 등록 실패 - 필드가 null인 경우")
@@ -83,8 +83,7 @@ public class WebtoonIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
-                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()))
-                    .andReturn();
+                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
         }
 
         @DisplayName("웹툰 등록 실패 - 필드가 공백인 경우")
@@ -101,8 +100,7 @@ public class WebtoonIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
-                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()))
-                    .andReturn();
+                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
         }
 
         @DisplayName("웹툰 등록 실패 - 필드 사이즈 범위가 [1~20]이 아닌경우")
@@ -119,8 +117,7 @@ public class WebtoonIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
-                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()))
-                    .andReturn();
+                    .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
         }
 
         @DisplayName("웹툰 등록 실패 - 중복된 웹툰 이름 존재")
@@ -158,11 +155,48 @@ public class WebtoonIntegrationTest {
                                         .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.statusMessage").value("실패"))
-                                .andExpect(jsonPath("$.data.status").value(HttpStatus.CONFLICT.value()))
-                                .andReturn();
+                                .andExpect(jsonPath("$.data.status").value(HttpStatus.CONFLICT.value()));
                     })
             );
         }
+
+    }
+
+    @Nested
+    @DisplayName("웹툰 조회 테스트")
+    class WebtoonRetrieveTests{
+
+        @DisplayName("웹툰 조회 성공")
+        @Test
+        void retrieveWebtoon_successfully() throws Exception {
+            // given
+            WebtoonEntity webtoonEntity = WebtoonEntity.builder()
+                    .title("쿠베라")
+                    .writerName("카레곰")
+                    .build();
+            WebtoonEntity saved = webtoonRepository.save(webtoonEntity);
+
+            // when
+            mockMvc.perform(get("/v1/webtoons/" + saved.getId())
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data.webtoonId").value(saved.getId()))
+                    .andExpect(jsonPath("$.data.title").value(saved.getTitle()))
+                    .andExpect(jsonPath("$.data.writerName").value(saved.getWriterName()));
+        }
+
+        @DisplayName("웹툰 조회 실패 - 존재 하지 않는 id로 조회한 경우")
+        @Test
+        void givenNotExistWebtoonId_whenRetrieveWebtoon_thenThrowException() throws Exception {
+            // when
+            mockMvc.perform(get("/v1/webtoons/99999999999999")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("실패"))
+                    .andExpect(jsonPath("$.data.status").value(HttpStatus.NOT_FOUND.value()));
+        }
+
     }
 
 }
