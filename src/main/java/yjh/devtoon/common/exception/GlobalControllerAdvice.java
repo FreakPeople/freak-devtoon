@@ -1,6 +1,7 @@
 package yjh.devtoon.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,7 @@ public class GlobalControllerAdvice {
         log.error("Error occurs {}", e.toString());
 
         ErrorData errorData = new ErrorData(
+                e.getErrorCode().getStatus().value(),
                 DateFormatter.getCurrentDateTime(),
                 e.getErrorCode().getMessage(),
                 e.getDetailMessage()
@@ -37,6 +39,7 @@ public class GlobalControllerAdvice {
                 .toList();
 
         ErrorData errorData = new ErrorData(
+                HttpStatus.BAD_REQUEST.value(),
                 DateFormatter.getCurrentDateTime(),
                 e.getClass().getSimpleName(),
                 errors
