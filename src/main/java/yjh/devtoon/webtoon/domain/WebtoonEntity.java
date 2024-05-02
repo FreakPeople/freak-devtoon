@@ -11,7 +11,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
-import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,6 +18,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "webtoon")
 public class WebtoonEntity extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "webtoon_no", nullable = false)
@@ -46,10 +46,10 @@ public class WebtoonEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    public static WebtoonEntity create(final WebtoonCreateRequest webtoonCreateRequest) {
+    public static WebtoonEntity create(final String title, final String writerName) {
         return WebtoonEntity.builder()
-                .title(webtoonCreateRequest.getTitle())
-                .writerName(webtoonCreateRequest.getWriterName())
+                .title(title)
+                .writerName(writerName)
                 .build();
     }
 

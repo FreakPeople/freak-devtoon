@@ -26,7 +26,7 @@ public class WebtoonService {
     public void createWebtoon(final WebtoonCreateRequest request) {
         validateTitleDuplicated(request.getTitle());
 
-        WebtoonEntity webtoon = WebtoonEntity.create(request);
+        WebtoonEntity webtoon = WebtoonEntity.create(request.getTitle(), request.getWriterName());
 
         webtoonRepository.save(webtoon);
     }
