@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.webtoon.constant.ErrorMessage;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import yjh.devtoon.webtoon.dto.response.WebtoonResponse;
@@ -18,7 +19,7 @@ public class WebtoonService {
 
     public WebtoonResponse retrieve(final Long id) {
         WebtoonEntity webtoon = webtoonRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, "id : '%d' 를 찾을 수 없습니다.".formatted(id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.ID_NOT_FOUND(id)));
         return WebtoonResponse.from(webtoon);
     }
 
@@ -34,7 +35,7 @@ public class WebtoonService {
     private void validateTitleDuplicated(String title) {
         webtoonRepository.findByTitle(title)
                 .ifPresent(webtoon -> {
-                    throw new DevtoonException(ErrorCode.CONFLICT, "title : '%s' 가 존재합니다.".formatted(title));
+                    throw new DevtoonException(ErrorCode.CONFLICT, ErrorMessage.TITLE_CONFLICT(title));
                 });
     }
 
