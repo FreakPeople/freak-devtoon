@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 
+@DisplayName("도메인 단위 테스트 [Webtoon]")
 class WebtoonEntityTest {
 
     @DisplayName("[create() 테스트] : 웬툰 엔티티 생성 테스트")
