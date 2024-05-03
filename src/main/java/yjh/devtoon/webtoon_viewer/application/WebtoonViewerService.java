@@ -2,6 +2,7 @@ package yjh.devtoon.webtoon_viewer.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.webtoon_viewer.constant.ErrorMessage;
@@ -18,6 +19,7 @@ public class WebtoonViewerService {
 
     private final WebtoonViewerRepository webtoonViewerRepository;
 
+    @Transactional
     public void register(final WebtoonViewerRegisterRequest request) {
         validateEmailDuplicated(request.getEmail());
 
@@ -45,6 +47,7 @@ public class WebtoonViewerService {
         return WebtoonViewerResponse.from(webtoonViewer);
     }
 
+    @Transactional
     public void changeMembershipStatus(final Long id, final MembershipStatusChangeRequest request) {
         WebtoonViewerEntity webtoonViewer = webtoonViewerRepository.findById(id)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
