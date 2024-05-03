@@ -72,4 +72,9 @@ public class WebtoonViewerEntity extends BaseEntity {
         webtoonViewer.membershipStatus = membershipStatus;
         return webtoonViewer;
     }
+
+    public void change(final MembershipStatus membershipStatus) {
+        this.membershipStatus = membershipStatus;
+    }
+
 }
