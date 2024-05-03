@@ -1,14 +1,14 @@
-package yjh.devtoon.viewer.application;
+package yjh.devtoon.webtoon_viewer.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
-import yjh.devtoon.viewer.constant.ErrorMessage;
-import yjh.devtoon.viewer.domain.MembershipStatus;
-import yjh.devtoon.viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.viewer.dto.request.WebtoonViewerRegisterRequest;
-import yjh.devtoon.viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.webtoon_viewer.constant.ErrorMessage;
+import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
+import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
+import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
 
 @RequiredArgsConstructor
 @Service

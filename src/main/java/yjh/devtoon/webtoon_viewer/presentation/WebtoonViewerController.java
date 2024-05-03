@@ -1,4 +1,4 @@
-package yjh.devtoon.viewer.presentation;
+package yjh.devtoon.webtoon_viewer.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.Response;
-import yjh.devtoon.viewer.application.WebtoonViewerService;
-import yjh.devtoon.viewer.dto.request.WebtoonViewerRegisterRequest;
+import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
+import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
 
-@RequestMapping("/v1/viewers")
+@RequestMapping("/v1/webtoon-viewers")
 @RequiredArgsConstructor
 @RestController
 public class WebtoonViewerController {

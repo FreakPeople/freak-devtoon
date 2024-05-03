@@ -1,4 +1,4 @@
-package yjh.devtoon.viewer.domain;
+package yjh.devtoon.webtoon_viewer.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;

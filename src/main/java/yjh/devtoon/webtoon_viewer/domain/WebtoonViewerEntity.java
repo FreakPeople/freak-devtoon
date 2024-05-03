@@ -1,4 +1,4 @@
-package yjh.devtoon.viewer.domain;
+package yjh.devtoon.webtoon_viewer.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

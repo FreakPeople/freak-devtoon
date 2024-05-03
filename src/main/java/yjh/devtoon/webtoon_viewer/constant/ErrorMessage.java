@@ -1,4 +1,4 @@
-package yjh.devtoon.viewer.constant;
+package yjh.devtoon.webtoon_viewer.constant;
 
 import lombok.AccessLevel;
 import lombok.Getter;

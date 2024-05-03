@@ -1,4 +1,4 @@
-package yjh.devtoon.viewer.dto.request;
+package yjh.devtoon.webtoon_viewer.dto.request;
 
 import lombok.Getter;
 
