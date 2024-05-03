@@ -19,7 +19,7 @@ public class WebtoonService {
 
     public WebtoonResponse retrieve(final Long id) {
         WebtoonEntity webtoon = webtoonRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.ID_NOT_FOUND(id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
         return WebtoonResponse.from(webtoon);
     }
 
@@ -35,7 +35,7 @@ public class WebtoonService {
     private void validateTitleDuplicated(String title) {
         webtoonRepository.findByTitle(title)
                 .ifPresent(webtoon -> {
-                    throw new DevtoonException(ErrorCode.CONFLICT, ErrorMessage.TITLE_CONFLICT(title));
+                    throw new DevtoonException(ErrorCode.CONFLICT, ErrorMessage.getTitleConflict(title));
                 });
     }
 

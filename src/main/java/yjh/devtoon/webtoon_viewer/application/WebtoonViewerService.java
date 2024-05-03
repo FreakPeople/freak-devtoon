@@ -32,7 +32,7 @@ public class WebtoonViewerService {
     private void validateEmailDuplicated(final String email) {
         webtoonViewerRepository.findByEmail(email)
                 .ifPresent(webtoonViewer -> {
-                    throw new DevtoonException(ErrorCode.CONFLICT, ErrorMessage.EMAIL_CONFLICT(email));
+                    throw new DevtoonException(ErrorCode.CONFLICT, ErrorMessage.getEmailConflict(email));
                 });
     }
 }

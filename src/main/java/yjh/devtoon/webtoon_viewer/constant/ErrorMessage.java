@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ErrorMessage {
 
-    public static final String EMAIL_CONFLICT = "email : '%s' 가 존재합니다.";
+    private static final String EMAIL_CONFLICT = "email : '%s' 가 존재합니다.";
 
-    public static String EMAIL_CONFLICT(final String email) {
+    public static String getEmailConflict(final String email) {
         return String.format(EMAIL_CONFLICT, email);
     }
 
