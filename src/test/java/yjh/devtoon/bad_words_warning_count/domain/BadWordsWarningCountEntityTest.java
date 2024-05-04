@@ -1,7 +1,8 @@
 package yjh.devtoon.bad_words_warning_count.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,4 +30,25 @@ class BadWordsWarningCountEntityTest {
         assertThatCode(() -> BadWordsWarningCountEntity.create(webtoonViewer)
         ).doesNotThrowAnyException();
     }
+
+    @DisplayName("[increase() 테스트] : 비속어 카운트 증가 테스트")
+    @Test
+    void increaseBadWordsWarningCount_successfully() {
+        // given
+        BadWordsWarningCountEntity badWordsWarningCount = new BadWordsWarningCountEntity(
+                1L,
+                5,
+                LocalDateTime.now()
+        );
+
+        // when
+        BadWordsWarningCountEntity result = badWordsWarningCount.increase();
+
+        // then
+        assertAll(
+                () -> assertThat(badWordsWarningCount.getCount()).isEqualTo(6),
+                () -> assertThat(result.getCount()).isEqualTo(6)
+        );
+    }
+
 }

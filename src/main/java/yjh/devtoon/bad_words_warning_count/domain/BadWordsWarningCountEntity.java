@@ -48,4 +48,9 @@ public class BadWordsWarningCountEntity extends BaseEntity {
                 .build();
     }
 
+    public BadWordsWarningCountEntity increase() {
+        this.count += 1;
+        return this;
+    }
+
 }
