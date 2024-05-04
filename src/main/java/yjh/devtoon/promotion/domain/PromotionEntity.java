@@ -51,6 +51,15 @@ public class PromotionEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
+    /**
+     * 프로모션 객체 생성 메서드
+     * : 주어진 설명, 시작 날짜, 종료 날짜를 사용하여 새로운 PromotionEntity 인스턴스를 생성합니다.
+     *
+     * @param description 프로모션에 대한 설명
+     * @param startDate   프로모션의 시작 날짜 및 시간
+     * @param endDate     프로모션의 종료 날짜 및 시간
+     * @return 새로 생성된 PromotionEntity 객체
+     */
     public static PromotionEntity create(
             final String description,
             final LocalDateTime startDate,
@@ -61,6 +70,17 @@ public class PromotionEntity extends BaseEntity {
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
+    }
+
+    /**
+     * 프로모션 엔티티의 삭제 시간을 기록하는 메서드
+     * : 실제 데이터베이스에서의 물리적 삭제는 이루어지지 않으며,
+     *   삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
+     *
+     * @param deletedAt 메서드가 호출되는 시점의 시간으로 삭제 처리를 기록
+     */
+    public void recordDeletion(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
 }
