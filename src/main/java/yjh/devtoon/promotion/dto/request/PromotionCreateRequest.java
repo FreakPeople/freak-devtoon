@@ -26,11 +26,11 @@ public class PromotionCreateRequest {
     private final String attributeValue;
 
     public PromotionCreateRequest(
-            String description,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            String attributeName,
-            String attributeValue
+            final String description,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate,
+            final String attributeName,
+            final String attributeValue
     ) {
         this.description = description;
         this.startDate = startDate;

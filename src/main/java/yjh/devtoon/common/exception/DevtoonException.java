@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class DevtoonException extends RuntimeException {
+
     private final ErrorCode errorCode;
     private final String detailMessage;
 

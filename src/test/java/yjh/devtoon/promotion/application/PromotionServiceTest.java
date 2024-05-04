@@ -1,5 +1,7 @@
 package yjh.devtoon.promotion.application;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
-
 import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThatCode;
 
 @ExtendWith(MockitoExtension.class)
 class PromotionServiceTest {
@@ -34,6 +33,7 @@ class PromotionServiceTest {
         @Test
         @DisplayName("프로모션 등록 요청 시 성공적으로 등록")
         void registerPromotion_successfully() {
+
             // given
             String description = "12월 크리스마스 프로모션입니다.";
             LocalDateTime startDate = LocalDateTime.parse("2024-05-10T00:00:00");
