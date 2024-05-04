@@ -25,10 +25,10 @@ public class PromotionService {
                 request.getEndDate()
         );
 
-        PromotionEntity savedPromotionEntity = promotionRepository.save(promotion);
+        PromotionEntity savedPromotion = promotionRepository.save(promotion);
 
         PromotionAttributeEntity attribute = PromotionAttributeEntity.create(
-                savedPromotionEntity,
+                savedPromotion,
                 request.getAttributeName(),
                 request.getAttributeValue()
         );
