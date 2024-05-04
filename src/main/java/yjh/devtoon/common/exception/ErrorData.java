@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ErrorData<T> {
+
     private final int status;
     private final String timestamp;
     private final String message;
