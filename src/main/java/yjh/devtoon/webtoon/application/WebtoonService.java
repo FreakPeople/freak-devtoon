@@ -8,7 +8,6 @@ import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.webtoon.constant.ErrorMessage;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
-import yjh.devtoon.webtoon.dto.response.WebtoonResponse;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
 
 @RequiredArgsConstructor
@@ -17,10 +16,9 @@ public class WebtoonService {
 
     private final WebtoonRepository webtoonRepository;
 
-    public WebtoonResponse retrieve(final Long id) {
-        WebtoonEntity webtoon = webtoonRepository.findById(id)
+    public WebtoonEntity retrieve(final Long id) {
+        return webtoonRepository.findById(id)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
-        return WebtoonResponse.from(webtoon);
     }
 
     @Transactional

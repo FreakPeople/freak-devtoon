@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.Response;
 import yjh.devtoon.webtoon.application.WebtoonService;
+import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import yjh.devtoon.webtoon.dto.response.WebtoonResponse;
 
@@ -39,8 +40,9 @@ public class WebtoonController {
     public ResponseEntity<Response> retrieve(
         @PathVariable final Long id
     ) {
-        WebtoonResponse webtoonResponse = webtoonService.retrieve(id);
-        return ResponseEntity.ok(Response.success(webtoonResponse));
+        WebtoonEntity webtoon = webtoonService.retrieve(id);
+        WebtoonResponse response = WebtoonResponse.from(webtoon);
+        return ResponseEntity.ok(Response.success(response));
     }
 
 }

@@ -10,7 +10,6 @@ import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
 import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import yjh.devtoon.webtoon_viewer.dto.request.MembershipStatusChangeRequest;
 import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
-import yjh.devtoon.webtoon_viewer.dto.response.WebtoonViewerResponse;
 import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
 
 @RequiredArgsConstructor
@@ -40,11 +39,9 @@ public class WebtoonViewerService {
                 });
     }
 
-    public WebtoonViewerResponse retrieve(final Long id) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerRepository.findById(id)
+    public WebtoonViewerEntity retrieve(final Long id) {
+        return webtoonViewerRepository.findById(id)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
-
-        return WebtoonViewerResponse.from(webtoonViewer);
     }
 
     @Transactional
