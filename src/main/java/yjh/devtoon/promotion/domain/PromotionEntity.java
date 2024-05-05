@@ -75,12 +75,23 @@ public class PromotionEntity extends BaseEntity {
     /**
      * 프로모션 엔티티의 삭제 시간을 기록하는 메서드
      * : 실제 데이터베이스에서의 물리적 삭제는 이루어지지 않으며,
-     *   삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
+     * 삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
      *
      * @param deletedAt 메서드가 호출되는 시점의 시간으로 삭제 처리를 기록
      */
     public void recordDeletion(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "PromotionEntity{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", deletedAt=" + deletedAt +
+                '}';
     }
 
 }
