@@ -41,13 +41,13 @@ public class WebtoonViewerService {
 
     public WebtoonViewerEntity retrieve(final Long id) {
         return webtoonViewerRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(id)));
     }
 
     @Transactional
     public void changeMembershipStatus(final Long id, final MembershipStatusChangeRequest request) {
         WebtoonViewerEntity webtoonViewer = webtoonViewerRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(id)));
 
         String targetStatus = request.getMembershipStatus();
         webtoonViewer.change(MembershipStatus.create(targetStatus));
