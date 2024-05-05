@@ -18,7 +18,7 @@ public class WebtoonService {
 
     public WebtoonEntity retrieve(final Long id) {
         return webtoonRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getIdNotFound(id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonNotFound(id)));
     }
 
     @Transactional
