@@ -5,9 +5,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
+import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,6 +28,7 @@ public class CookieWalletEntity extends BaseEntity {
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
+    @Builder
     public CookieWalletEntity(
             final Long webtoonViewerId,
             final Integer quantity,
@@ -34,6 +37,13 @@ public class CookieWalletEntity extends BaseEntity {
         this.webtoonViewerId = webtoonViewerId;
         this.quantity = quantity;
         this.deletedAt = deletedAt;
+    }
+
+    public static CookieWalletEntity create(final WebtoonViewerEntity webtoonViewerEntity) {
+        return CookieWalletEntity.builder()
+                .webtoonViewerId(webtoonViewerEntity.getId())
+                .quantity(0)
+                .build();
     }
 
     public void increase(final int quantity) {

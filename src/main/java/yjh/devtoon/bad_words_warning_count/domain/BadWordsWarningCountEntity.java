@@ -39,9 +39,7 @@ public class BadWordsWarningCountEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    public static BadWordsWarningCountEntity create(
-            final WebtoonViewerEntity webtoonViewerEntity
-    ) {
+    public static BadWordsWarningCountEntity create(final WebtoonViewerEntity webtoonViewerEntity) {
         return BadWordsWarningCountEntity.builder()
                 .webtoonViewerId(webtoonViewerEntity.getId())
                 .count(0)
