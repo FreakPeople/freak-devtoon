@@ -1,6 +1,7 @@
 package yjh.devtoon.webtoon_viewer.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -22,10 +23,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
+import yjh.devtoon.bad_words_warning_count.infrastructure.BadWordsWarningCountRepository;
+import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
+import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
 import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
 import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
 import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @DisplayName("통합 테스트 [WebtoonViewer]")
@@ -38,6 +44,12 @@ public class WebtoonViewerIntegrationTest {
 
     @Autowired
     private WebtoonViewerRepository webtoonViewerRepository;
+
+    @Autowired
+    private BadWordsWarningCountRepository badWordsWarningCountRepository;
+
+    @Autowired
+    private CookieWalletRepository cookieWalletRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -71,6 +83,40 @@ public class WebtoonViewerIntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
                     .andExpect(jsonPath("$.data").value(NULL));
+        }
+
+        @DisplayName("웹툰 독자 회원가입 성공 시 비속어 카운트 테이블, 쿠키 지갑 테이블도 함께 생성되어야 한다.")
+        @Test
+        void given_whenRegisterWebtoonViewer_thenCreateBadWordsWarningCount_and_CookieWallet() throws Exception {
+            // given
+            final WebtoonViewerRegisterRequest request = new WebtoonViewerRegisterRequest(
+                    VALID_FILED_TITLE,
+                    VALID_FILED_EMAIL,
+                    VALID_FILED_PASSWORD
+            );
+            final String requestBody = objectMapper.writeValueAsString(request);
+
+            // when
+            mockMvc.perform(post("/v1/webtoon-viewers")
+                            .content(requestBody)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data").value(NULL));
+
+            // then
+            Optional<WebtoonViewerEntity> saved = webtoonViewerRepository.findByEmail(VALID_FILED_EMAIL);
+
+            assertThat(saved).isNotEmpty();
+
+            Long savedWebtoonViewerId = saved.get().getId();
+            Optional<BadWordsWarningCountEntity> createdBadWordsWarningCount = badWordsWarningCountRepository.findById(savedWebtoonViewerId);
+            Optional<CookieWalletEntity> createdCookieWallet = cookieWalletRepository.findById(savedWebtoonViewerId);
+
+            assertAll(
+                    () -> assertThat(createdBadWordsWarningCount).isNotEmpty(),
+                    () -> assertThat(createdCookieWallet).isNotEmpty()
+            );
         }
 
         @DisplayName("웹툰 독자 회원가입 실패 - 필드 유효성 검사")
