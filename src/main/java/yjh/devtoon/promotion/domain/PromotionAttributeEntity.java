@@ -67,4 +67,15 @@ public class PromotionAttributeEntity extends BaseEntity {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "PromotionAttributeEntity{" +
+                "id=" + id +
+                ", promotionEntity=" + promotionEntity +
+                ", attributeName='" + attributeName + '\'' +
+                ", attributeValue='" + attributeValue + '\'' +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }
