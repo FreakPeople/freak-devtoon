@@ -48,4 +48,18 @@ public class GlobalControllerAdvice {
         return ResponseEntity.ok(Response.error(errorData));
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Response> InternalExceptionHandler(final Exception e) {
+        log.error("Error occurs {}", e.toString());
+
+        ErrorData errorData = new ErrorData(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                DateFormatter.getCurrentDateTime(),
+                HttpStatus.INTERNAL_SERVER_ERROR.name(),
+                e.getMessage()
+        );
+
+        return ResponseEntity.ok(Response.error(errorData));
+    }
+
 }
