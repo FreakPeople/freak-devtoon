@@ -12,9 +12,12 @@ import yjh.devtoon.policy.domain.BadWordsPolicyEntity;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.domain.factory.PolicyFactory;
 import yjh.devtoon.policy.dto.request.PolicyCreateRequest;
+import yjh.devtoon.policy.dto.response.RetrieveActivePoliciesResponse;
 import yjh.devtoon.policy.infrastructure.BadWordsPolicyRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
 import yjh.devtoon.promotion.constant.ErrorMessage;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -56,6 +59,18 @@ public class PolicyService {
         } else {
             throw new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Policy", policy));
         }
+
+    }
+
+    @Transactional(readOnly = true)
+    public RetrieveActivePoliciesResponse getActivePolicies() {
+
+        List<RetrieveActivePoliciesResponse.PolicyDetailsInfo> activePoliciesList = policyManager.getActivePolicies()
+                .stream()
+                .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(), p.getClass().getSimpleName(), p.toString()))
+                .collect(Collectors.toList());
+
+        return new RetrieveActivePoliciesResponse(activePoliciesList);
 
     }
 
