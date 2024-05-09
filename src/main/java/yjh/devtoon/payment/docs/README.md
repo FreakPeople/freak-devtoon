@@ -1,5 +1,6 @@
 ## 요구사항 정리
 
+### 1. 쿠키 결제
 - [x] 쿠키 결제 등록
   - 비즈니스 로직
     - [x] WebtoonViewerId 검증: 요청된 `webtoonViewerId`가 데이터베이스에 존재하는지 확인합니다.
@@ -14,5 +15,13 @@
     - 비즈니스 로직
         - [x] 주어진 `webtoonViewerId`에 해당하는 쿠키 결제 내역을 데이터베이스에서 조회합니다. 조회 결과가 없는 경우 예외를 발생시킵니다.
 
+### 2. 웹툰 미리보기 결제
+- [x] 웹툰 미리보기 결제 등록
+  - 비즈니스 로직
+    - [x] WebtoonViewerId 검증: 요청된 `webtoonViewerId`가 데이터베이스에 존재하는지 확인합니다.
+    - [x] WebtoonId 검증: 요청된 `webtoonId`가 데이터베이스에 존재하는지 확인합니다.
+    - [x] 웹툰 미리보기 1편당 차감 쿠키 개수 정책 조회: `CookiePolicyRepository`를 통해 현재 적용되는 웹툰 미리보기당 차감되어야 하는 쿠키 수를 조회합니다.
+    - [x] CookieWallet 조회 및 감소 처리: `CookieWalletEntity`를 조회하여, 결제된 쿠키 수만큼 쿠키 수량을 감소시킨 후 데이터베이스에 저장합니다.
+    - [x] WebtoonPaymentEntity 생성 및 저장: `WebtoonPaymentEntity`를 생성하여 요청된 정보와 함께 데이터베이스에 저장합니다.
 
   
