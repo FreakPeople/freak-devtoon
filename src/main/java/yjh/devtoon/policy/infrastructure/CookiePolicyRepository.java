@@ -20,4 +20,10 @@ public interface CookiePolicyRepository extends JpaRepository<CookiePolicyEntity
     @Query("SELECT c FROM CookiePolicyEntity c WHERE c.startDate <= :now AND (c.endDate IS NULL OR c.endDate >= :now)")
     List<CookiePolicyEntity> findActivePolicies(@Param("now") LocalDateTime now);
 
+    /**
+     * 현재 적용되는 cookieQuantityPerEpisode 조회합니다.
+     */
+    @Query("SELECT c.cookieQuantityPerEpisode FROM CookiePolicyEntity c WHERE c.endDate is null")
+    Integer findActiveCookieQuantityPerEpisode();
+
 }
