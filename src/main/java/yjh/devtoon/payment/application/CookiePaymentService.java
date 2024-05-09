@@ -54,18 +54,18 @@ public class CookiePaymentService {
 
 
         // 4. 쿠키 결제 가격 계산 - 요청한 쿠키 개수 * 현재 쿠키 가격 - 프로모션 할인율(회원등급,각종 프로모션 적용)
-        Integer totalDiscountRate = calculateTotalDiscountRate(activePromotions);
+        BigDecimal totalDiscountRate = calculateTotalDiscountRate(activePromotions);
         Integer quantity = request.getQuantity();
         BigDecimal totalPrice = activeCookiePrice.multiply(new BigDecimal(quantity));
-        Integer totalDiscountRatePercentage = 1 - totalDiscountRate;
-        BigDecimal discountedTotalPrice = totalPrice.multiply(new BigDecimal(totalDiscountRatePercentage));
+        BigDecimal netPaymentMultiplier = BigDecimal.ONE.subtract(totalDiscountRate);
+        BigDecimal discountedTotalPrice = totalPrice.multiply(netPaymentMultiplier);
 
         // 5. cookiePaymentEntity 생성 후 DB저장
         CookiePaymentEntity cookiePayment = CookiePaymentEntity.create(
                 webtoonViewerId,
                 quantity,
                 activeCookiePrice,
-                totalDiscountRatePercentage
+                totalDiscountRate
         );
         cookiePaymentRepository.save(cookiePayment);
 
@@ -83,20 +83,26 @@ public class CookiePaymentService {
                 ).getId();
     }
 
-    private Integer calculateTotalDiscountRate(List<PromotionEntity> promotions) {
-
+    private BigDecimal calculateTotalDiscountRate(List<PromotionEntity> promotions) {
         /**
          * TODO 현재 적용 가능한 프로모션 할인율 계산 로직 적용
          */
-        // 임시로 각 프로모션에 5% 할인율 적용
-        Integer totalDiscountRate = 0;
+        BigDecimal totalDiscountRate = BigDecimal.ZERO;
+
         for (PromotionEntity promotion : promotions) {
-            totalDiscountRate += 5;
+            totalDiscountRate = totalDiscountRate.add(new BigDecimal("5"));  // 각 프로모션에 대해 5% 추가
         }
-        totalDiscountRate /= 100;
-        System.out.println("할인율: " + totalDiscountRate);
+        totalDiscountRate = totalDiscountRate.divide(new BigDecimal("100")); // 0.05
 
         return totalDiscountRate;
+    }
+
+    /**
+     * 특정 회원 쿠키 결제 내역 조회
+     */
+    public CookiePaymentEntity retrieve(final Long webtoonViewerId) {
+        return cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 CookiePayment 내역", webtoonViewerId)));
     }
 
 }

@@ -35,7 +35,7 @@ public class CookiePaymentEntity extends BaseEntity {
     private BigDecimal cookiePrice;
 
     @Column(name = "total_discount_rate", nullable = false)
-    private Integer totalDiscountRate;
+    private BigDecimal totalDiscountRate;
 
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
@@ -46,7 +46,7 @@ public class CookiePaymentEntity extends BaseEntity {
             final Long webtoonViewerId,
             final Integer quantity,
             final BigDecimal cookiePrice,
-            final Integer totalDiscountRate,
+            final BigDecimal totalDiscountRate,
             final LocalDateTime deletedAt
     ) {
         this.cookiesPaymentId = cookiesPaymentId;
@@ -61,7 +61,7 @@ public class CookiePaymentEntity extends BaseEntity {
             final Long webtoonViewerId,
             final Integer quantity,
             final BigDecimal cookiePrice,
-            final Integer totalDiscountRate
+            final BigDecimal totalDiscountRate
     ) {
         return CookiePaymentEntity.builder()
                 .webtoonViewerId(webtoonViewerId)
