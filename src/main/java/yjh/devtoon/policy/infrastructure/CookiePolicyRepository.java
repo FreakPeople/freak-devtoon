@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface CookiePolicyRepository extends JpaRepository<CookiePolicyEntity, Long> {
 
@@ -15,5 +16,8 @@ public interface CookiePolicyRepository extends JpaRepository<CookiePolicyEntity
      */
     @Query("SELECT c.cookiePrice FROM CookiePolicyEntity c WHERE c.startDate <= :now AND c.endDate >= :now")
     BigDecimal activeCookiePrice(@Param("now") LocalDateTime now);
+
+    @Query("SELECT c FROM CookiePolicyEntity c WHERE c.startDate <= :now AND (c.endDate IS NULL OR c.endDate >= :now)")
+    List<CookiePolicyEntity> findActivePolicies(@Param("now") LocalDateTime now);
 
 }
