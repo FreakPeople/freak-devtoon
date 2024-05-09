@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
@@ -33,7 +34,7 @@ public class CookiePolicyEntity extends BaseEntity implements Policy {
 
     @Column(name = "cookie_quantity_per_episode", nullable = false)
     @Min(0)
-    private int cookieQuantityPerEpisode;
+    private Integer cookieQuantityPerEpisode;
 
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
@@ -49,6 +50,21 @@ public class CookiePolicyEntity extends BaseEntity implements Policy {
         this.cookieQuantityPerEpisode = Integer.parseInt(details.get("cookieQuantityPerEpisode").toString());
         this.startDate = LocalDateTime.parse(details.get("startDate").toString());
         this.endDate = details.containsKey("endDate") ? LocalDateTime.parse(details.get("endDate").toString()) : null;
+    }
+
+    @Builder
+    public CookiePolicyEntity(
+            final Long id,
+            final BigDecimal cookiePrice,
+            final Integer cookieQuantityPerEpisode,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate
+    ) {
+        this.id = id;
+        this.cookiePrice = cookiePrice;
+        this.cookieQuantityPerEpisode = cookieQuantityPerEpisode;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
     /**

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface PromotionRepository extends JpaRepository<PromotionEntity, Long> {
 
@@ -25,5 +26,13 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
             @Param("endDate") LocalDateTime endDate,
             Pageable pageable
     );
+
+    /**
+     * 현재 적용 가능한 모든 유효한 프로모션을 리스트로 반환합니다.
+     * : 현재 시간이 프로모션 적용시간 시작과 끝 사이여야한다.
+     */
+    @Query("SELECT p FROM PromotionEntity p WHERE p.startDate <= :now AND p.endDate >= :now")
+    List<PromotionEntity> activePromotions(@Param("now") LocalDateTime now);
+
 
 }
