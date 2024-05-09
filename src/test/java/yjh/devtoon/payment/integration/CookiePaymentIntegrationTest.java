@@ -1,5 +1,6 @@
 package yjh.devtoon.payment.integration;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
+import yjh.devtoon.payment.domain.CookiePaymentEntity;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
+import yjh.devtoon.payment.infrastructure.CookiePaymentRepository;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
 import yjh.devtoon.promotion.domain.PromotionEntity;
@@ -47,6 +50,9 @@ public class CookiePaymentIntegrationTest {
 
     @Autowired
     private CookieWalletRepository cookieWalletRepository;
+
+    @Autowired
+    private CookiePaymentRepository cookiePaymentRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -106,6 +112,43 @@ public class CookiePaymentIntegrationTest {
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"));
+
+        }
+
+        @DisplayName("특정 회원 쿠키 결제 내역 조회 성공")
+        @Test
+        void retrieveCookiePayment_forSpecificMember_successfully() throws Exception {
+
+            // given
+            // 1. webtoon_viewer 등록
+            WebtoonViewerEntity savedWebtoonViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                    .name("둘리")
+                    .email("email@gmail.ocm")
+                    .password("password")
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
+
+            // 2. cookie payment 등록
+            CookiePaymentEntity savedCookiePayment = cookiePaymentRepository.save(CookiePaymentEntity.builder()
+                    .cookiesPaymentId(1L)
+                    .webtoonViewerId(savedWebtoonViewer.getId())
+                    .quantity(5)
+                    .cookiePrice(BigDecimal.valueOf(200))
+                    .totalDiscountRate(BigDecimal.valueOf(0.1))
+                    .build());
+            Long requestId = savedWebtoonViewer.getId();
+
+            // when, then
+            mockMvc.perform(get("/v1/cookie-payments/" + requestId)
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(savedWebtoonViewer.getId()))
+                    .andExpect(jsonPath("$.data.quantity").value(5))
+                    .andExpect(jsonPath("$.data.totalPrice").value(1000))
+                    .andExpect(jsonPath("$.data.totalDiscountRate").value(0.1))
+                    .andExpect(jsonPath("$.data.paymentPrice").value(900));
 
         }
 
