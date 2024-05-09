@@ -24,4 +24,9 @@
     - [x] CookieWallet 조회 및 감소 처리: `CookieWalletEntity`를 조회하여, 결제된 쿠키 수만큼 쿠키 수량을 감소시킨 후 데이터베이스에 저장합니다.
     - [x] WebtoonPaymentEntity 생성 및 저장: `WebtoonPaymentEntity`를 생성하여 요청된 정보와 함께 데이터베이스에 저장합니다.
 
+
+- [x] 웹툰 미리보기 결제 내역 단건 조회
+  - 비즈니스 로직
+    - [x] 주어진 `webtoonViewerId`에 해당하는 웹툰 미리보기 결제 내역을 데이터베이스에서 조회합니다. 조회 결과가 없는 경우 예외를 발생시킵니다.
+
   

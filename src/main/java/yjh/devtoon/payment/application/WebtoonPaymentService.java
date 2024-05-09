@@ -75,4 +75,12 @@ public class WebtoonPaymentService {
                 ).getId();
     }
 
+    /**
+     * 특정 회원 웹툰 결제 내역 단건 조회
+     */
+    public WebtoonPaymentEntity retrieve(final Long webtoonViewerId) {
+        return webtoonPaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 WebtoonPayment 내역", webtoonViewerId)));
+    }
+
 }
