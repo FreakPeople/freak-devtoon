@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yjh.devtoon.common.response.Response;
+import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.promotion.application.PromotionService;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.dto.request.RetrieveActivePromotionsRequest;
@@ -32,29 +32,29 @@ public class PromotionController {
      * 프로모션 등록
      */
     @PostMapping
-    public ResponseEntity<Response> register(
+    public ResponseEntity<ApiReponse> register(
             @RequestBody @Valid final PromotionCreateRequest request
     ) {
         promotionService.register(request);
-        return ResponseEntity.ok(Response.success(null));
+        return ResponseEntity.ok(ApiReponse.success(null));
     }
 
     /**
      * 프로모션 삭제
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Response> softDelete(
+    public ResponseEntity<ApiReponse> softDelete(
             @PathVariable final Long id
     ) {
         PromotionSoftDeleteResponse response = promotionService.softDelete(id);
-        return ResponseEntity.ok(Response.success(response));
+        return ResponseEntity.ok(ApiReponse.success(response));
     }
 
     /**
      * 현재 적용 가능한 프로모션 전체 조회
      */
     @GetMapping("/now")
-    public ResponseEntity<Response<Page<RetrieveActivePromotionsResponse>>> retrieveActivePromotions(
+    public ResponseEntity<ApiReponse<Page<RetrieveActivePromotionsResponse>>> retrieveActivePromotions(
             @RequestBody final RetrieveActivePromotionsRequest request,
             Pageable pageable
     ) {
@@ -65,7 +65,7 @@ public class PromotionController {
             log.info("조회된 프로모션 없음.");
         }
 
-        return ResponseEntity.ok(Response.success(activePromotions));
+        return ResponseEntity.ok(ApiReponse.success(activePromotions));
     }
 
 }

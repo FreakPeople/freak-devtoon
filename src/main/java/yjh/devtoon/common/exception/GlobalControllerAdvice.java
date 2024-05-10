@@ -7,7 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import yjh.devtoon.common.response.Response;
+import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.common.utils.DateFormatter;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import java.util.List;
 public class GlobalControllerAdvice {
 
     @ExceptionHandler(DevtoonException.class)
-    public ResponseEntity<Response> applicationHandler(final DevtoonException e) {
+    public ResponseEntity<ApiReponse> applicationHandler(final DevtoonException e) {
         log.error("Error occurs {}", e.toString());
 
         ErrorData errorData = new ErrorData(
@@ -26,11 +26,11 @@ public class GlobalControllerAdvice {
                 e.getDetailMessage()
         );
 
-        return ResponseEntity.ok(Response.error(errorData));
+        return ResponseEntity.ok(ApiReponse.error(errorData));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Response> validationHandler(final MethodArgumentNotValidException e) {
+    public ResponseEntity<ApiReponse> validationHandler(final MethodArgumentNotValidException e) {
         log.error("Error occurs {}", e.toString());
 
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
@@ -45,11 +45,11 @@ public class GlobalControllerAdvice {
                 errors
         );
 
-        return ResponseEntity.ok(Response.error(errorData));
+        return ResponseEntity.ok(ApiReponse.error(errorData));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Response> InternalExceptionHandler(final Exception e) {
+    public ResponseEntity<ApiReponse> InternalExceptionHandler(final Exception e) {
         log.error("Error occurs {}", e.toString());
 
         ErrorData errorData = new ErrorData(
@@ -59,7 +59,7 @@ public class GlobalControllerAdvice {
                 e.getMessage()
         );
 
-        return ResponseEntity.ok(Response.error(errorData));
+        return ResponseEntity.ok(ApiReponse.error(errorData));
     }
 
 }
