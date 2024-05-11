@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.payment.application.CookiePaymentService;
-import yjh.devtoon.payment.domain.CookiePaymentEntity;
+import yjh.devtoon.payment.dto.CookiePaymentDetailDto;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
 import yjh.devtoon.payment.dto.response.CookiePaymentRetrieveResponse;
 
@@ -40,8 +40,8 @@ public class CookiePaymentController {
     public ResponseEntity<ApiReponse> retrieve(
             @PathVariable final Long webtoonViewerId
     ) {
-        CookiePaymentEntity cookiePayment = cookiePaymentService.retrieve(webtoonViewerId);
-        CookiePaymentRetrieveResponse response = CookiePaymentRetrieveResponse.from(cookiePayment);
+        CookiePaymentDetailDto cookiePaymentDetailDto = cookiePaymentService.retrieve(webtoonViewerId);
+        CookiePaymentRetrieveResponse response = CookiePaymentRetrieveResponse.from(cookiePaymentDetailDto);
         return ResponseEntity.ok(ApiReponse.success(response));
     }
 

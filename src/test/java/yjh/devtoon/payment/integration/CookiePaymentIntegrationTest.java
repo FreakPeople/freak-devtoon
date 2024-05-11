@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
+import yjh.devtoon.payment.domain.Price;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.CookiePaymentRepository;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
@@ -134,7 +135,7 @@ public class CookiePaymentIntegrationTest {
                     .cookiesPaymentId(1L)
                     .webtoonViewerId(savedWebtoonViewer.getId())
                     .quantity(5)
-                    .cookiePrice(BigDecimal.valueOf(200))
+                    .price(Price.of(200))
                     .totalDiscountRate(BigDecimal.valueOf(0.1))
                     .build());
             Long requestId = savedWebtoonViewer.getId();

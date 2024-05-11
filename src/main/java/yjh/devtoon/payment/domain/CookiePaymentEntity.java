@@ -1,6 +1,7 @@
 package yjh.devtoon.payment.domain;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,8 +32,9 @@ public class CookiePaymentEntity extends BaseEntity {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Embedded
     @Column(name = "cookie_price", nullable = false)
-    private BigDecimal cookiePrice;
+    private Price price;
 
     @Column(name = "total_discount_rate", nullable = false)
     private BigDecimal totalDiscountRate;
@@ -45,14 +47,14 @@ public class CookiePaymentEntity extends BaseEntity {
             final Long cookiesPaymentId,
             final Long webtoonViewerId,
             final Integer quantity,
-            final BigDecimal cookiePrice,
+            final Price price,
             final BigDecimal totalDiscountRate,
             final LocalDateTime deletedAt
     ) {
         this.cookiesPaymentId = cookiesPaymentId;
         this.webtoonViewerId = webtoonViewerId;
         this.quantity = quantity;
-        this.cookiePrice = cookiePrice;
+        this.price = price;
         this.totalDiscountRate = totalDiscountRate;
         this.deletedAt = deletedAt;
     }
@@ -60,15 +62,27 @@ public class CookiePaymentEntity extends BaseEntity {
     public static CookiePaymentEntity create(
             final Long webtoonViewerId,
             final Integer quantity,
-            final BigDecimal cookiePrice,
+            final Price price,
             final BigDecimal totalDiscountRate
     ) {
         return CookiePaymentEntity.builder()
                 .webtoonViewerId(webtoonViewerId)
                 .quantity(quantity)
-                .cookiePrice(cookiePrice)
+                .price(price)
                 .totalDiscountRate(totalDiscountRate)
                 .build();
+    }
+
+    public Price calculateTotalPrice() {
+        return this.price.calculateTotalPrice(this.quantity);
+    }
+
+    public Price calculatePaymentPrice() {
+        // 총 결제 가격 = 총 가격 * (1-totalDiscountRate)
+        Price totalPrice = calculateTotalPrice();
+        BigDecimal discountedPercentage = BigDecimal.ONE.subtract(this.totalDiscountRate);
+
+        return totalPrice.multiply(Price.of(discountedPercentage));
     }
 
 }
