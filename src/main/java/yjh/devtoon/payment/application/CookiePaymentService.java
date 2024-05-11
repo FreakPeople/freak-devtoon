@@ -11,6 +11,8 @@ import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
 import yjh.devtoon.payment.constant.ErrorMessage;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
+import yjh.devtoon.payment.domain.Price;
+import yjh.devtoon.payment.dto.CookiePaymentDetailDto;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.CookiePaymentRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
@@ -45,8 +47,8 @@ public class CookiePaymentService {
 
         // 2. cookie policy에서 현재 cookie 가격 조회
         LocalDateTime now = LocalDateTime.now();
-        BigDecimal activeCookiePrice = cookiePolicyRepository.activeCookiePrice(now);
-        log.info("현재 적용되는 쿠키 가격은 {}", activeCookiePrice);
+        Price activeCookie = Price.of(cookiePolicyRepository.activeCookiePrice(now));
+        log.info("현재 적용되는 쿠키 가격은 {}", activeCookie);
 
         // 3. 현재 활성 프로모션 조회
         List<PromotionEntity> activePromotions = promotionRepository.activePromotions(now);
@@ -56,15 +58,15 @@ public class CookiePaymentService {
         // 4. 쿠키 결제 가격 계산 - 요청한 쿠키 개수 * 현재 쿠키 가격 - 프로모션 할인율(회원등급,각종 프로모션 적용)
         BigDecimal totalDiscountRate = calculateTotalDiscountRate(activePromotions);
         Integer quantity = request.getQuantity();
-        BigDecimal totalPrice = activeCookiePrice.multiply(new BigDecimal(quantity));
+        Price totalPrice = activeCookie.calculateTotalPrice(quantity);
         BigDecimal netPaymentMultiplier = BigDecimal.ONE.subtract(totalDiscountRate);
-        BigDecimal discountedTotalPrice = totalPrice.multiply(netPaymentMultiplier);
+        Price discountedTotalPrice = totalPrice.multiply(Price.of(netPaymentMultiplier));
 
         // 5. cookiePaymentEntity 생성 후 DB저장
         CookiePaymentEntity cookiePayment = CookiePaymentEntity.create(
                 webtoonViewerId,
                 quantity,
-                activeCookiePrice,
+                activeCookie,
                 totalDiscountRate
         );
         cookiePaymentRepository.save(cookiePayment);
@@ -100,9 +102,19 @@ public class CookiePaymentService {
     /**
      * 특정 회원 쿠키 결제 내역 조회
      */
-    public CookiePaymentEntity retrieve(final Long webtoonViewerId) {
-        return cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+    public CookiePaymentDetailDto retrieve(final Long webtoonViewerId) {
+        CookiePaymentEntity cookiePayment = cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 CookiePayment 내역", webtoonViewerId)));
+
+        Price totalPrice = cookiePayment.calculateTotalPrice();
+        Price paymentPrice = cookiePayment.calculatePaymentPrice();
+
+        return new CookiePaymentDetailDto(
+                cookiePayment,
+                totalPrice,
+                paymentPrice
+        );
+
     }
 
 }
