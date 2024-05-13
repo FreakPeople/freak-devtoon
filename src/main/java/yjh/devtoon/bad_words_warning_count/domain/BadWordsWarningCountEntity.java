@@ -51,4 +51,13 @@ public class BadWordsWarningCountEntity extends BaseEntity {
         return this;
     }
 
+    @Override
+    public String toString() {
+        return "BadWordsWarningCountEntity{" +
+                "webtoonViewerId=" + webtoonViewerId +
+                ", count=" + count +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }

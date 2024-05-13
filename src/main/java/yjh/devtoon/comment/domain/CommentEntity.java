@@ -70,4 +70,16 @@ public class CommentEntity extends BaseEntity {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "CommentEntity{" +
+                "id=" + id +
+                ", webtoonId=" + webtoonId +
+                ", detailId=" + detailId +
+                ", webtoonViewerId=" + webtoonViewerId +
+                ", content='" + content + '\'' +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }

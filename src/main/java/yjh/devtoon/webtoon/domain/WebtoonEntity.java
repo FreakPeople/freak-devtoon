@@ -53,4 +53,14 @@ public class WebtoonEntity extends BaseEntity {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "WebtoonEntity{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", writerName='" + writerName + '\'' +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }

@@ -54,4 +54,13 @@ public class CookieWalletEntity extends BaseEntity {
         this.quantity -= quantity;
     }
 
+    @Override
+    public String toString() {
+        return "CookieWalletEntity{" +
+                "webtoonViewerId=" + webtoonViewerId +
+                ", quantity=" + quantity +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }
