@@ -77,4 +77,16 @@ public class WebtoonViewerEntity extends BaseEntity {
         this.membershipStatus = membershipStatus;
     }
 
+    @Override
+    public String toString() {
+        return "WebtoonViewerEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", membershipStatus=" + membershipStatus +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }

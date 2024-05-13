@@ -85,4 +85,16 @@ public class CookiePaymentEntity extends BaseEntity {
         return totalPrice.multiply(Price.of(discountedPercentage));
     }
 
+    @Override
+    public String toString() {
+        return "CookiePaymentEntity{" +
+                "cookiesPaymentId=" + cookiesPaymentId +
+                ", webtoonViewerId=" + webtoonViewerId +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", totalDiscountRate=" + totalDiscountRate +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }

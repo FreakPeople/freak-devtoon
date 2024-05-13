@@ -86,4 +86,11 @@ public class Price {
         return Objects.hashCode(amount);
     }
 
+    @Override
+    public String toString() {
+        return "Price{" +
+                "amount=" + amount +
+                '}';
+    }
+
 }

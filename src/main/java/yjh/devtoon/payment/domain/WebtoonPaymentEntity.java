@@ -70,4 +70,16 @@ public class WebtoonPaymentEntity extends BaseEntity {
                 .build();
     }
 
+    @Override
+    public String toString() {
+        return "WebtoonPaymentEntity{" +
+                "webtoonPaymentId=" + webtoonPaymentId +
+                ", webtoonViewerId=" + webtoonViewerId +
+                ", webtoonId=" + webtoonId +
+                ", webtoonDetailId=" + webtoonDetailId +
+                ", cookiePaymentAmount=" + cookiePaymentAmount +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
+
 }
