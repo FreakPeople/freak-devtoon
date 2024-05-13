@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
-import yjh.devtoon.promotion.dto.request.RetrieveActivePromotionsRequest;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import java.time.LocalDateTime;
@@ -120,22 +119,34 @@ public class PromotionIntegrationTest {
         private static Stream<Arguments> givenInvalidField_whenRegisterPromotion_thenThrowException() {
             return Stream.of(
                     // description 유효성 검사
-                    Arguments.of(null, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
-                    Arguments.of("", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
-                    Arguments.of(" ", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
+                    Arguments.of(null, LocalDateTime.now(), LocalDateTime.now().plusDays(1),
+                            "attributeName", "attributeValue"),
+                    Arguments.of("", LocalDateTime.now(), LocalDateTime.now().plusDays(1),
+                            "attributeName", "attributeValue"),
+                    Arguments.of(" ", LocalDateTime.now(), LocalDateTime.now().plusDays(1),
+                            "attributeName", "attributeValue"),
                     // startDate 유효성 검사
-                    Arguments.of("description", null, LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
-                    Arguments.of("description", LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
+                    Arguments.of("description", null, LocalDateTime.now().plusDays(1),
+                            "attributeName", "attributeValue"),
+                    Arguments.of("description", LocalDateTime.now().minusDays(1),
+                            LocalDateTime.now().plusDays(1), "attributeName", "attributeValue"),
                     // endDate 유효성 검사
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().minusDays(1), "attributeName", "attributeValue"),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().minusDays(1), "attributeName", "attributeValue"),
                     // attributeName 유효성 검사
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), null, "attributeValue"),
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "", "attributeValue"),
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), " ", "attributeValue"),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), null, "attributeValue"),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), "", "attributeValue"),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), " ", "attributeValue"),
                     // attributeValue 유효성 검사
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", null),
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", ""),
-                    Arguments.of("description", LocalDateTime.now(), LocalDateTime.now().plusDays(1), "attributeName", " ")
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), "attributeName", null),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), "attributeName", ""),
+                    Arguments.of("description", LocalDateTime.now(),
+                            LocalDateTime.now().plusDays(1), "attributeName", " ")
             );
 
         }
@@ -202,86 +213,122 @@ public class PromotionIntegrationTest {
     @DisplayName("프로모션 조회 테스트")
     class RetrieveActivePromotionsTests {
 
-        @DisplayName("요청된 기간 내 유효한 프로모션 전체 조회")
+        @DisplayName("현재 시간 기준 유효한 프로모션 전체 조회")
         @TestFactory
-        Stream<DynamicTest> givenTimePeriod_whenRetrievePromotions_thenAllActivePromotionsAreListed() {
-
-            final PromotionEntity[] savedPromotion1 = new PromotionEntity[1];
-            final PromotionEntity[] savedPromotion2 = new PromotionEntity[1];
-
-            final PromotionAttributeEntity[] savedPromotionAttribute1 = new PromotionAttributeEntity[1];
-            final PromotionAttributeEntity[] savedPromotionAttribute2 = new PromotionAttributeEntity[1];
-
+        Stream<DynamicTest> whenCurrentTimeGiven_thenListActivePromotionsPaged() {
             return Stream.of(
                     DynamicTest.dynamicTest("1. 프로모션1 저장 ->", () -> {
                         // given
                         PromotionEntity promotionEntity = PromotionEntity.builder()
                                 .description("여름 프로모션")
-                                .startDate(LocalDateTime.of(2024, 5, 4, 0, 0, 0))
+                                .startDate(LocalDateTime.of(2024, 5, 13, 23, 44, 0))
                                 .endDate(LocalDateTime.of(2024, 7, 1, 0, 0, 0))
                                 .build();
+                        PromotionEntity savedPromotion1 = promotionRepository.save(promotionEntity);
+                        assertNotNull(savedPromotion1.getId());
 
-                        savedPromotion1[0] = promotionRepository.save(promotionEntity);
-                        assertNotNull(savedPromotion1[0].getId());
-
-                        PromotionAttributeEntity promotionAttributeEntity = PromotionAttributeEntity.builder()
-                                .promotionEntity(savedPromotion1[0])
+                        PromotionAttributeEntity promotionAttributeEntity =
+                                PromotionAttributeEntity.builder()
+                                .promotionEntity(savedPromotion1)
                                 .attributeName("target-month")
                                 .attributeValue("6")
                                 .build();
-
-                        savedPromotionAttribute1[0] = promotionAttributeRepository.save(promotionAttributeEntity);
-                        assertNotNull(savedPromotionAttribute1[0].getId());
+                        promotionAttributeRepository.save(promotionAttributeEntity);
 
                     }), DynamicTest.dynamicTest("2. 프로모션2 저장 ->", () -> {
                         // given
                         PromotionEntity promotionEntity = PromotionEntity.builder()
-                                .description("여름 앵콜 프로모션")
-                                .startDate(LocalDateTime.of(2024, 5, 3, 0, 0, 0))
-                                .endDate(LocalDateTime.of(2024, 7, 3, 0, 0, 0))
+                                .description("스릴러 프로모션")
+                                .startDate(LocalDateTime.of(2024, 5, 13, 23, 44, 0))
+                                .endDate(LocalDateTime.of(2024, 7, 1, 0, 0, 0))
                                 .build();
+                        PromotionEntity savedPromotion2 = promotionRepository.save(promotionEntity);
+                        assertNotNull(savedPromotion2.getId());
 
-                        savedPromotion2[0] = promotionRepository.save(promotionEntity);
-                        assertNotNull(savedPromotion2[0].getId());
-
-                        PromotionAttributeEntity promotionAttributeEntity = PromotionAttributeEntity.builder()
-                                .promotionEntity(savedPromotion2[0])
+                        PromotionAttributeEntity promotionAttributeEntity =
+                                PromotionAttributeEntity.builder()
+                                .promotionEntity(savedPromotion2)
                                 .attributeName("target-genre")
-                                .attributeValue("스릴러")
+                                .attributeValue("thriller")
                                 .build();
-
-                        savedPromotionAttribute2[0] = promotionAttributeRepository.save(promotionAttributeEntity);
-                        assertNotNull(savedPromotionAttribute2[0].getId());
+                        promotionAttributeRepository.save(promotionAttributeEntity);
 
                     }), DynamicTest.dynamicTest("3. 유효한 프로모션 조회", () -> {
-                        // given
-                        final RetrieveActivePromotionsRequest request = new RetrieveActivePromotionsRequest(
-                                LocalDateTime.of(2024, 5, 2, 0, 0, 0),
-                                LocalDateTime.of(2024, 5, 5, 0, 0, 0)
-                        );
-                        final String requestBody = objectMapper.writeValueAsString(request);
-
                         // when, then
                         mockMvc.perform(get("/v1/promotions/now")
-                                        .content(requestBody)
                                         .contentType(MediaType.APPLICATION_JSON))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.statusMessage").value("성공"))
-                                .andExpect(jsonPath("$.data.content[0].promotionId").value(savedPromotion1[0].getId()))
-                                .andExpect(jsonPath("$.data.content[0].description").value("여름 프로모션"))
-                                .andExpect(jsonPath("$.data.content[0].startDate").value("2024-05-04T00:00:00"))
-                                .andExpect(jsonPath("$.data.content[0].endDate").value("2024-07-01T00:00:00"))
-                                .andExpect(jsonPath("$.data.content[0].attributeName").value("target-month"))
+                                .andExpect(jsonPath("$.data.content[0].description").value("여름 " +
+                                        "프로모션"))
+                                .andExpect(jsonPath("$.data.content[0].startDate").value("2024-05" +
+                                        "-13T23:44:00"))
+                                .andExpect(jsonPath("$.data.content[0].endDate").value("2024-07" +
+                                        "-01T00:00:00"))
+                                .andExpect(jsonPath("$.data.content[0].attributeName").value(
+                                        "target-month"))
                                 .andExpect(jsonPath("$.data.content[0].attributeValue").value("6"))
-                                .andExpect(jsonPath("$.data.content[1].promotionId").value(savedPromotion2[0].getId()))
-                                .andExpect(jsonPath("$.data.content[1].description").value("여름 앵콜 프로모션"))
-                                .andExpect(jsonPath("$.data.content[1].startDate").value("2024-05-03T00:00:00"))
-                                .andExpect(jsonPath("$.data.content[1].endDate").value("2024-07-03T00:00:00"))
-                                .andExpect(jsonPath("$.data.content[1].attributeName").value("target-genre"))
-                                .andExpect(jsonPath("$.data.content[1].attributeValue").value("스릴러"));
+                                .andExpect(jsonPath("$.data.content[1].description").value("스릴러 " +
+                                        "프로모션"))
+                                .andExpect(jsonPath("$.data.content[1].startDate").value("2024-05" +
+                                        "-13T23:44:00"))
+                                .andExpect(jsonPath("$.data.content[1].endDate").value("2024-07" +
+                                        "-01T00:00:00"))
+                                .andExpect(jsonPath("$.data.content[1].attributeName").value(
+                                        "target-genre"))
+                                .andExpect(jsonPath("$.data.content[1].attributeValue").value(
+                                        "thriller"));
                     })
             );
+        }
 
+        @DisplayName("현재 시간 기준 유효한 프로모션 조회 - 등록된 프로모션이 현재 시간에는 유효하지 않을 경우 빈 페이지 반환")
+        @TestFactory
+        Stream<DynamicTest> whenCurrentTimeGiven_AndNoPromotions_thenReturnEmptyPage() throws Exception {
+            return Stream.of(
+                    DynamicTest.dynamicTest("1. 과거 프로모션1 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotionEntity = PromotionEntity.builder()
+                                .description("여름 프로모션")
+                                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0, 0))
+                                .endDate(LocalDateTime.of(2024, 5, 1, 0, 0, 0))
+                                .build();
+                        PromotionEntity savedPromotion1 = promotionRepository.save(promotionEntity);
+
+                        PromotionAttributeEntity promotionAttributeEntity =
+                                PromotionAttributeEntity.builder()
+                                .promotionEntity(savedPromotion1)
+                                .attributeName("target-month")
+                                .attributeValue("6")
+                                .build();
+                        promotionAttributeRepository.save(promotionAttributeEntity);
+
+                    }), DynamicTest.dynamicTest("2. 과거 프로모션2 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotionEntity = PromotionEntity.builder()
+                                .description("스릴러 프로모션")
+                                .startDate(LocalDateTime.of(2024, 2, 1, 0, 0, 0))
+                                .endDate(LocalDateTime.of(2024, 5, 1, 0, 0, 0))
+                                .build();
+                        PromotionEntity savedPromotion2 = promotionRepository.save(promotionEntity);
+
+                        PromotionAttributeEntity promotionAttributeEntity =
+                                PromotionAttributeEntity.builder()
+                                .promotionEntity(savedPromotion2)
+                                .attributeName("target-genre")
+                                .attributeValue("thriller")
+                                .build();
+                        promotionAttributeRepository.save(promotionAttributeEntity);
+
+                    }), DynamicTest.dynamicTest("3. 유효한 프로모션 조회", () -> {
+                        // when, then
+                        mockMvc.perform(get("/v1/promotions/now")
+                                        .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.statusMessage").value("성공"))
+                                .andExpect(jsonPath("$.data.content").isEmpty());
+                    })
+            );
         }
 
     }
