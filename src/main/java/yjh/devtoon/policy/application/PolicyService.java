@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class PolicyService {
 
+    private static final String POLICY = "Policy";
+
     private final CookiePolicyRepository cookiePolicyRepository;
     private final BadWordsPolicyRepository badWordsPolicyRepository;
     private final PolicyManager policyManager;
@@ -57,7 +59,8 @@ public class PolicyService {
             badWordsPolicyRepository.save((BadWordsPolicyEntity) policy);
             log.info("비속어 정책 저장: {}", policy);
         } else {
-            throw new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Policy", policy));
+            throw new DevtoonException(ErrorCode.NOT_FOUND,
+                    ErrorMessage.getResourceNotFound(POLICY, policy));
         }
 
     }
@@ -65,9 +68,11 @@ public class PolicyService {
     @Transactional(readOnly = true)
     public RetrieveActivePoliciesResponse getActivePolicies() {
 
-        List<RetrieveActivePoliciesResponse.PolicyDetailsInfo> activePoliciesList = policyManager.getActivePolicies()
+        List<RetrieveActivePoliciesResponse.PolicyDetailsInfo> activePoliciesList =
+                policyManager.getActivePolicies()
                 .stream()
-                .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(), p.getClass().getSimpleName(), p.toString()))
+                .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(),
+                        p.getClass().getSimpleName(), p.toString()))
                 .collect(Collectors.toList());
 
         return new RetrieveActivePoliciesResponse(activePoliciesList);

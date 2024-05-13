@@ -25,6 +25,8 @@ import java.util.Optional;
 @Service
 public class PromotionService {
 
+    private static final String PROMOTION = "Promotion";
+
     private final PromotionRepository promotionRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
 
@@ -59,7 +61,8 @@ public class PromotionService {
     public PromotionSoftDeleteResponse softDelete(final Long id) {
 
         PromotionEntity promotion = promotionRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Promotion", id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(PROMOTION, id)));
 
         promotion.recordDeletion(LocalDateTime.now());
         PromotionEntity softDeletedPromotion = promotionRepository.save(promotion);
@@ -81,24 +84,29 @@ public class PromotionService {
             throw new DevtoonException(
                     ErrorCode.NOT_FOUND,
                     ErrorMessage.getResourceNotFound(
-                            "Promotion",
-                            String.format("from %s to %s", request.getStartDate(), request.getEndDate())
+                            PROMOTION,
+                            String.format("from %s to %s", request.getStartDate(),
+                                    request.getEndDate())
                     )
             );
         }
 
         // 유효한 프로모션 조회
-        Page<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(request.getStartDate(), request.getEndDate(), pageable);
+        Page<PromotionEntity> activePromotions =
+                promotionRepository.findActivePromotions(request.getStartDate(),
+                        request.getEndDate(), pageable);
         log.info("조회된 유효 프로모션 수: {}", activePromotions.getNumberOfElements());
 
         // 프로모션 엔티티를 응답 DTO로 변환
         return activePromotions.map(promotionEntity -> {
-            Optional<PromotionAttributeEntity> promotionAttributeEntity = promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
+            Optional<PromotionAttributeEntity> promotionAttributeEntity =
+                    promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
 
             PromotionAttributeEntity attributeEntity = promotionAttributeEntity.orElseThrow(() ->
                     new DevtoonException(
                             ErrorCode.NOT_FOUND,
-                            String.format("Attribute for promotion ID %s not found.", promotionEntity.getId())
+                            String.format("Attribute for promotion ID %s not found.",
+                                    promotionEntity.getId())
                     )
             );
             log.info("성공적으로 조회된 attribute: {} for promotion: {}", attributeEntity, promotionEntity);

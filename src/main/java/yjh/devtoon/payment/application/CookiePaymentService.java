@@ -28,6 +28,9 @@ import java.util.List;
 @Service
 public class CookiePaymentService {
 
+    private static final String WEBTOON_VIEWER = "WebtoonViewer";
+    private static final String COOKIE_PAYMENT = "CookiePayment";
+
     private final CookiePaymentRepository cookiePaymentRepository;
     private final WebtoonViewerRepository webtoonViewerRepository;
     private final CookiePolicyRepository cookiePolicyRepository;
@@ -81,7 +84,8 @@ public class CookiePaymentService {
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
         return webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("WebtoonViewerNo", webtoonViewerId))
+                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON_VIEWER,
+                        webtoonViewerId))
                 ).getId();
     }
 
@@ -103,8 +107,10 @@ public class CookiePaymentService {
      * 특정 회원 쿠키 결제 내역 조회
      */
     public CookiePaymentDetailDto retrieve(final Long webtoonViewerId) {
-        CookiePaymentEntity cookiePayment = cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 CookiePayment 내역", webtoonViewerId)));
+        CookiePaymentEntity cookiePayment =
+                cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(COOKIE_PAYMENT, webtoonViewerId)));
 
         Price totalPrice = cookiePayment.calculateTotalPrice();
         Price paymentPrice = cookiePayment.calculatePaymentPrice();

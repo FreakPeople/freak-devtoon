@@ -10,6 +10,8 @@ import yjh.devtoon.promotion.constant.ErrorMessage;
 
 public class PolicyFactory {
 
+    private static final String POLICY = "Policy";
+
     public static Policy registerPolicy(PolicyCreateRequest request) {
 
         switch (request.getType()) {
@@ -18,7 +20,8 @@ public class PolicyFactory {
             case "bad_words":
                 return new BadWordsPolicyEntity(request.getDetails());
             default:
-                throw new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Policy", request.getType()));
+                throw new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(POLICY, request.getType()));
         }
 
     }

@@ -22,6 +22,10 @@ import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
 @Service
 public class WebtoonPaymentService {
 
+    private static final String WEBTOON_VIEWER = "WebtoonViewer";
+    private static final String WEBTOON = "Webtoon";
+    private static final String WEBTOON_PAYMENT = "WebtoonPayment";
+
     private final WebtoonRepository webtoonRepository;
     private final WebtoonViewerRepository webtoonViewerRepository;
     private final CookiePolicyRepository cookiePolicyRepository;
@@ -43,7 +47,8 @@ public class WebtoonPaymentService {
         Long webtoonId = getWebtoonIdOrThrow(request.getWebtoonId());
 
         // 3. 웹툰 미리보기 1편당 차감 쿠키 개수 정책 조회
-        Integer activeCookieQuantityPerEpisode = cookiePolicyRepository.findActiveCookieQuantityPerEpisode();
+        Integer activeCookieQuantityPerEpisode =
+                cookiePolicyRepository.findActiveCookieQuantityPerEpisode();
 
         // 4. webtoonViewerId의 cookieWallet 조회 - cookieWallet 결제한 만큼 감소 후 DB 저장
         CookieWalletEntity cookieWallet = cookieWalletService.retrieve(webtoonViewerId);
@@ -64,14 +69,15 @@ public class WebtoonPaymentService {
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
         return webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("WebtoonViewerNo", webtoonViewerId))
+                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON_VIEWER,
+                        webtoonViewerId))
                 ).getId();
     }
 
     private Long getWebtoonIdOrThrow(final Long webtoonId) {
         return webtoonRepository.findById(webtoonId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("WebtoonNo", webtoonId))
+                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON, webtoonId))
                 ).getId();
     }
 
@@ -80,7 +86,8 @@ public class WebtoonPaymentService {
      */
     public WebtoonPaymentEntity retrieve(final Long webtoonViewerId) {
         return webtoonPaymentRepository.findByWebtoonViewerId(webtoonViewerId)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 WebtoonPayment 내역", webtoonViewerId)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(WEBTOON_PAYMENT, webtoonViewerId)));
     }
 
 }
