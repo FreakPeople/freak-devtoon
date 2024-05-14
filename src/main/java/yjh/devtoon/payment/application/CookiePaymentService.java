@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.cookie_wallet.application.CookieWalletService;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
@@ -81,7 +82,9 @@ public class CookiePaymentService {
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
         return webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("WebtoonViewerNo", webtoonViewerId))
+                        ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
+                        webtoonViewerId))
                 ).getId();
     }
 
@@ -103,8 +106,11 @@ public class CookiePaymentService {
      * 특정 회원 쿠키 결제 내역 조회
      */
     public CookiePaymentDetailDto retrieve(final Long webtoonViewerId) {
-        CookiePaymentEntity cookiePayment = cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("특정 회원 CookiePayment 내역", webtoonViewerId)));
+        CookiePaymentEntity cookiePayment =
+                cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+                        .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                                ErrorMessage.getResourceNotFound(ResourceType.COOKIE_PAYMENT,
+                                        webtoonViewerId)));
 
         Price totalPrice = cookiePayment.calculateTotalPrice();
         Price paymentPrice = cookiePayment.calculatePaymentPrice();

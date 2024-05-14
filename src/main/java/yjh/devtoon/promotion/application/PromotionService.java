@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.promotion.constant.ErrorMessage;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
@@ -55,7 +56,7 @@ public class PromotionService {
     public PromotionSoftDeleteResponse softDelete(final Long id) {
         PromotionEntity promotion = promotionRepository.findById(id)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
-                        ErrorMessage.getResourceNotFound("Promotion", id)));
+                        ErrorMessage.getResourceNotFound(ResourceType.PROMOTION, id)));
 
         promotion.recordDeletion(LocalDateTime.now());
         PromotionEntity softDeletedPromotion = promotionRepository.save(promotion);
@@ -101,7 +102,7 @@ public class PromotionService {
                 promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId())
                         .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
                                 ErrorMessage.getResourceNotFound(
-                                        "PromotionEntity",
+                                        ResourceType.PROMOTION,
                                         promotionEntity.getId()
                                 ))
                         );

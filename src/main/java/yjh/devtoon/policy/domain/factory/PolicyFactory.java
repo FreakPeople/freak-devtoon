@@ -2,6 +2,7 @@ package yjh.devtoon.policy.domain.factory;
 
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.policy.common.Policy;
 import yjh.devtoon.policy.domain.BadWordsPolicyEntity;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
@@ -18,7 +19,8 @@ public class PolicyFactory {
             case "bad_words":
                 return new BadWordsPolicyEntity(request.getDetails());
             default:
-                throw new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Policy", request.getType()));
+                throw new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(ResourceType.POLICY, request.getType()));
         }
 
     }
