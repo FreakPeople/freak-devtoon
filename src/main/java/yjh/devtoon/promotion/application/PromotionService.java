@@ -33,13 +33,11 @@ public class PromotionService {
      */
     @Transactional
     public void register(final PromotionCreateRequest request) {
-
         PromotionEntity promotion = PromotionEntity.create(
                 request.getDescription(),
                 request.getStartDate(),
                 request.getEndDate()
         );
-
         PromotionEntity savedPromotion = promotionRepository.save(promotion);
 
         PromotionAttributeEntity attribute = PromotionAttributeEntity.create(
@@ -47,9 +45,7 @@ public class PromotionService {
                 request.getAttributeName(),
                 request.getAttributeValue()
         );
-
         promotionAttributeRepository.save(attribute);
-
     }
 
     /**
@@ -57,7 +53,6 @@ public class PromotionService {
      */
     @Transactional
     public PromotionSoftDeleteResponse softDelete(final Long id) {
-
         PromotionEntity promotion = promotionRepository.findById(id)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound("Promotion", id)));
@@ -66,7 +61,6 @@ public class PromotionService {
         PromotionEntity softDeletedPromotion = promotionRepository.save(promotion);
 
         return PromotionSoftDeleteResponse.from(softDeletedPromotion);
-
     }
 
     /**
@@ -75,7 +69,7 @@ public class PromotionService {
      */
     @Transactional(readOnly = true)
     public Page<RetrieveActivePromotionsResponse> retrieveActivePromotions(
-            Pageable pageable
+            final Pageable pageable
     ) {
         // 활성화된 프로모션 목록 조회
         Page<PromotionEntity> activePromotions = validateActivePromotionExists(pageable);
@@ -88,7 +82,7 @@ public class PromotionService {
         });
     }
 
-    private Page<PromotionEntity> validateActivePromotionExists(Pageable pageable) {
+    private Page<PromotionEntity> validateActivePromotionExists(final Pageable pageable) {
         LocalDateTime currentTime = LocalDateTime.now();
         Page<PromotionEntity> promotions = promotionRepository.findActivePromotions(
                 currentTime, pageable
@@ -100,7 +94,9 @@ public class PromotionService {
         return promotions;
     }
 
-    private PromotionAttributeEntity validatePromotionAttributeExists(PromotionEntity promotionEntity) {
+    private PromotionAttributeEntity validatePromotionAttributeExists(
+            final PromotionEntity promotionEntity
+    ) {
         PromotionAttributeEntity promotionAttribute =
                 promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId())
                         .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
