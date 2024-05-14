@@ -3,6 +3,7 @@ package yjh.devtoon.promotion.application;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,12 @@ import yjh.devtoon.promotion.constant.ErrorMessage;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
-import yjh.devtoon.promotion.dto.request.RetrieveActivePromotionsRequest;
 import yjh.devtoon.promotion.dto.response.PromotionSoftDeleteResponse;
 import yjh.devtoon.promotion.dto.response.RetrieveActivePromotionsResponse;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Collections;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,13 +33,11 @@ public class PromotionService {
      */
     @Transactional
     public void register(final PromotionCreateRequest request) {
-
         PromotionEntity promotion = PromotionEntity.create(
                 request.getDescription(),
                 request.getStartDate(),
                 request.getEndDate()
         );
-
         PromotionEntity savedPromotion = promotionRepository.save(promotion);
 
         PromotionAttributeEntity attribute = PromotionAttributeEntity.create(
@@ -47,9 +45,7 @@ public class PromotionService {
                 request.getAttributeName(),
                 request.getAttributeValue()
         );
-
         promotionAttributeRepository.save(attribute);
-
     }
 
     /**
@@ -57,54 +53,59 @@ public class PromotionService {
      */
     @Transactional
     public PromotionSoftDeleteResponse softDelete(final Long id) {
-
         PromotionEntity promotion = promotionRepository.findById(id)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound("Promotion", id)));
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound("Promotion", id)));
 
         promotion.recordDeletion(LocalDateTime.now());
         PromotionEntity softDeletedPromotion = promotionRepository.save(promotion);
 
         return PromotionSoftDeleteResponse.from(softDeletedPromotion);
-
     }
 
     /**
-     * 현재 적용 가능한 프로모션 전체 조회
+     * 현재 활성화된 프로모션 전체 조회
+     * : 현재 활성화된 프로모션이 없는 경우 빈 페이지를 반환합니다.
      */
     @Transactional(readOnly = true)
     public Page<RetrieveActivePromotionsResponse> retrieveActivePromotions(
-            final RetrieveActivePromotionsRequest request,
-            Pageable pageable
+            final Pageable pageable
     ) {
-        // 유효한 프로모션의 존재 여부를 확인
-        if (!promotionRepository.existsByDateRange(request.getStartDate(), request.getEndDate())) {
-            throw new DevtoonException(
-                    ErrorCode.NOT_FOUND,
-                    ErrorMessage.getResourceNotFound(
-                            "Promotion",
-                            String.format("from %s to %s", request.getStartDate(), request.getEndDate())
-                    )
-            );
-        }
+        // 활성화된 프로모션 목록 조회
+        Page<PromotionEntity> activePromotions = validateActivePromotionExists(pageable);
 
-        // 유효한 프로모션 조회
-        Page<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(request.getStartDate(), request.getEndDate(), pageable);
-        log.info("조회된 유효 프로모션 수: {}", activePromotions.getNumberOfElements());
-
-        // 프로모션 엔티티를 응답 DTO로 변환
+        // 각 프로모션 엔티티를 프로모션 속성과 함께 응답 객체로 변환
         return activePromotions.map(promotionEntity -> {
-            Optional<PromotionAttributeEntity> promotionAttributeEntity = promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
-
-            PromotionAttributeEntity attributeEntity = promotionAttributeEntity.orElseThrow(() ->
-                    new DevtoonException(
-                            ErrorCode.NOT_FOUND,
-                            String.format("Attribute for promotion ID %s not found.", promotionEntity.getId())
-                    )
-            );
-            log.info("성공적으로 조회된 attribute: {} for promotion: {}", attributeEntity, promotionEntity);
-
-            return RetrieveActivePromotionsResponse.from(promotionEntity, attributeEntity);
+            PromotionAttributeEntity promotionAttribute =
+                    validatePromotionAttributeExists(promotionEntity);
+            return RetrieveActivePromotionsResponse.from(promotionEntity, promotionAttribute);
         });
+    }
+
+    private Page<PromotionEntity> validateActivePromotionExists(final Pageable pageable) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Page<PromotionEntity> promotions = promotionRepository.findActivePromotions(
+                currentTime, pageable
+        );
+
+        if (promotions.isEmpty()) {
+            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+        }
+        return promotions;
+    }
+
+    private PromotionAttributeEntity validatePromotionAttributeExists(
+            final PromotionEntity promotionEntity
+    ) {
+        PromotionAttributeEntity promotionAttribute =
+                promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId())
+                        .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                                ErrorMessage.getResourceNotFound(
+                                        "PromotionEntity",
+                                        promotionEntity.getId()
+                                ))
+                        );
+        return promotionAttribute;
     }
 
 }

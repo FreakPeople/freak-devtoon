@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.promotion.application.PromotionService;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
-import yjh.devtoon.promotion.dto.request.RetrieveActivePromotionsRequest;
 import yjh.devtoon.promotion.dto.response.PromotionSoftDeleteResponse;
 import yjh.devtoon.promotion.dto.response.RetrieveActivePromotionsResponse;
 
@@ -51,20 +50,15 @@ public class PromotionController {
     }
 
     /**
-     * 현재 적용 가능한 프로모션 전체 조회
+     * 현재 활성화된 프로모션 전체 조회
+     * : 현재 활성화된 프로모션이 없는 경우 빈 페이지를 반환합니다.
      */
     @GetMapping("/now")
     public ResponseEntity<ApiReponse<Page<RetrieveActivePromotionsResponse>>> retrieveActivePromotions(
-            @RequestBody final RetrieveActivePromotionsRequest request,
             Pageable pageable
     ) {
-        Page<RetrieveActivePromotionsResponse> activePromotions = promotionService.retrieveActivePromotions(request, pageable);
-        if (activePromotions.hasContent()) {
-            activePromotions.getContent().forEach(promotion -> log.info("프로모션 상세 조회: {}", promotion));
-        } else {
-            log.info("조회된 프로모션 없음.");
-        }
-
+        Page<RetrieveActivePromotionsResponse> activePromotions =
+                promotionService.retrieveActivePromotions(pageable);
         return ResponseEntity.ok(ApiReponse.success(activePromotions));
     }
 
