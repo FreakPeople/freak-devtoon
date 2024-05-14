@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.cookie_wallet.application.CookieWalletService;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
@@ -27,9 +28,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CookiePaymentService {
-
-    private static final String WEBTOON_VIEWER = "WebtoonViewer";
-    private static final String COOKIE_PAYMENT = "CookiePayment";
 
     private final CookiePaymentRepository cookiePaymentRepository;
     private final WebtoonViewerRepository webtoonViewerRepository;
@@ -84,7 +82,8 @@ public class CookiePaymentService {
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
         return webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON_VIEWER,
+                        ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
                         webtoonViewerId))
                 ).getId();
     }
@@ -109,8 +108,9 @@ public class CookiePaymentService {
     public CookiePaymentDetailDto retrieve(final Long webtoonViewerId) {
         CookiePaymentEntity cookiePayment =
                 cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
-                        ErrorMessage.getResourceNotFound(COOKIE_PAYMENT, webtoonViewerId)));
+                        .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                                ErrorMessage.getResourceNotFound(ResourceType.COOKIE_PAYMENT,
+                                        webtoonViewerId)));
 
         Price totalPrice = cookiePayment.calculateTotalPrice();
         Price paymentPrice = cookiePayment.calculatePaymentPrice();

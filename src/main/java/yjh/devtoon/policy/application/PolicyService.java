@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.policy.common.Policy;
 import yjh.devtoon.policy.common.PolicyManager;
 import yjh.devtoon.policy.domain.BadWordsPolicyEntity;
@@ -23,8 +24,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class PolicyService {
-
-    private static final String POLICY = "Policy";
 
     private final CookiePolicyRepository cookiePolicyRepository;
     private final BadWordsPolicyRepository badWordsPolicyRepository;
@@ -60,7 +59,7 @@ public class PolicyService {
             log.info("비속어 정책 저장: {}", policy);
         } else {
             throw new DevtoonException(ErrorCode.NOT_FOUND,
-                    ErrorMessage.getResourceNotFound(POLICY, policy));
+                    ErrorMessage.getResourceNotFound(ResourceType.POLICY, policy));
         }
 
     }
@@ -70,10 +69,10 @@ public class PolicyService {
 
         List<RetrieveActivePoliciesResponse.PolicyDetailsInfo> activePoliciesList =
                 policyManager.getActivePolicies()
-                .stream()
-                .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(),
-                        p.getClass().getSimpleName(), p.toString()))
-                .collect(Collectors.toList());
+                        .stream()
+                        .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(),
+                                p.getClass().getSimpleName(), p.toString()))
+                        .collect(Collectors.toList());
 
         return new RetrieveActivePoliciesResponse(activePoliciesList);
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.cookie_wallet.application.CookieWalletService;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
@@ -21,10 +22,6 @@ import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
 @RequiredArgsConstructor
 @Service
 public class WebtoonPaymentService {
-
-    private static final String WEBTOON_VIEWER = "WebtoonViewer";
-    private static final String WEBTOON = "Webtoon";
-    private static final String WEBTOON_PAYMENT = "WebtoonPayment";
 
     private final WebtoonRepository webtoonRepository;
     private final WebtoonViewerRepository webtoonViewerRepository;
@@ -69,7 +66,8 @@ public class WebtoonPaymentService {
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
         return webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON_VIEWER,
+                        ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
                         webtoonViewerId))
                 ).getId();
     }
@@ -77,17 +75,20 @@ public class WebtoonPaymentService {
     private Long getWebtoonIdOrThrow(final Long webtoonId) {
         return webtoonRepository.findById(webtoonId)
                 .orElseThrow(() -> new DevtoonException(
-                        ErrorCode.NOT_FOUND, ErrorMessage.getResourceNotFound(WEBTOON, webtoonId))
+                        ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON, webtoonId))
                 ).getId();
     }
 
     /**
+     * $
      * 특정 회원 웹툰 결제 내역 단건 조회
      */
     public WebtoonPaymentEntity retrieve(final Long webtoonViewerId) {
         return webtoonPaymentRepository.findByWebtoonViewerId(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
-                        ErrorMessage.getResourceNotFound(WEBTOON_PAYMENT, webtoonViewerId)));
+                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_PAYMENT,
+                                webtoonViewerId)));
     }
 
 }
