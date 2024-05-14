@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
 
 @Embeddable
@@ -35,36 +34,24 @@ public class Price {
         return new BigDecimal(amount.toString());
     }
 
-    public Price add(final Price price) {
-        return new Price(add(price.amount));
+    public Price plus(final Price price) {
+        BigDecimal result = Calculator.PLUS.calculate(this.amount, price.getAmount());
+        return new Price(result);
     }
 
-    private BigDecimal add(final BigDecimal amount) {
-        return this.amount.add(amount);
-    }
-
-    public Price subtract(final Price price) {
-        return new Price(subtract(price.amount));
-    }
-
-    private BigDecimal subtract(final BigDecimal amount) {
-        return this.amount.subtract(amount);
+    public Price minus(final Price price) {
+        BigDecimal result = Calculator.MINUS.calculate(this.amount, price.getAmount());
+        return new Price(result);
     }
 
     public Price multiply(final Price price) {
-        return new Price(multiply(price.amount));
-    }
-
-    private BigDecimal multiply(final BigDecimal amount) {
-        return this.amount.multiply(amount);
+        BigDecimal result = Calculator.MULTIPLY.calculate(this.amount, price.getAmount());
+        return new Price(result);
     }
 
     public Price divide(final Price price) {
-        return new Price(divide(price.amount));
-    }
-
-    private BigDecimal divide(final BigDecimal amount) {
-        return this.amount.divide(amount, 3, RoundingMode.HALF_UP);
+        BigDecimal result = Calculator.DIVIDE.calculate(this.amount, price.getAmount());
+        return new Price(result);
     }
 
     public Price calculateTotalPrice(Integer quantity) {

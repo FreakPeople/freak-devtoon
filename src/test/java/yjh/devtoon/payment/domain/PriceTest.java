@@ -31,23 +31,23 @@ class PriceTest {
                 .isInstanceOf(NullPointerException.class);
     }
 
-    @DisplayName("[add, subtract, multiply, divide 테스트] : 계산 성공 테스트")
+    @DisplayName("[plus, minus, multiply, divide 테스트] : 계산 성공 테스트")
     @Test
     void calculate_successfully() {
         // given
-        Price num_1 = Price.of(8);
-        Price num_2 = Price.of(4);
+        Price num_1 = Price.of(BigDecimal.valueOf(8));
+        Price num_2 = Price.of(BigDecimal.valueOf(4));
 
         // when, then
         assertAll(
-                () -> assertThat(num_1.add(num_2)).isEqualTo(Price.of(12)),
-                () -> assertThat(num_1.subtract(num_2)).isEqualTo(Price.of(4)),
-                () -> assertThat(num_1.multiply(num_2)).isEqualTo(Price.of(32)),
-                () -> assertThat(num_1.divide(num_2)).isEqualTo(Price.of(new BigDecimal("2.000")))
+                () -> assertThat(num_1.plus(num_2).getAmount()).isEqualTo(Price.of(BigDecimal.valueOf(12)).getAmount()),
+                () -> assertThat(num_1.minus(num_2).getAmount()).isEqualTo(Price.of(BigDecimal.valueOf(4)).getAmount()),
+                () -> assertThat(num_1.multiply(num_2).getAmount()).isEqualTo(Price.of(BigDecimal.valueOf(32)).getAmount()),
+                () -> assertThat(num_1.divide(num_2).getAmount()).isEqualTo(Price.of(new BigDecimal("2.000")).getAmount())
         );
     }
 
-    @DisplayName("[add, subtract, multiply, divide 테스트] : 계산 실패 테스트")
+    @DisplayName("[plus, minus, multiply, divide 테스트] : 계산 실패 테스트")
     @Test
     void givenNumbers_whenCalculated_thenThrowException() {
         // given
@@ -56,8 +56,8 @@ class PriceTest {
 
         // when, then
         assertAll(
-                () -> assertThat(num_1.add(num_2)).isNotEqualTo(Price.of(999)),
-                () -> assertThat(num_1.subtract(num_2)).isNotEqualTo(Price.of(999)),
+                () -> assertThat(num_1.plus(num_2)).isNotEqualTo(Price.of(999)),
+                () -> assertThat(num_1.minus(num_2)).isNotEqualTo(Price.of(999)),
                 () -> assertThat(num_1.multiply(num_2)).isNotEqualTo(Price.of(999)),
                 () -> assertThat(num_1.divide(num_2)).isNotEqualTo(Price.of(new BigDecimal("999")))
         );
