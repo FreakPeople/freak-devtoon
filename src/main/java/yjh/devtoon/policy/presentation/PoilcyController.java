@@ -30,8 +30,6 @@ public class PoilcyController {
             @RequestBody final PolicyCreateRequest request
     ) {
         Long policyId = policyService.register(request);
-        log.info("새로운 정책 등록: ID={}", policyId);
-
         return ResponseEntity.ok(ApiReponse.success(policyId));
     }
 
@@ -42,8 +40,6 @@ public class PoilcyController {
     @GetMapping("/active")
     public ResponseEntity<ApiReponse<RetrieveActivePoliciesResponse>> getActivePolicies() {
         RetrieveActivePoliciesResponse response = policyService.getActivePolicies();
-        log.info("활성 정책 조회: {}", response);
-
         return ResponseEntity.ok(ApiReponse.success(response));
     }
 
