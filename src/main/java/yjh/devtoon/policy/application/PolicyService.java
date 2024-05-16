@@ -40,10 +40,8 @@ public class PolicyService {
         savePolicyByType(policy);
 
         policyManager.addPolicy(policy);
-        log.info("정책매니저에 새로운 정책 등록: {}", policy);
 
         policyManager.applyAllActivePolicies();
-        log.info("정책매니저에 모든 활성 정책을 적용: {}", policy);
 
         return policy.getId();
 
@@ -53,10 +51,8 @@ public class PolicyService {
 
         if (policy instanceof CookiePolicyEntity) {
             cookiePolicyRepository.save((CookiePolicyEntity) policy);
-            log.info("쿠키 정책 저장: {}", policy);
         } else if (policy instanceof BadWordsPolicyEntity) {
             badWordsPolicyRepository.save((BadWordsPolicyEntity) policy);
-            log.info("비속어 정책 저장: {}", policy);
         } else {
             throw new DevtoonException(ErrorCode.NOT_FOUND,
                     ErrorMessage.getResourceNotFound(ResourceType.POLICY, policy));
