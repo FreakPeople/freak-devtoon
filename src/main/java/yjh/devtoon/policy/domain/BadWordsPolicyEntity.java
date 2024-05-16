@@ -7,12 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
 import yjh.devtoon.policy.common.Policy;
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -34,27 +34,37 @@ public class BadWordsPolicyEntity extends BaseEntity implements Policy {
     @Column(name = "end_date")
     private LocalDateTime endDate;
 
-    /**
-     * 요청 DTO에서 받은 세부 정보를 기반으로 객체의 상태를 초기화합니다.
-     */
-    public BadWordsPolicyEntity(Map<String, Object> details) {
-        this.warningThreshold = Integer.parseInt(details.get("warningThreshold").toString());
-        this.startDate = LocalDateTime.parse(details.get("startDate").toString());
-        this.endDate = details.containsKey("endDate") ? LocalDateTime.parse(details.get("endDate").toString()) : null;
+    @Builder
+    public BadWordsPolicyEntity(
+            final int warningThreshold,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate
+    ) {
+        this.warningThreshold = warningThreshold;
+        this.startDate = startDate;
+        this.endDate = endDate;
     }
 
-    /**
-     * 정책 적용 메서드는 시스템에서 정책을 적용할 때 호출됩니다.
-     */
-    @Override
-    public void applyPolicy() {
-        System.out.println("비속어 정책이 적용되었습니다. : ID = " + id + ", 경고 임계값 = " + warningThreshold);
+    public static BadWordsPolicyEntity create(
+            final int warningThreshold,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate
+    ) {
+        return new BadWordsPolicyEntity().builder()
+                .warningThreshold(warningThreshold)
+                .startDate(startDate)
+                .endDate(endDate)
+                .build();
     }
 
     @Override
     public String toString() {
-        return String.format("BadWordsPolicy {id=%d, warningThreshold=%s, start=%s, end=%s}",
-                id, warningThreshold, startDate, endDate);
+        return "BadWordsPolicyEntity{" +
+                "id=" + id +
+                ", warningThreshold=" + warningThreshold +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                '}';
     }
 
 }

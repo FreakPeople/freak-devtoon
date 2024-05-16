@@ -1,14 +1,56 @@
 package yjh.devtoon.policy.dto.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import java.util.Map;
+import lombok.NoArgsConstructor;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
+/**
+ * 모든 정책에 공통 사용 dto
+ */
+@NoArgsConstructor
 @Getter
 public class PolicyCreateRequest {
 
-    private final String type; // 정책 유형 (예: "cookie", "bad_words")
-    private final Map<String, Object> details; // 정책 세부 사항
+    private String policyName;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
+
+    /**
+     * 쿠키 정책
+     */
+    private BigDecimal cookiePrice;
+    private Integer cookieQuantityPerEpisode;
+
+    /**
+     * 비속어 정책
+     */
+    private int warningThreshold;
+
+    public PolicyCreateRequest(
+            final String policyName,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate,
+            final BigDecimal cookiePrice,
+            final Integer cookieQuantityPerEpisode
+    ) {
+        this.policyName = policyName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.cookiePrice = cookiePrice;
+        this.cookieQuantityPerEpisode = cookieQuantityPerEpisode;
+    }
+
+    public PolicyCreateRequest(
+            final String policyName,
+            final LocalDateTime startDate,
+            final LocalDateTime endDate,
+            final int warningThreshold
+    ) {
+        this.policyName = policyName;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.warningThreshold = warningThreshold;
+    }
 
 }
