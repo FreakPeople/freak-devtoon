@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.promotion.application.PromotionService;
+import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.dto.response.PromotionSoftDeleteResponse;
@@ -58,11 +59,21 @@ public class PromotionController {
      */
     @GetMapping("/now")
     public ResponseEntity<ApiReponse<Page<RetrieveActivePromotionsResponse>>> retrieveActivePromotions(
-            Pageable pageable
+            final Pageable pageable
     ) {
-        Page<RetrieveActivePromotionsResponse> activePromotions =
+        Page<PromotionEntity> activePromotions =
                 promotionService.retrieveActivePromotions(pageable);
-        return ResponseEntity.ok(ApiReponse.success(activePromotions));
+
+        Page<RetrieveActivePromotionsResponse> response =
+                activePromotions.map(promotionEntity -> {
+                    PromotionAttributeEntity promotionAttribute =
+                            promotionService.validatePromotionAttributeExists(promotionEntity);
+                    return RetrieveActivePromotionsResponse.from(
+                            promotionEntity,
+                            promotionAttribute
+                    );
+                });
+        return ResponseEntity.ok(ApiReponse.success(response));
     }
 
 }
