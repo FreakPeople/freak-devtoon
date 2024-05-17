@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.promotion.application.PromotionService;
+import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.dto.response.PromotionSoftDeleteResponse;
 import yjh.devtoon.promotion.dto.response.RetrieveActivePromotionsResponse;
@@ -40,12 +41,14 @@ public class PromotionController {
 
     /**
      * 프로모션 삭제
+     * : 삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiReponse> softDelete(
+    public ResponseEntity<ApiReponse> delete(
             @PathVariable final Long id
     ) {
-        PromotionSoftDeleteResponse response = promotionService.softDelete(id);
+        PromotionEntity promotionEntity = promotionService.delete(id);
+        PromotionSoftDeleteResponse response = PromotionSoftDeleteResponse.from(promotionEntity);
         return ResponseEntity.ok(ApiReponse.success(response));
     }
 
