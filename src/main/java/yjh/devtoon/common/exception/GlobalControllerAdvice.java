@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import yjh.devtoon.common.response.ApiReponse;
 import yjh.devtoon.common.utils.DateFormatter;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -17,26 +18,26 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(DevtoonException.class)
     public ResponseEntity<ApiReponse> applicationHandler(final DevtoonException e) {
-        log.error("Error occurs {}", e.toString());
+        int statusCode = e.getErrorCode().getStatus().value();
+        String currentTime = DateFormatter.getCurrentDateTime();
+        String message = e.getErrorCode().getMessage();
+        String detailMessage = e.getDetailMessage();
 
-        ErrorData errorData = new ErrorData(
-                e.getErrorCode().getStatus().value(),
-                DateFormatter.getCurrentDateTime(),
-                e.getErrorCode().getMessage(),
-                e.getDetailMessage()
-        );
+        ErrorData errorData = new ErrorData(statusCode, currentTime, message, detailMessage);
+
+        log.error("Error: {} {} -> {}", statusCode, message, detailMessage);
 
         return ResponseEntity.ok(ApiReponse.error(errorData));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiReponse> validationHandler(final MethodArgumentNotValidException e) {
-        log.error("Error occurs {}", e.toString());
 
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         List<String> errors = fieldErrors.stream()
                 .map(fieldError -> fieldError.getField() + " : " + fieldError.getDefaultMessage())
                 .toList();
+
 
         ErrorData errorData = new ErrorData(
                 HttpStatus.BAD_REQUEST.value(),
@@ -45,12 +46,13 @@ public class GlobalControllerAdvice {
                 errors
         );
 
+        log.error("Error: {} {} -> {}", HttpStatus.BAD_REQUEST.value(), e.getClass().getSimpleName(), errors);
+
         return ResponseEntity.ok(ApiReponse.error(errorData));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiReponse> InternalExceptionHandler(final Exception e) {
-        log.error("Error occurs {}", e.toString());
 
         ErrorData errorData = new ErrorData(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -58,6 +60,9 @@ public class GlobalControllerAdvice {
                 HttpStatus.INTERNAL_SERVER_ERROR.name(),
                 e.getMessage()
         );
+
+        log.error("Error: {} {} -> {}",
+                HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.name(), e.getMessage());
 
         return ResponseEntity.ok(ApiReponse.error(errorData));
     }

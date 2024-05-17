@@ -30,11 +30,9 @@ public class PolicyService {
     public void register(PolicyCreateRequest request) {
         // 1. 정책 확인 -> PolicyType 객체 반환
         PolicyType policyType = PolicyType.create(request.getPolicyName());
-        log.info("policyType : {}", policyType);
 
         // 2. 정책 타입에 맞게 정책 객체(Policy)를 생성 및 반환
         Policy policy = PolicyFactory.valueOf(policyType.getPolicyName()).createPolicy(request);
-        log.info("policy : {}", policy);
 
         // 3. 각 정책 리포지토리에 저장
         // @SuppressWarnings("unchecked") : 제네릭 타입 캐스팅 시 발생하는 경고 억제
