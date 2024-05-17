@@ -51,18 +51,4 @@ public class PolicyService {
         repository.save(policy);
     }
 
-//    @Transactional(readOnly = true)
-//    public RetrieveActivePoliciesResponse getActivePolicies() {
-//
-//        List<RetrieveActivePoliciesResponse.PolicyDetailsInfo> activePoliciesList =
-//                policyManager.getActivePolicies()
-//                .stream()
-//                .map(p -> new RetrieveActivePoliciesResponse.PolicyDetailsInfo(p.getId(),
-//                        p.getClass().getSimpleName(), p.toString()))
-//                .collect(Collectors.toList());
-//
-//        return new RetrieveActivePoliciesResponse(activePoliciesList);
-//
-//    }
-
 }

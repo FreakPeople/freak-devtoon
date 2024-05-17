@@ -31,15 +31,8 @@ public class PoilcyController {
     }
 
     /**
-     * 활성 정책 조회
+     * TODO: 활성 정책 조회
      * : 현재 시간 기준으로 활성화된 정책들을 조회합니다.
      */
-//    @GetMapping("/active")
-//    public ResponseEntity<ApiReponse<RetrieveActivePoliciesResponse>> getActivePolicies() {
-//        RetrieveActivePoliciesResponse response = policyService.getActivePolicies();
-//        log.info("활성 정책 조회: {}", response);
-//
-//        return ResponseEntity.ok(ApiReponse.success(response));
-//    }
 
 }
