@@ -15,17 +15,33 @@ public class CookiePaymentRetrieveResponse {
     private BigDecimal paymentPrice;       // 결제 금액 = totalPrice * (1-totalDiscountRate)
     private LocalDateTime createdAt;
 
+    public CookiePaymentRetrieveResponse(
+            Long webtoonViewerNo,
+            Integer quantity,
+            BigDecimal totalPrice,
+            BigDecimal totalDiscountRate,
+            BigDecimal paymentPrice,
+            LocalDateTime createdAt
+    ) {
+        this.webtoonViewerNo = webtoonViewerNo;
+        this.quantity = quantity;
+        this.totalPrice = totalPrice;
+        this.totalDiscountRate = totalDiscountRate;
+        this.paymentPrice = paymentPrice;
+        this.createdAt = createdAt;
+    }
+
     public static CookiePaymentRetrieveResponse from(
             final CookiePaymentDetailDto cookiePaymentDetailDto
     ) {
-        CookiePaymentRetrieveResponse response = new CookiePaymentRetrieveResponse();
-        response.webtoonViewerNo = cookiePaymentDetailDto.getCookiePayment().getWebtoonViewerId();
-        response.quantity = cookiePaymentDetailDto.getCookiePayment().getQuantity();
-        response.totalPrice = cookiePaymentDetailDto.getTotalPrice().getAmount();
-        response.totalDiscountRate = cookiePaymentDetailDto.getCookiePayment().getTotalDiscountRate();
-        response.paymentPrice = cookiePaymentDetailDto.getPaymentPrice().getAmount();
-        response.createdAt = cookiePaymentDetailDto.getCookiePayment().getCreatedAt();
-        return response;
+        return new CookiePaymentRetrieveResponse(
+                cookiePaymentDetailDto.getCookiePayment().getWebtoonViewerId(),
+                cookiePaymentDetailDto.getCookiePayment().getQuantity(),
+                cookiePaymentDetailDto.getTotalPrice().getAmount(),
+                cookiePaymentDetailDto.getCookiePayment().getTotalDiscountRate(),
+                cookiePaymentDetailDto.getPaymentPrice().getAmount(),
+                cookiePaymentDetailDto.getCookiePayment().getCreatedAt()
+        );
     }
 
 }
