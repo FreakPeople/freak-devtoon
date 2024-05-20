@@ -13,7 +13,6 @@ import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
 import yjh.devtoon.payment.constant.ErrorMessage;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
 import yjh.devtoon.payment.domain.Price;
-import yjh.devtoon.payment.dto.CookiePaymentDetailDto;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.CookiePaymentRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
@@ -42,7 +41,6 @@ public class CookiePaymentService {
      */
     @Transactional
     public void register(final CookiePaymentCreateRequest request) {
-
         // 1. webtoonViewerId가 DB에 존재하는지 확인
         Long webtoonViewerId = getWebtoonViewerIdOrThrow(request.getWebtoonViewerId());
 
@@ -73,7 +71,6 @@ public class CookiePaymentService {
         CookieWalletEntity cookieWallet = cookieWalletService.retrieve(webtoonViewerId);
         cookieWallet.increase(quantity);
         cookieWalletRepository.save(cookieWallet);
-
     }
 
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
@@ -81,7 +78,7 @@ public class CookiePaymentService {
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
-                        webtoonViewerId))
+                                webtoonViewerId))
                 ).getId();
     }
 
@@ -102,22 +99,13 @@ public class CookiePaymentService {
     /**
      * 특정 회원 쿠키 결제 내역 조회
      */
-    public CookiePaymentDetailDto retrieve(final Long webtoonViewerId) {
-        CookiePaymentEntity cookiePayment =
-                cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
-                        .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
-                                ErrorMessage.getResourceNotFound(ResourceType.COOKIE_PAYMENT,
-                                        webtoonViewerId)));
-
-        Price totalPrice = cookiePayment.calculateTotalPrice();
-        Price paymentPrice = cookiePayment.calculatePaymentPrice();
-
-        return new CookiePaymentDetailDto(
-                cookiePayment,
-                totalPrice,
-                paymentPrice
-        );
-
+    public CookiePaymentEntity retrieve(final Long webtoonViewerId) {
+        return cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(
+                                ResourceType.COOKIE_PAYMENT,
+                                webtoonViewerId
+                        )));
     }
 
 }
