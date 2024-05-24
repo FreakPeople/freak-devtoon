@@ -13,11 +13,13 @@ import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.promotion.constant.ErrorMessage;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
+import yjh.devtoon.promotion.dto.request.PromotionAttributeCreateRequest;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,17 +36,32 @@ public class PromotionService {
     public void register(final PromotionCreateRequest request) {
         PromotionEntity promotion = PromotionEntity.create(
                 request.getDescription(),
+                request.getDiscountType(),
+                request.getDiscountRate(),
+                request.getDiscountQuantity(),
+                request.getIsDiscountDuplicatable(),
                 request.getStartDate(),
                 request.getEndDate()
         );
         PromotionEntity savedPromotion = promotionRepository.save(promotion);
 
-        PromotionAttributeEntity attribute = PromotionAttributeEntity.create(
+        List<PromotionAttributeCreateRequest> promotionAttributeCreateRequests =
+                request.getPromotionAttributes();
+
+        promotionAttributeCreateRequests.stream()
+                .map(promotionAttributeRequest -> toEntity(savedPromotion,
+                        promotionAttributeRequest))
+                .forEach(promotionAttributeRepository::save);
+    }
+
+    private PromotionAttributeEntity toEntity(
+            PromotionEntity savedPromotion,
+            PromotionAttributeCreateRequest request
+    ) {
+        return PromotionAttributeEntity.create(
                 savedPromotion,
                 request.getAttributeName(),
-                request.getAttributeValue()
-        );
-        promotionAttributeRepository.save(attribute);
+                request.getAttributeValue());
     }
 
     /**
