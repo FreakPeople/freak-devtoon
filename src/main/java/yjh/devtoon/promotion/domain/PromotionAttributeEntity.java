@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
+import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -66,6 +67,20 @@ public class PromotionAttributeEntity extends BaseEntity {
                 .attributeValue(attributeValue)
                 .build();
     }
+
+    public boolean isCashDiscountApply(
+            final WebtoonViewerEntity webtoonViewer,
+            final int quantity
+    ) {
+        // TODO : 속성이 계속해서 추가될 수 있음. 리팩토링 해야함.
+        if (attributeName.equals("premium_member_discount")) {
+            return webtoonViewer.isPremium();
+        } else if (attributeName.equals("cookie_purchase_quantity")) {
+            return 10 < quantity;
+        }
+        return false;
+    }
+
 
     @Override
     public String toString() {

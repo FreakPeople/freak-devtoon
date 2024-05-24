@@ -115,6 +115,15 @@ public class PromotionEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
+    public boolean isCashDiscount() {
+        return discountType.equals(DiscountType.CASH_DISCOUNT);
+    }
+
+
+    public boolean isNotDiscountDuplicatable() {
+        return !isDiscountDuplicatable;
+    }
+
     @Override
     public String toString() {
         return "PromotionEntity{" +
