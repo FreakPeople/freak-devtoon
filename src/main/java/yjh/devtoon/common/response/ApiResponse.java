@@ -3,27 +3,27 @@ package yjh.devtoon.common.response;
 import lombok.Getter;
 
 @Getter
-public class ApiReponse<T> {
+public class ApiResponse<T> {
 
     private final String statusMessage;
     private final T data;
 
-    public ApiReponse(
+    public ApiResponse(
             final String statusMessage,
             final T data) {
         this.statusMessage = statusMessage;
         this.data = data;
     }
 
-    public static <T> ApiReponse<T> success(final T data) {
-        return new ApiReponse<>(
+    public static <T> ApiResponse<T> success(final T data) {
+        return new ApiResponse<>(
                 "성공",
                 data
         );
     }
 
-    public static <T> ApiReponse<T> error(final T data) {
-        return new ApiReponse<>(
+    public static <T> ApiResponse<T> error(final T data) {
+        return new ApiResponse<>(
                 "실패",
                 data
         );

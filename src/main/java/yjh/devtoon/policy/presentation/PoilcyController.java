@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 import yjh.devtoon.policy.application.PolicyService;
 import yjh.devtoon.policy.dto.request.PolicyCreateRequest;
 
@@ -23,11 +23,11 @@ public class PoilcyController {
      * 정책 등록
      */
     @PostMapping
-    public ResponseEntity<ApiReponse> register(
+    public ResponseEntity<ApiResponse> register(
             @RequestBody final PolicyCreateRequest request
     ) {
         policyService.register(request);
-        return ResponseEntity.ok(ApiReponse.success(null));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     /**

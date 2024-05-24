@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.bad_words_warning_count.aplication.BadWordsWarningCountService;
 import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
 import yjh.devtoon.bad_words_warning_count.dto.response.BadWordsWarningCountResponse;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 
 @RequestMapping("/v1/bad-words-warning-count")
 @RequiredArgsConstructor
@@ -23,24 +23,24 @@ public class BadWordsWarningCountController {
      * 비속어 카운트 조회
      */
     @GetMapping
-    public ResponseEntity<ApiReponse> retrieve(
+    public ResponseEntity<ApiResponse> retrieve(
             @RequestParam("webtoonViewerNo") final Long id
     ) {
         BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.retrieve(id);
         BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     /**
      * 비속어 카운트 증가
      */
     @PutMapping("/increase")
-    public ResponseEntity<ApiReponse> increase(
+    public ResponseEntity<ApiResponse> increase(
             @RequestParam("webtoonViewerNo") final Long id
     ) {
         BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.increase(id);
         BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }

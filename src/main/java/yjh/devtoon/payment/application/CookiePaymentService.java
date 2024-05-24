@@ -49,7 +49,7 @@ public class CookiePaymentService {
         Price activeCookie = Price.of(cookiePolicyRepository.activeCookiePrice(now));
 
         // 3. 현재 활성 프로모션 조회
-        List<PromotionEntity> activePromotions = promotionRepository.activePromotions(now);
+        List<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(now);
 
         // 4. 쿠키 결제 가격 계산 - 요청한 쿠키 개수 * 현재 쿠키 가격 - 프로모션 할인율(회원등급,각종 프로모션 적용)
         BigDecimal totalDiscountRate = calculateTotalDiscountRate(activePromotions);

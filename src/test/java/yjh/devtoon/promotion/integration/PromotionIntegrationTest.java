@@ -1,14 +1,19 @@
 package yjh.devtoon.promotion.integration;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static yjh.devtoon.promotion.domain.DiscountType.CASH_DISCOUNT;
+import static yjh.devtoon.promotion.domain.DiscountType.COOKIE_QUANTITY_DISCOUNT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -56,7 +61,7 @@ public class PromotionIntegrationTest {
     class PromotionRegisterTests {
 
         private static final String DESCRIPTION = "7월 스릴러 장르 파격 할인 행사입니다.";
-        private static final DiscountType DISCOUNT_TYPE = DiscountType.COOKIE_QUANTITY_DISCOUNT;
+        private static final DiscountType DISCOUNT_TYPE = COOKIE_QUANTITY_DISCOUNT;
         private static final BigDecimal DISCOUNT_RATE = null;
         private static final Integer DISCOUNT_QUANTITY = 1;
         private static final Boolean IS_DISCOUNT_DUPLICATABLE = true;
@@ -171,7 +176,7 @@ public class PromotionIntegrationTest {
     class PromotionSoftDeleteTests {
 
         private static final String DESCRIPTION = "12월 로맨스 장르 파격 할인 행사입니다.";
-        private static final DiscountType DISCOUNT_TYPE = DiscountType.CASH_DISCOUNT;
+        private static final DiscountType DISCOUNT_TYPE = CASH_DISCOUNT;
         private static final BigDecimal DISCOUNT_RATE = BigDecimal.valueOf(10);
         private static final Integer DISCOUNT_QUANTITY = null;
         private static final Boolean IS_DISCOUNT_DUPLICATABLE = true;
@@ -243,146 +248,138 @@ public class PromotionIntegrationTest {
 
     }
 
-//    @Nested
-//    @DisplayName("프로모션 조회 테스트")
-//    class RetrieveActivePromotionsTests {
-//
-//        private static final List<PromotionAttributeCreateRequest> PROMOTION_ATTRIBUTES = List.of(
-//                new PromotionAttributeCreateRequest("target-month", "12"),
-//                new PromotionAttributeCreateRequest("target-genre", "romance")
-//        );
-//
-//        @DisplayName("현재 시간 기준 유효한 프로모션 전체 조회")
-//        @TestFactory
-//        Stream<DynamicTest> whenCurrentTimeGiven_thenListActivePromotionsPaged() {
-//            return Stream.of(
-//                    DynamicTest.dynamicTest("1. 프로모션1 저장 ->", () -> {
-//                        // given
-//                        PromotionEntity promotion1 = PromotionEntity.create(
-//                                "12월 로맨스 장르 파격 할인 행사입니다.",
-//                                DiscountType.CASH_DISCOUNT,
-//                                BigDecimal.valueOf(10),
-//                                null,
-//                                true,
-//                                LocalDateTime.of(2024, 12, 1, 0, 0, 0),
-//                                LocalDateTime.of(2024, 12, 31, 11, 59, 59)
-//                        );
-//                        PromotionEntity savedPromotion1 = promotionRepository.save(promotion1);
-//
-//                        PROMOTION_ATTRIBUTES.stream()
-//                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
-//                                        savedPromotion1,
-//                                        promotionAttributeRequest.getAttributeName(),
-//                                        promotionAttributeRequest.getAttributeValue()
-//                                ))
-//                                .forEach(promotionAttributeRepository::save);
-//
-//                    }), DynamicTest.dynamicTest("2. 프로모션2 저장 ->", () -> {
-//                        // given
-//                        PromotionEntity promotion2 = PromotionEntity.create(
-//                                "7월 장르 파격 할인 행사입니다.",
-//                                DiscountType.COOKIE_QUANTITY_DISCOUNT,
-//                                null,
-//                                2,
-//                                true,
-//                                LocalDateTime.of(2024, 7, 1, 0, 0, 0),
-//                                LocalDateTime.of(2024, 7, 31, 11, 59, 59)
-//                        );
-//                        PromotionEntity savedPromotion2 = promotionRepository.save(promotion2);
-//
-//                        PROMOTION_ATTRIBUTES.stream()
-//                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
-//                                        savedPromotion2,
-//                                        promotionAttributeRequest.getAttributeName(),
-//                                        promotionAttributeRequest.getAttributeValue()
-//                                ))
-//                                .forEach(promotionAttributeRepository::save);
-//
-//                    }), DynamicTest.dynamicTest("3. 유효한 프로모션 조회", () -> {
-//                        // when, then
-//                        mockMvc.perform(get("/v1/promotions/now")
-//                                        .contentType(MediaType.APPLICATION_JSON))
-//                                .andExpect(status().isOk())
-//                                .andExpect(jsonPath("$.statusMessage").value("성공"))
-//                                .andExpect(jsonPath("$.data.content[0].description").value("12월
-//                                로맨스 장르 파격 할인 행사입니다."))
-//                                .andExpect(jsonPath("$.data.content[0].startDate").value
-//                                ("2024-05" +
-//                                        "-13T23:44:00"))
-//                                .andExpect(jsonPath("$.data.content[0].endDate").value("2024-07" +
-//                                        "-01T00:00:00"))
-//                                .andExpect(jsonPath("$.data.content[0].attributeName").value(
-//                                        "target-month"))
-//                                .andExpect(jsonPath("$.data.content[0].attributeValue").value
-//                                ("6"))
-//                                .andExpect(jsonPath("$.data.content[1].description").value("스릴러
-//                                " +
-//                                        "프로모션"))
-//                                .andExpect(jsonPath("$.data.content[1].startDate").value
-//                                ("2024-05" +
-//                                        "-13T23:44:00"))
-//                                .andExpect(jsonPath("$.data.content[1].endDate").value("2024-07" +
-//                                        "-01T00:00:00"))
-//                                .andExpect(jsonPath("$.data.content[1].attributeName").value(
-//                                        "target-genre"))
-//                                .andExpect(jsonPath("$.data.content[1].attributeValue").value(
-//                                        "thriller"));
-//                    })
-//            );
-//        }
-//
-//        @DisplayName("현재 시간 기준 유효한 프로모션 조회 - 등록된 프로모션이 현재 시간에는 유효하지 않을 경우 빈 페이지 반환")
-//        @TestFactory
-//        Stream<DynamicTest> whenCurrentTimeGiven_AndNoPromotions_thenReturnEmptyPage() throws
-//        Exception {
-//            return Stream.of(
-//                    DynamicTest.dynamicTest("1. 과거 프로모션1 저장 ->", () -> {
-//                        // given
-//                        PromotionEntity promotionEntity = PromotionEntity.builder()
-//                                .description("여름 프로모션")
-//                                .startDate(LocalDateTime.of(2024, 1, 1, 0, 0, 0))
-//                                .endDate(LocalDateTime.of(2024, 5, 1, 0, 0, 0))
-//                                .build();
-//                        PromotionEntity savedPromotion1 = promotionRepository.save
-//                        (promotionEntity);
-//
-//                        PromotionAttributeEntity promotionAttributeEntity =
-//                                PromotionAttributeEntity.builder()
-//                                .promotionEntity(savedPromotion1)
-//                                .attributeName("target-month")
-//                                .attributeValue("6")
-//                                .build();
-//                        promotionAttributeRepository.save(promotionAttributeEntity);
-//
-//                    }), DynamicTest.dynamicTest("2. 과거 프로모션2 저장 ->", () -> {
-//                        // given
-//                        PromotionEntity promotionEntity = PromotionEntity.builder()
-//                                .description("스릴러 프로모션")
-//                                .startDate(LocalDateTime.of(2024, 2, 1, 0, 0, 0))
-//                                .endDate(LocalDateTime.of(2024, 5, 1, 0, 0, 0))
-//                                .build();
-//                        PromotionEntity savedPromotion2 = promotionRepository.save
-//                        (promotionEntity);
-//
-//                        PromotionAttributeEntity promotionAttributeEntity =
-//                                PromotionAttributeEntity.builder()
-//                                .promotionEntity(savedPromotion2)
-//                                .attributeName("target-genre")
-//                                .attributeValue("thriller")
-//                                .build();
-//                        promotionAttributeRepository.save(promotionAttributeEntity);
-//
-//                    }), DynamicTest.dynamicTest("3. 유효한 프로모션 조회", () -> {
-//                        // when, then
-//                        mockMvc.perform(get("/v1/promotions/now")
-//                                        .contentType(MediaType.APPLICATION_JSON))
-//                                .andExpect(status().isOk())
-//                                .andExpect(jsonPath("$.statusMessage").value("성공"))
-//                                .andExpect(jsonPath("$.data.content").isEmpty());
-//                    })
-//            );
-//        }
-//
-//    }
+    @Nested
+    @DisplayName("프로모션 조회 테스트")
+    class RetrieveActivePromotionsTests {
+
+        private static final List<PromotionAttributeCreateRequest> PROMOTION_ATTRIBUTES = List.of(
+                new PromotionAttributeCreateRequest("target-month", "12"),
+                new PromotionAttributeCreateRequest("target-genre", "romance")
+        );
+
+        @DisplayName("현재 적용 가능한 모든 프로모션 조회")
+        @TestFactory
+        Stream<DynamicTest> whenCurrentTimeGiven_thenReturnActivePromotionsList() {
+            return Stream.of(
+                    DynamicTest.dynamicTest("1. 프로모션1 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotion1 = PromotionEntity.create(
+                                "12월 로맨스 장르 파격 할인 행사입니다.",
+                                CASH_DISCOUNT,
+                                BigDecimal.valueOf(20),
+                                null,
+                                true,
+                                LocalDateTime.now().minusMonths(1),
+                                LocalDateTime.now().plusMonths(1)
+                        );
+                        PromotionEntity savedPromotion1 = promotionRepository.save(promotion1);
+
+                        PROMOTION_ATTRIBUTES.stream()
+                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
+                                        savedPromotion1,
+                                        promotionAttributeRequest.getAttributeName(),
+                                        promotionAttributeRequest.getAttributeValue()
+                                ))
+                                .forEach(promotionAttributeRepository::save);
+
+                    }), DynamicTest.dynamicTest("2. 프로모션2 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotion2 = PromotionEntity.create(
+                                "7월 로맨스 장르 파격 할인 행사입니다.",
+                                COOKIE_QUANTITY_DISCOUNT,
+                                null,
+                                2,
+                                true,
+                                LocalDateTime.now().minusMonths(1),
+                                LocalDateTime.now().plusMonths(1)
+                        );
+                        PromotionEntity savedPromotion2 = promotionRepository.save(promotion2);
+
+                        PROMOTION_ATTRIBUTES.stream()
+                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
+                                        savedPromotion2,
+                                        promotionAttributeRequest.getAttributeName(),
+                                        promotionAttributeRequest.getAttributeValue()
+                                ))
+                                .forEach(promotionAttributeRepository::save);
+
+                    }), DynamicTest.dynamicTest("3. 현재 적용 가능한 모든 프로모션 조회", () -> {
+
+                        // when, then
+                        mockMvc.perform(get("/v1/promotions/now")
+                                        .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.statusMessage").value("성공"))
+                                .andExpect(jsonPath("$.data[0].description").value("12월 로맨스 장르 파격" +
+                                        " 할인 행사입니다."))
+                                .andExpect(jsonPath("$.data[0].discountType").value(
+                                        "CASH_DISCOUNT"))
+                                .andExpect(jsonPath("$.data[1].description").value("7월 로맨스 장르 파격 " +
+                                        "할인 행사입니다."))
+                                .andExpect(jsonPath("$.data[1].discountType").value(
+                                        "COOKIE_QUANTITY_DISCOUNT"));
+                    })
+            );
+        }
+
+        @DisplayName("현재 적용 가능한 모든 프로모션 조회 - 해당 프로모션이 없는 경우 빈 리스트를 반환")
+        @TestFactory
+        Stream<DynamicTest> whenCurrentTimeGiven_AndNoPromotions_thenReturnEmptyList() throws
+                Exception {
+            return Stream.of(
+                    DynamicTest.dynamicTest("1. 과거 프로모션1 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotion1 = PromotionEntity.create(
+                                "12월 로맨스 장르 파격 할인 행사입니다.",
+                                CASH_DISCOUNT,
+                                BigDecimal.valueOf(20),
+                                null,
+                                true,
+                                LocalDateTime.now().minusMonths(2),
+                                LocalDateTime.now().minusMonths(1)
+                        );
+                        PromotionEntity savedPromotion1 = promotionRepository.save(promotion1);
+
+                        PROMOTION_ATTRIBUTES.stream()
+                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
+                                        savedPromotion1,
+                                        promotionAttributeRequest.getAttributeName(),
+                                        promotionAttributeRequest.getAttributeValue()
+                                ))
+                                .forEach(promotionAttributeRepository::save);
+
+                    }), DynamicTest.dynamicTest("2. 과거 프로모션2 저장 ->", () -> {
+                        // given
+                        PromotionEntity promotion2 = PromotionEntity.create(
+                                "7월 로맨스 장르 파격 할인 행사입니다.",
+                                COOKIE_QUANTITY_DISCOUNT,
+                                null,
+                                2,
+                                true,
+                                LocalDateTime.now().minusMonths(2),
+                                LocalDateTime.now().minusMonths(1)
+                        );
+                        PromotionEntity savedPromotion2 = promotionRepository.save(promotion2);
+
+                        PROMOTION_ATTRIBUTES.stream()
+                                .map(promotionAttributeRequest -> PromotionAttributeEntity.create(
+                                        savedPromotion2,
+                                        promotionAttributeRequest.getAttributeName(),
+                                        promotionAttributeRequest.getAttributeValue()
+                                ))
+                                .forEach(promotionAttributeRepository::save);
+
+                    }), DynamicTest.dynamicTest("3. 유효한 프로모션 조회", () -> {
+                        // when, then
+                        mockMvc.perform(get("/v1/promotions/now")
+                                        .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk())
+                                .andExpect(jsonPath("$.statusMessage").value("성공"))
+                                .andExpect(jsonPath("$.data[*]").isEmpty());
+                    })
+            );
+        }
+
+    }
 
 }
