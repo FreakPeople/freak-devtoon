@@ -2,6 +2,8 @@ package yjh.devtoon.promotion.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -11,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -27,6 +30,19 @@ public class PromotionEntity extends BaseEntity {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "discount_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DiscountType discountType;
+
+    @Column(name = "discount_rate")
+    private BigDecimal discountRate;
+
+    @Column(name = "discount_quantity")
+    private Integer discountQuantity;
+
+    @Column(name = "is_discount_duplicatable", nullable = false)
+    private Boolean isDiscountDuplicatable;
+
     @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
@@ -40,12 +56,20 @@ public class PromotionEntity extends BaseEntity {
     public PromotionEntity(
             final Long id,
             final String description,
+            final DiscountType discountType,
+            final BigDecimal discountRate,
+            final Integer discountQuantity,
+            final Boolean isDiscountDuplicatable,
             final LocalDateTime startDate,
             final LocalDateTime endDate,
             final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.description = description;
+        this.discountType = discountType;
+        this.discountRate = discountRate;
+        this.discountQuantity = discountQuantity;
+        this.isDiscountDuplicatable = isDiscountDuplicatable;
         this.startDate = startDate;
         this.endDate = endDate;
         this.deletedAt = deletedAt;
@@ -62,11 +86,19 @@ public class PromotionEntity extends BaseEntity {
      */
     public static PromotionEntity create(
             final String description,
+            final DiscountType discountType,
+            final BigDecimal discountRate,
+            final Integer discountQuantity,
+            final Boolean isDiscountDuplicatable,
             final LocalDateTime startDate,
             final LocalDateTime endDate
     ) {
         return PromotionEntity.builder()
                 .description(description)
+                .discountType(discountType)
+                .discountRate(discountRate)
+                .discountQuantity(discountQuantity)
+                .isDiscountDuplicatable(isDiscountDuplicatable)
                 .startDate(startDate)
                 .endDate(endDate)
                 .build();
@@ -88,6 +120,10 @@ public class PromotionEntity extends BaseEntity {
         return "PromotionEntity{" +
                 "id=" + id +
                 ", description='" + description + '\'' +
+                ", discountType=" + discountType +
+                ", discountRate=" + discountRate +
+                ", discountQuantity=" + discountQuantity +
+                ", isDiscountDuplicatable=" + isDiscountDuplicatable +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", deletedAt=" + deletedAt +
