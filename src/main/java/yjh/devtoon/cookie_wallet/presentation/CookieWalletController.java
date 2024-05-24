@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 import yjh.devtoon.cookie_wallet.application.CookieWalletService;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.dto.request.CookieRequest;
@@ -25,38 +25,38 @@ public class CookieWalletController {
      * 쿠키 지갑 조회
      */
     @GetMapping
-    public ResponseEntity<ApiReponse> retrieve(
+    public ResponseEntity<ApiResponse> retrieve(
             @RequestParam("webtoonViewerNo") final Long id
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.retrieve(id);
         CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     /**
      * 쿠키 증가
      */
     @PutMapping("/increase")
-    public ResponseEntity<ApiReponse> increase(
+    public ResponseEntity<ApiResponse> increase(
             @RequestParam("webtoonViewerNo") final Long id,
             @RequestBody final CookieRequest request
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.increase(id, request);
         CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
     /**
      * 쿠키 감소
      */
     @PutMapping("/decrease")
-    public ResponseEntity<ApiReponse> decrease(
+    public ResponseEntity<ApiResponse> decrease(
             @RequestParam("webtoonViewerNo") final Long id,
             @RequestBody final CookieRequest request
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.decrease(id, request);
         CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }

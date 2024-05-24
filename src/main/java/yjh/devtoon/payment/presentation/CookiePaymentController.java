@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 import yjh.devtoon.payment.application.CookiePaymentService;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
 import yjh.devtoon.payment.dto.CookiePaymentDetailDto;
@@ -29,18 +29,18 @@ public class CookiePaymentController {
      * : 쿠키는 현금으로 결제한다.
      */
     @PostMapping
-    public ResponseEntity<ApiReponse> register(
+    public ResponseEntity<ApiResponse> register(
             @RequestBody final CookiePaymentCreateRequest request
     ) {
         cookiePaymentService.register(request);
-        return ResponseEntity.ok(ApiReponse.success(null));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     /**
      * 특정 회원 쿠키 결제 내역 단건 조회
      */
     @GetMapping("/{webtoonViewerId}")
-    public ResponseEntity<ApiReponse> retrieve(
+    public ResponseEntity<ApiResponse> retrieve(
             @PathVariable final Long webtoonViewerId
     ) {
         CookiePaymentEntity cookiePayment = cookiePaymentService.retrieve(webtoonViewerId);
@@ -48,7 +48,7 @@ public class CookiePaymentController {
         CookiePaymentRetrieveResponse response =
                 CookiePaymentRetrieveResponse.from(cookiePaymentDetailDto);
 
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }

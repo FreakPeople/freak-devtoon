@@ -13,7 +13,7 @@ import yjh.devtoon.comment.application.CommentService;
 import yjh.devtoon.comment.domain.CommentEntity;
 import yjh.devtoon.comment.dto.reponse.CommentResponse;
 import yjh.devtoon.comment.dto.request.CommentCreateRequest;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 
 @RequestMapping("/v1/comments")
 @RequiredArgsConstructor
@@ -26,23 +26,23 @@ public class CommentController {
      * 댓글 등록
      */
     @PostMapping
-    public ResponseEntity<ApiReponse> register(
+    public ResponseEntity<ApiResponse> register(
             @RequestBody @Valid final CommentCreateRequest request
     ) {
         commentService.create(request);
-        return ResponseEntity.ok(ApiReponse.success(null));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     /**
      * 댓글 조회
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiReponse> retrieve(
+    public ResponseEntity<ApiResponse> retrieve(
             @PathVariable final Long id
     ) {
         CommentEntity comment = commentService.retrieve(id);
         CommentResponse response = CommentResponse.from(comment);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }

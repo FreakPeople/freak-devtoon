@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yjh.devtoon.common.response.ApiReponse;
+import yjh.devtoon.common.response.ApiResponse;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
@@ -26,23 +26,23 @@ public class WebtoonController {
      * 웹툰 등록
      */
     @PostMapping
-    public ResponseEntity<ApiReponse> registerWebtoon(
+    public ResponseEntity<ApiResponse> registerWebtoon(
             @RequestBody @Valid final WebtoonCreateRequest request
     ) {
         webtoonService.createWebtoon(request);
-        return ResponseEntity.ok(ApiReponse.success(null));
+        return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     /**
      * 웹툰 조회
      */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiReponse> retrieve(
+    public ResponseEntity<ApiResponse> retrieve(
         @PathVariable final Long id
     ) {
         WebtoonEntity webtoon = webtoonService.retrieve(id);
         WebtoonResponse response = WebtoonResponse.from(webtoon);
-        return ResponseEntity.ok(ApiReponse.success(response));
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }
