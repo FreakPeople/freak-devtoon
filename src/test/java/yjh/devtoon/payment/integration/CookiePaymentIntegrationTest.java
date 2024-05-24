@@ -23,6 +23,7 @@ import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.CookiePaymentRepository;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
+import yjh.devtoon.promotion.domain.DiscountType;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
@@ -68,37 +69,44 @@ public class CookiePaymentIntegrationTest {
 
             // given
             // 1. webtoon_viewer 등록
-            WebtoonViewerEntity savedWebtoonViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name("홍길동")
-                    .email("email@gmail.ocm")
-                    .password("password")
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedWebtoonViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name("홍길동")
+                            .email("email@gmail.ocm")
+                            .password("password")
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
 
             // 2. cookie policy 등록
-            CookiePolicyEntity savedCookiePolicy = cookiePolicyRepository.save(CookiePolicyEntity.builder()
-                    .id(1L)
-                    .cookiePrice(BigDecimal.valueOf(200))
-                    .cookieQuantityPerEpisode(5)
-                    .startDate(LocalDateTime.parse("2024-05-05T00:00"))
-                    .endDate(LocalDateTime.parse("2024-12-31T00:00"))
-                    .build()
-            );
+            CookiePolicyEntity savedCookiePolicy =
+                    cookiePolicyRepository.save(CookiePolicyEntity.builder()
+                            .id(1L)
+                            .cookiePrice(BigDecimal.valueOf(200))
+                            .cookieQuantityPerEpisode(5)
+                            .startDate(LocalDateTime.parse("2024-05-05T00:00"))
+                            .endDate(LocalDateTime.parse("2024-12-31T00:00"))
+                            .build()
+                    );
 
             // 3. promotion 등록
             PromotionEntity savedPromotion = promotionRepository.save(PromotionEntity.builder()
                     .id(1L)
-                    .description("5월 프로모션입니다.")
+                    .description("12월 로맨스 프로모션입니다.")
+                    .discountType(DiscountType.COOKIE_QUANTITY_DISCOUNT)
+                    .discountRate(null)
+                    .discountQuantity(2)
+                    .isDiscountDuplicatable(true)
                     .startDate(LocalDateTime.parse("2024-05-01T00:00"))
                     .endDate(LocalDateTime.parse("2024-12-29T00:00"))
                     .build());
 
             // 4. cookie wallet 저장
-            CookieWalletEntity savedCookieWallet = cookieWalletRepository.save(CookieWalletEntity.builder()
-                    .webtoonViewerId(savedWebtoonViewer.getId())
-                    .quantity(4)
-                    .build());
+            CookieWalletEntity savedCookieWallet =
+                    cookieWalletRepository.save(CookieWalletEntity.builder()
+                            .webtoonViewerId(savedWebtoonViewer.getId())
+                            .quantity(4)
+                            .build());
 
 
             final CookiePaymentCreateRequest request = new CookiePaymentCreateRequest(
@@ -122,22 +130,24 @@ public class CookiePaymentIntegrationTest {
 
             // given
             // 1. webtoon_viewer 등록
-            WebtoonViewerEntity savedWebtoonViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name("둘리")
-                    .email("email@gmail.ocm")
-                    .password("password")
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedWebtoonViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name("둘리")
+                            .email("email@gmail.ocm")
+                            .password("password")
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
 
             // 2. cookie payment 등록
-            CookiePaymentEntity savedCookiePayment = cookiePaymentRepository.save(CookiePaymentEntity.builder()
-                    .cookiesPaymentId(1L)
-                    .webtoonViewerId(savedWebtoonViewer.getId())
-                    .quantity(5)
-                    .price(Price.of(200))
-                    .totalDiscountRate(BigDecimal.valueOf(0.1))
-                    .build());
+            CookiePaymentEntity savedCookiePayment =
+                    cookiePaymentRepository.save(CookiePaymentEntity.builder()
+                            .cookiesPaymentId(1L)
+                            .webtoonViewerId(savedWebtoonViewer.getId())
+                            .quantity(5)
+                            .price(Price.of(200))
+                            .totalDiscountRate(BigDecimal.valueOf(0.1))
+                            .build());
             Long requestId = savedWebtoonViewer.getId();
 
             // when, then
