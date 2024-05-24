@@ -2,9 +2,6 @@ package yjh.devtoon.promotion.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
@@ -81,40 +78,44 @@ public class PromotionService {
     }
 
     /**
-     * 현재 활성화된 프로모션 전체 조회
-     * : 현재 활성화된 프로모션이 없는 경우 빈 페이지를 반환합니다.
+     * 현재 적용 가능한 모든 프로모션 조회
+     * : 프로모션만 조회합니다. 현재 적용 가능한 모든 프로모션이 없는 경우 빈 리스트를 반환합니다.
      */
     @Transactional(readOnly = true)
-    public Page<PromotionEntity> retrieveActivePromotions(final Pageable pageable) {
-        Page<PromotionEntity> activePromotions = validateActivePromotionExists(pageable);
+    public List<PromotionEntity> retrieveActivePromotions() {
+        log.info(">>>>>>>>>> 서비스 들어왔나");
+        List<PromotionEntity> activePromotions = findActivePromotions();
         return activePromotions;
     }
 
-    private Page<PromotionEntity> validateActivePromotionExists(final Pageable pageable) {
+    private List<PromotionEntity> findActivePromotions() {
         LocalDateTime currentTime = LocalDateTime.now();
-        Page<PromotionEntity> promotions = promotionRepository.findActivePromotions(
-                currentTime, pageable
-        );
+        List<PromotionEntity> promotions = promotionRepository.findActivePromotions(currentTime);
 
         if (promotions.isEmpty()) {
-            return new PageImpl<>(Collections.emptyList(), pageable, 0);
+            return Collections.emptyList();
         }
         return promotions;
     }
 
-    public PromotionAttributeEntity validatePromotionAttributeExists(
-            final PromotionEntity promotionEntity
-    ) {
-        PromotionAttributeEntity promotionAttribute =
-                promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId())
-                        .orElseThrow(() -> new DevtoonException(
-                                ErrorCode.NOT_FOUND,
-                                ErrorMessage.getResourceNotFound(
-                                        ResourceType.PROMOTION,
-                                        promotionEntity.getId()
-                                ))
-                        );
-        return promotionAttribute;
+    /**
+     * 현재 적용 가능한 프로모션에 포함된 모든 프로모션 속성 조회
+     */
+    @Transactional(readOnly = true)
+    public List<PromotionAttributeEntity> retrieveActivePromotionAttributes(Long promotionId) {
+        List<PromotionAttributeEntity> activePromotionAttributes =
+                findActivePromotionAttributes(promotionId);
+        return activePromotionAttributes;
+    }
+
+    private List<PromotionAttributeEntity> findActivePromotionAttributes(Long promotionId) {
+        List<PromotionAttributeEntity> promotionAttributes =
+                promotionAttributeRepository.findByPromotionEntityId(promotionId);
+
+        if (promotionAttributes.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return promotionAttributes;
     }
 
 }
