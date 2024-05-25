@@ -2,6 +2,8 @@ package yjh.devtoon.webtoon.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +32,10 @@ public class WebtoonEntity extends BaseEntity {
     @Column(name = "writerName", nullable = false)
     private String writerName;
 
+    @Column(name = "genre", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Genre genre;
+
     @Column(name = "deleted_at")
     protected LocalDateTime deletedAt;
 
@@ -38,19 +44,30 @@ public class WebtoonEntity extends BaseEntity {
             final Long id,
             final String title,
             final String writerName,
+            final Genre genre,
             final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.title = title;
         this.writerName = writerName;
+        this.genre = genre;
         this.deletedAt = deletedAt;
     }
 
-    public static WebtoonEntity create(final String title, final String writerName) {
+    public static WebtoonEntity create(
+            final String title,
+            final String writerName,
+            final Genre genre
+    ) {
         return WebtoonEntity.builder()
                 .title(title)
                 .writerName(writerName)
+                .genre(genre)
                 .build();
+    }
+
+    public boolean isGenre(final String attributeName) {
+        return genre.isSame(attributeName);
     }
 
     @Override
