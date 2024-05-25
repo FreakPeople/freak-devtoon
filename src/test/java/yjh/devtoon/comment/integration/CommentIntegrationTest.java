@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.comment.domain.CommentEntity;
 import yjh.devtoon.comment.dto.request.CommentCreateRequest;
 import yjh.devtoon.comment.infrastructure.CommentRepository;
+import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
 import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
@@ -65,16 +66,18 @@ public class CommentIntegrationTest {
             WebtoonEntity savedWebtoon = webtoonRepository.save(WebtoonEntity.builder()
                     .title("쿠베라")
                     .writerName("카레곰")
+                    .genre(Genre.HORROR)
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name(VALID_FILED_TITLE)
-                    .email(VALID_FILED_EMAIL)
-                    .password(VALID_FILED_PASSWORD)
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name(VALID_FILED_TITLE)
+                            .email(VALID_FILED_EMAIL)
+                            .password(VALID_FILED_PASSWORD)
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
             long detailId = 1L;
 
             final CommentCreateRequest request = new CommentCreateRequest(
@@ -102,16 +105,18 @@ public class CommentIntegrationTest {
             WebtoonEntity savedWebtoon = webtoonRepository.save(WebtoonEntity.builder()
                     .title("쿠베라")
                     .writerName("카레곰")
+                    .genre(Genre.HORROR)
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name(VALID_FILED_TITLE)
-                    .email(VALID_FILED_EMAIL)
-                    .password(VALID_FILED_PASSWORD)
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name(VALID_FILED_TITLE)
+                            .email(VALID_FILED_EMAIL)
+                            .password(VALID_FILED_PASSWORD)
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
             long detailId = 1L;
 
             final CommentCreateRequest request = new CommentCreateRequest(
@@ -140,16 +145,18 @@ public class CommentIntegrationTest {
             WebtoonEntity savedWebtoon = webtoonRepository.save(WebtoonEntity.builder()
                     .title("쿠베라")
                     .writerName("카레곰")
+                    .genre(Genre.HORROR)
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name(VALID_FILED_TITLE)
-                    .email(VALID_FILED_EMAIL)
-                    .password(VALID_FILED_PASSWORD)
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name(VALID_FILED_TITLE)
+                            .email(VALID_FILED_EMAIL)
+                            .password(VALID_FILED_PASSWORD)
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
             long detailId = 1L;
 
             final CommentCreateRequest request = new CommentCreateRequest(
@@ -177,23 +184,25 @@ public class CommentIntegrationTest {
             WebtoonEntity savedWebtoon = webtoonRepository.save(WebtoonEntity.builder()
                     .title("쿠베라")
                     .writerName("카레곰")
+                    .genre(Genre.HORROR)
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name(VALID_FILED_TITLE)
-                    .email(VALID_FILED_EMAIL)
-                    .password(VALID_FILED_PASSWORD)
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name(VALID_FILED_TITLE)
+                            .email(VALID_FILED_EMAIL)
+                            .password(VALID_FILED_PASSWORD)
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
             long detailId = 1L;
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
                     detailId,
                     savedViewer.getId(),
-                    "문".repeat(101)
+                    "문" .repeat(101)
             );
             final String requestBody = objectMapper.writeValueAsString(request);
 
@@ -213,13 +222,14 @@ public class CommentIntegrationTest {
             long NotExistWebtoonId = 99999999999L;
 
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
-                    .name(VALID_FILED_TITLE)
-                    .email(VALID_FILED_EMAIL)
-                    .password(VALID_FILED_PASSWORD)
-                    .membershipStatus(MembershipStatus.GENERAL)
-                    .build()
-            );
+            WebtoonViewerEntity savedViewer =
+                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+                            .name(VALID_FILED_TITLE)
+                            .email(VALID_FILED_EMAIL)
+                            .password(VALID_FILED_PASSWORD)
+                            .membershipStatus(MembershipStatus.GENERAL)
+                            .build()
+                    );
             long detailId = 1L;
 
             final CommentCreateRequest request = new CommentCreateRequest(
