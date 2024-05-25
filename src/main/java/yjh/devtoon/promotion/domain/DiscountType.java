@@ -7,6 +7,11 @@ import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.promotion.constant.ErrorMessage;
 import java.util.Arrays;
 
+/**
+ * 프로모션 할인 유형
+ * 1. CASH_DISCOUNT : 쿠키 구매시 현금 할인
+ * 2. COOKIE_QUANTITY_DISCOUNT : 웹툰 구매시 쿠키 개수 할인
+ */
 @Getter
 public enum DiscountType {
     CASH_DISCOUNT("cash_discount"),

@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
+import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import java.time.LocalDateTime;
 
@@ -68,6 +69,9 @@ public class PromotionAttributeEntity extends BaseEntity {
                 .build();
     }
 
+    /**
+     * 프로모션 할인 유형 중 '현금 할인'이 적용가능한지 확인하는 메서드
+     */
     public boolean isCashDiscountApply(
             final WebtoonViewerEntity webtoonViewer,
             final int quantity
@@ -81,6 +85,15 @@ public class PromotionAttributeEntity extends BaseEntity {
         return false;
     }
 
+    /**
+     * 프로모션 할인 유형 중 '웹툰 구매시 쿠키 개수 할인'이 적용가능한지 확인하는 메서드
+     */
+    public boolean isCookieQuantyDiscountApply(final WebtoonEntity webtoon) {
+        if (attributeName.equals("target_genre")) {
+            return webtoon.isGenre(attributeValue);
+        }
+        return false;
+    }
 
     @Override
     public String toString() {
