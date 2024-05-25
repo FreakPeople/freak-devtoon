@@ -14,7 +14,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
-import yjh.devtoon.webtoon.domain.WebtoonEntity;
+import yjh.devtoon.promotion.domain.attribute.Attribute;
+import yjh.devtoon.promotion.domain.attribute.Author;
+import yjh.devtoon.promotion.domain.attribute.Genre;
 import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import java.time.LocalDateTime;
 
@@ -76,7 +78,7 @@ public class PromotionAttributeEntity extends BaseEntity {
             final WebtoonViewerEntity webtoonViewer,
             final int quantity
     ) {
-        // TODO : 속성이 계속해서 추가될 수 있음. 리팩토링 해야함.
+        // TODO : 속성이 계속해서 추가될 수 있음. 리팩토링 필요.
         if (attributeName.equals("premium_member_discount")) {
             return webtoonViewer.isPremium();
         } else if (attributeName.equals("cookie_purchase_quantity")) {
@@ -86,13 +88,16 @@ public class PromotionAttributeEntity extends BaseEntity {
     }
 
     /**
-     * 프로모션 할인 유형 중 '웹툰 구매시 쿠키 개수 할인'이 적용가능한지 확인하는 메서드
+     * attributeName에 따라 구체 클래스를 생성하는 메서드
      */
-    public boolean isCookieQuantyDiscountApply(final WebtoonEntity webtoon) {
+    // TODO: 속성이 계속해서 추가될 수 있음. 리팩토링 필요.
+    public Attribute toModel() {
         if (attributeName.equals("target_genre")) {
-            return webtoon.isGenre(attributeValue);
+            return new Genre(attributeValue);
+        } else if (attributeName.equals("target_author")) {
+            return new Author(attributeValue);
         }
-        return false;
+        return null;
     }
 
     @Override
