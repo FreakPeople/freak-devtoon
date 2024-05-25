@@ -19,6 +19,9 @@ import yjh.devtoon.payment.infrastructure.WebtoonPaymentRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
+import yjh.devtoon.promotion.domain.attribute.Attribute;
+import yjh.devtoon.promotion.domain.promotion.CookiePromotion;
+import yjh.devtoon.promotion.domain.promotion.Promotion;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import yjh.devtoon.webtoon.application.WebtoonService;
@@ -58,7 +61,7 @@ public class WebtoonPaymentService {
         WebtoonEntity webtoon = webtoonService.retrieve(webtoonId);
 
         // 3. 웹툰 미리보기 1편당 차감 쿠키 개수 정책 조회
-        Integer activeCookieQuantityPerEpisode =
+        Integer cookiePerEpisode =
                 cookiePolicyRepository.findActiveCookieQuantityPerEpisode();
 
         // 4. 현재 적용 가능한 프로모션 중
@@ -70,26 +73,25 @@ public class WebtoonPaymentService {
                 .filter(PromotionEntity::isCookieQuantityDiscountApplicable)
                 .toList();
 
-        List<PromotionEntity> isApplicable = new ArrayList<>();
+        List<Promotion> promotions = new ArrayList<>();
         for (PromotionEntity promotionEntity : cookieQuantityDiscountActivePromotion) {
-            List<PromotionAttributeEntity> promotionAttributeEntities =
-                    promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
+            List<Attribute> attributes =
+                    promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId()).stream()
+                            .map(PromotionAttributeEntity::toModel)
+                            .toList();
 
-            boolean isApplyPromotionAttributes = promotionAttributeEntities.stream()
-                    .anyMatch(a -> a.isCookieQuantyDiscountApply(webtoon));
-            if (isApplyPromotionAttributes) {
-                isApplicable.add(promotionEntity);
-            }
+            Promotion promotion = new CookiePromotion(promotionEntity.getDiscountQuantity(),
+                    attributes);
+            promotions.add(promotion);
         }
 
         // 5. 웹툰 구매시 쿠키 할인 개수
-        Integer discountQuantity = isApplicable.stream()
-                .map(PromotionEntity::getDiscountQuantity)
+        int discount = promotions.stream()
+                .map(p -> p.calculateDiscount(webtoon))
                 .reduce(0, Integer::sum);
 
         // 6. 필요한 최종 쿠키 개수 : 정책 - 5번
-        int totalCookieQuantityPerEpisode = max(0,
-                activeCookieQuantityPerEpisode - discountQuantity);
+        int totalCookieQuantityPerEpisode = max(0, cookiePerEpisode - discount);
 
         // 7. cookieWallet 결제한 만큼 감소 후 DB 저장
         CookieWalletEntity cookieWallet = cookieWalletService.retrieve(webtoonViewerId);
@@ -125,7 +127,6 @@ public class WebtoonPaymentService {
     }
 
     /**
-     * $
      * 특정 회원 웹툰 결제 내역 단건 조회
      */
     public WebtoonPaymentEntity retrieve(final Long webtoonViewerId) {

@@ -184,6 +184,7 @@ public class WebtoonIntegrationTest {
             WebtoonEntity webtoonEntity = WebtoonEntity.builder()
                     .title("쿠베라")
                     .writerName("카레곰")
+                    .genre(Genre.HORROR)
                     .build();
             WebtoonEntity saved = webtoonRepository.save(webtoonEntity);
 

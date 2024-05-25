@@ -29,9 +29,7 @@ public enum Genre {
                         ErrorMessage.getGenreNotFound(genre)));
     }
 
-    public boolean isSame(final String attributeName) {
-        System.out.println("Genre: " + attributeName); // thriller
-        System.out.println("Genre: " + name.equals(attributeName)); //
-        return name.equals(attributeName);
+    public boolean isSame(final String attributeValue) {
+        return name.equals(attributeValue);
     }
 }

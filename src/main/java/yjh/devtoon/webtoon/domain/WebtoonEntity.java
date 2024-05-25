@@ -66,8 +66,12 @@ public class WebtoonEntity extends BaseEntity {
                 .build();
     }
 
-    public boolean isGenre(final String attributeName) {
-        return genre.isSame(attributeName);
+    public boolean isGenre(final String attributeValue) {
+        return genre.isSame(attributeValue);
+    }
+
+    public boolean isWriter(String name) {
+        return writerName.equals(name);
     }
 
     @Override
@@ -76,6 +80,7 @@ public class WebtoonEntity extends BaseEntity {
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", writerName='" + writerName + '\'' +
+                ", genre=" + genre +
                 ", deletedAt=" + deletedAt +
                 '}';
     }
