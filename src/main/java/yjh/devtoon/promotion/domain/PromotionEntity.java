@@ -75,15 +75,6 @@ public class PromotionEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    /**
-     * 프로모션 객체 생성 메서드
-     * : 주어진 설명, 시작 날짜, 종료 날짜를 사용하여 새로운 PromotionEntity 인스턴스를 생성합니다.
-     *
-     * @param description 프로모션에 대한 설명
-     * @param startDate   프로모션의 시작 날짜 및 시간
-     * @param endDate     프로모션의 종료 날짜 및 시간
-     * @return 새로 생성된 PromotionEntity 객체
-     */
     public static PromotionEntity create(
             final String description,
             final DiscountType discountType,
@@ -113,6 +104,27 @@ public class PromotionEntity extends BaseEntity {
      */
     public void recordDeletion(LocalDateTime deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    /**
+     * 프로모션 할인 유형 중 '현금 할인'에 해당하는지 확인하는 메서드
+     */
+    public boolean isCashDiscount() {
+        return discountType.equals(DiscountType.CASH_DISCOUNT);
+    }
+
+    /**
+     * 중복 할인이 불가능함을 확인하는 메서드
+     */
+    public boolean isNotDiscountDuplicatable() {
+        return !isDiscountDuplicatable;
+    }
+
+    /**
+     * 프로모션 할인 유형 중 '웹툰 구매시 쿠키 개수 할인'에 해당하는지 확인하는 메서드
+     */
+    public boolean isCookieQuantityDiscountApplicable() {
+        return discountType.equals(DiscountType.COOKIE_QUANTITY_DISCOUNT);
     }
 
     @Override

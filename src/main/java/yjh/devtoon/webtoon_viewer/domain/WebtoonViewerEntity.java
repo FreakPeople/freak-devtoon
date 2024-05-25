@@ -77,6 +77,11 @@ public class WebtoonViewerEntity extends BaseEntity {
         this.membershipStatus = membershipStatus;
     }
 
+
+    public boolean isPremium() {
+        return membershipStatus == MembershipStatus.PREMIUM;
+    }
+
     @Override
     public String toString() {
         return "WebtoonViewerEntity{" +
