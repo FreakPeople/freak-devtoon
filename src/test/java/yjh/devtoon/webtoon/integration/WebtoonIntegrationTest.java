@@ -23,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
@@ -48,7 +49,7 @@ public class WebtoonIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 등록 테스트")
-    class WebtoonRegisterTests{
+    class WebtoonRegisterTests {
 
         @DisplayName("웹툰 등록 성공")
         @Test
@@ -56,7 +57,8 @@ public class WebtoonIntegrationTest {
             // given
             final WebtoonCreateRequest request = new WebtoonCreateRequest(
                     "쿠베라",
-                    "카레곰"
+                    "카레곰",
+                    "horror"
             );
             final String requestBody = objectMapper.writeValueAsString(request);
 
@@ -71,10 +73,12 @@ public class WebtoonIntegrationTest {
 
         @DisplayName("웹툰 등록 실패 - 필드가 null인 경우")
         @ParameterizedTest
-        @CsvSource(value = {", 카레곰", "쿠베라, "}, delimiter = ',')
-        void givenNullField_whenRegisterWebtoon_thenThrowException(String title, String writerName) throws Exception {
+        @CsvSource(value = {", 카레곰, horror", "쿠베라, , horror"}, delimiter = ',')
+        void givenNullField_whenRegisterWebtoon_thenThrowException(String title,
+                                                                   String writerName,
+                                                                   String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
@@ -88,10 +92,12 @@ public class WebtoonIntegrationTest {
 
         @DisplayName("웹툰 등록 실패 - 필드가 공백인 경우")
         @ParameterizedTest
-        @CsvSource(value = {"' ', 카레곰", "쿠베라, ' '"}, delimiter = ',')
-        void givenEmptyField_whenRegisterWebtoon_thenThrowException(String title, String writerName) throws Exception {
+        @CsvSource(value = {"' ', 카레곰, horror", "쿠베라, ' ', horror"}, delimiter = ',')
+        void givenEmptyField_whenRegisterWebtoon_thenThrowException(String title,
+                                                                    String writerName,
+                                                                    String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
@@ -105,10 +111,13 @@ public class WebtoonIntegrationTest {
 
         @DisplayName("웹툰 등록 실패 - 필드 사이즈 범위가 [1~20]이 아닌경우")
         @ParameterizedTest
-        @CsvSource(value = {"123456789012345678901, 카레곰", "쿠베라, 123456789012345678901"}, delimiter = ',')
-        void givenNotRangeFiled_whenRegisterWebtoon_thenThrowException(String title, String writerName) throws Exception {
+        @CsvSource(value = {"123456789012345678901, 카레곰, horror", "쿠베라, 123456789012345678901, " +
+                "horror"}, delimiter = ',')
+        void givenNotRangeFiled_whenRegisterWebtoon_thenThrowException(String title,
+                                                                       String writerName,
+                                                                       String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
@@ -129,6 +138,7 @@ public class WebtoonIntegrationTest {
                         WebtoonEntity webtoonEntity = WebtoonEntity.builder()
                                 .title("쿠베라")
                                 .writerName("카레곰")
+                                .genre(Genre.HORROR)
                                 .build();
 
                         // when
@@ -145,7 +155,8 @@ public class WebtoonIntegrationTest {
                         // given
                         final WebtoonCreateRequest request = new WebtoonCreateRequest(
                                 "쿠베라",
-                                "짜장곰"
+                                "짜장곰",
+                                "horror"
                         );
                         final String requestBody = objectMapper.writeValueAsString(request);
 
@@ -164,7 +175,7 @@ public class WebtoonIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 조회 테스트")
-    class WebtoonRetrieveTests{
+    class WebtoonRetrieveTests {
 
         @DisplayName("웹툰 조회 성공")
         @Test
