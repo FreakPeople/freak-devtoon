@@ -65,8 +65,6 @@ public class PromotionController {
                 .map(RetrieveActivePromotionsResponse::from)
                 .collect(Collectors.toList());
 
-
-        System.out.println(response.size());
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
