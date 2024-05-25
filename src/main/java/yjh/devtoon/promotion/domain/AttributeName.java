@@ -10,8 +10,9 @@ import java.util.Arrays;
 @Getter
 public enum AttributeName {
 
-    TARGET_MONTH("target_month"),
+    TARGET_AUTHOR("target_author"),
     TARGET_GENRE("target_genre"),
+    TARGET_MONTH("target_month"),
     RELEASE_MONTH("release_month"),
     COOKIE_PURCHASE_QUANTITY("cookie_purchase_quantity"),
     PREMIUM_MEMBER_DISCOUNT("premium_member_discount"),
@@ -31,4 +32,5 @@ public enum AttributeName {
                         ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.PROMOTION, attributeName)));
     }
+
 }
