@@ -83,7 +83,6 @@ public class PromotionService {
      */
     @Transactional(readOnly = true)
     public List<PromotionEntity> retrieveActivePromotions() {
-        log.info(">>>>>>>>>> 서비스 들어왔나");
         List<PromotionEntity> activePromotions = findActivePromotions();
         return activePromotions;
     }
