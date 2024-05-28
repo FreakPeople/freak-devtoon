@@ -18,6 +18,12 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     List<PromotionEntity> findActivePromotions(@Param("now") LocalDateTime now);
 
     /**
+     * 현재와 미래 프로모션을 리스트로 반환합니다.
+     */
+    @Query("SELECT p FROM PromotionEntity p WHERE  p.endDate IS NULL OR p.endDate >= :now")
+    List<PromotionEntity> findCurrentOrFuturePromotions(LocalDateTime now);
+
+    /**
      * 현재 활성화된 모든 프로모션을 페이지로 반환합니다.
      */
     @Query("SELECT p FROM PromotionEntity p WHERE p.startDate <= :now AND p.endDate >= :now")

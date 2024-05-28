@@ -25,9 +25,11 @@ public class PromotionService {
 
     private final PromotionRepository promotionRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
+    private final PromotionCacheService promotionCacheService;
 
     /**
      * 프로모션 등록
+     * : 등록된 프로모션은 캐시에 저장된다.
      */
     @Transactional
     public void register(final PromotionCreateRequest request) {
@@ -49,6 +51,9 @@ public class PromotionService {
                 .map(promotionAttributeRequest -> toEntity(savedPromotion,
                         promotionAttributeRequest))
                 .forEach(promotionAttributeRepository::save);
+
+        List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
+        promotionCacheService.updateMultiplePromotionsInCache(promotions);
     }
 
     private PromotionAttributeEntity toEntity(
@@ -62,7 +67,7 @@ public class PromotionService {
     }
 
     /**
-     * 프로모션 삭제
+     * [관리자용] 프로모션 삭제
      * : 삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
      */
     @Transactional
@@ -73,28 +78,57 @@ public class PromotionService {
                         ErrorMessage.getResourceNotFound(ResourceType.PROMOTION, id)
                 ));
         promotion.recordDeletion(LocalDateTime.now());
-
+        promotionCacheService.evictPromotionFromCache(id);
         return promotionRepository.save(promotion);
     }
 
     /**
      * 현재 적용 가능한 모든 프로모션 조회
-     * : 프로모션만 조회합니다. 현재 적용 가능한 모든 프로모션이 없는 경우 빈 리스트를 반환합니다.
+     * : 프로모션만 조회합니다. 프로모션이 없는 경우 빈 리스트를 반환합니다.
      */
     @Transactional(readOnly = true)
     public List<PromotionEntity> retrieveActivePromotions() {
-        List<PromotionEntity> activePromotions = findActivePromotions();
-        return activePromotions;
+        // 현재~미래 프로모션 조회 후 캐시 저장
+        List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
+        promotionCacheService.updateMultiplePromotionsInCache(promotions);
+
+        // 필터링 : 과거 프로모션 제거 후 캐시 저장
+        List<PromotionEntity> currentOrFuturePromotions =
+                filterCurrentOrFuturePromotions(promotions);
+        promotionCacheService.updateMultiplePromotionsInCache(currentOrFuturePromotions);
+
+        // 필터링 : 미래 프로모션 제거 후 반환, 캐시 저장x, 사용자에게 반환 목적의 필터링
+        List<PromotionEntity> currentPromotions =
+                filterCurrentPromotions(promotions);
+
+        return currentPromotions;
     }
 
-    private List<PromotionEntity> findActivePromotions() {
+    private List<PromotionEntity> retrieveCurrentOrFuturePromotion() {
         LocalDateTime currentTime = LocalDateTime.now();
-        List<PromotionEntity> promotions = promotionRepository.findActivePromotions(currentTime);
+        List<PromotionEntity> promotions =
+                promotionRepository.findCurrentOrFuturePromotions(currentTime);
 
         if (promotions.isEmpty()) {
             return Collections.emptyList();
         }
         return promotions;
+    }
+
+
+    private List<PromotionEntity> filterCurrentOrFuturePromotions(final List<PromotionEntity> promotions) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return promotions.stream()
+                .filter(p -> p.isCurrentOrFuture(currentTime))
+                .toList();
+
+    }
+
+    private List<PromotionEntity> filterCurrentPromotions(final List<PromotionEntity> currentAndFuturePromotions) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        return currentAndFuturePromotions.stream()
+                .filter(p -> p.isCurrent(currentTime))
+                .toList();
     }
 
     /**
