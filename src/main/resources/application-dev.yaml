@@ -17,5 +17,7 @@ spring:
     sql:
         init:
             mode: always # data.sql 파일 실행
+    cache:
+        type: caffeine
 
 
