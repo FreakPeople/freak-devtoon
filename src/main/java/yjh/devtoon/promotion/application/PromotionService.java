@@ -2,6 +2,7 @@ package yjh.devtoon.promotion.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
@@ -29,7 +30,6 @@ public class PromotionService {
 
     /**
      * 프로모션 등록
-     * : 등록된 프로모션은 캐시에 저장된다.
      */
     @Transactional
     public void register(final PromotionCreateRequest request) {
@@ -52,8 +52,7 @@ public class PromotionService {
                         promotionAttributeRequest))
                 .forEach(promotionAttributeRepository::save);
 
-        List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
-        promotionCacheService.updateMultiplePromotionsInCache(promotions);
+        promotionCacheService.updatePromotionInCache(savedPromotion);
     }
 
     private PromotionAttributeEntity toEntity(
@@ -87,20 +86,13 @@ public class PromotionService {
      * : 프로모션만 조회합니다. 프로모션이 없는 경우 빈 리스트를 반환합니다.
      */
     @Transactional(readOnly = true)
+    @Cacheable(value = "promotion", key = "'active'")
     public List<PromotionEntity> retrieveActivePromotions() {
-        // 현재~미래 프로모션 조회 후 캐시 저장
         List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
-        promotionCacheService.updateMultiplePromotionsInCache(promotions);
 
-        // 필터링 : 과거 프로모션 제거 후 캐시 저장
-        List<PromotionEntity> currentOrFuturePromotions =
-                filterCurrentOrFuturePromotions(promotions);
-        promotionCacheService.updateMultiplePromotionsInCache(currentOrFuturePromotions);
-
-        // 필터링 : 미래 프로모션 제거 후 반환, 캐시 저장x, 사용자에게 반환 목적의 필터링
         List<PromotionEntity> currentPromotions =
                 filterCurrentPromotions(promotions);
-
+        currentPromotions.forEach(promotion -> log.info("프로모션: {}", promotion));
         return currentPromotions;
     }
 
@@ -115,13 +107,11 @@ public class PromotionService {
         return promotions;
     }
 
-
     private List<PromotionEntity> filterCurrentOrFuturePromotions(final List<PromotionEntity> promotions) {
         LocalDateTime currentTime = LocalDateTime.now();
         return promotions.stream()
                 .filter(p -> p.isCurrentOrFuture(currentTime))
                 .toList();
-
     }
 
     private List<PromotionEntity> filterCurrentPromotions(final List<PromotionEntity> currentAndFuturePromotions) {

@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,15 +18,15 @@ public class PromotionCacheService {
     /**
      * @CachePut: 기존 캐시 항목은 그대로 유지, 새로 등록된 항목만 캐시에 추가
      */
-    @CachePut(value = "promotion")
-    public List<PromotionEntity> updateMultiplePromotionsInCache(List<PromotionEntity> promotions) {
-        log.info("프로모션 데이터를 캐시에 추가합니다.");
-        return promotions;
+    @CachePut(value = "promotion", key = "#promotion.id")
+    public PromotionEntity updatePromotionInCache(PromotionEntity promotion) {
+        log.info("프로모션 데이터를 캐시에 추가합니다: {}", promotion.getId());
+        return promotion;
     }
 
     @CacheEvict(value = "promotion", key = "#promotionId")
     public void evictPromotionFromCache(Long promotionId) {
-        log.info("캐시에서 특정 프로모션 데이터를 삭제합니다.");
+        log.info("캐시에서 특정 프로모션 데이터를 삭제합니다: {}", promotionId);
     }
 
 }
