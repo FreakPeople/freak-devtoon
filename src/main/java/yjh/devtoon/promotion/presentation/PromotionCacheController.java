@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiResponse;
+import yjh.devtoon.promotion.domain.PromotionEntity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,8 +48,19 @@ public class PromotionCacheController {
         Map<String, List<String>> entry = new HashMap<>();
 
         nativeCache.forEach((key, value) -> {
-            if (!key.toString().contains("SimpleKey")) {
-                entry.computeIfAbsent(cacheName, k -> new ArrayList<>()).add(key.toString());
+            if (value instanceof List) {
+                List<?> valueList = (List<?>) value;
+                List<String> promotions = new ArrayList<>();
+                for (Object obj : valueList) {
+                    if (obj instanceof PromotionEntity) {
+                        promotions.add(obj.toString());
+                    }
+                }
+                entry.computeIfAbsent(cacheName, k -> new ArrayList<>()).add(key.toString() + ": "
+                        + promotions);
+            } else {
+                entry.computeIfAbsent(cacheName, k -> new ArrayList<>()).add(key.toString() + ": "
+                        + value.toString());
             }
         });
         return entry;
