@@ -142,4 +142,19 @@ public class PromotionEntity extends BaseEntity {
                 '}';
     }
 
+    /**
+     * 현재 또는 미래에 유효한 프로모션인지 확인하는 메서드
+     */
+    public boolean isCurrentOrFuture(final LocalDateTime now) {
+        return endDate == null || now.isBefore(endDate) || now.isEqual(endDate);
+    }
+
+    /**
+     * 현재 유효한 프로모션인지 확인하는 메서드
+     */
+    public boolean isCurrent(final LocalDateTime now) {
+        return (now.isAfter(startDate) || now.isEqual(startDate)) &&
+                (endDate == null || now.isBefore(endDate) || now.isEqual(endDate));
+    }
+
 }
