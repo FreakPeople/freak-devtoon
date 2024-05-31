@@ -64,9 +64,9 @@ public class CookiePaymentService {
         // TODO: [기존 코드 , 캐시 적용] 성능테스트 필요
         // 3. 현재 활성 프로모션 조회
         // 기존 코드
-        List<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(now);
+        //List<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(now);
         // 캐시 적용
-        //List<PromotionEntity> activePromotions = promotionService.retrieveActivePromotions();
+        List<PromotionEntity> activePromotions = promotionService.retrieveActivePromotions();
 
         // 4. 3번 중 DiscountType이 CASH_DISCOUNT 인것만 골라냄
         List<PromotionEntity> cashDiscountActivePromotion = activePromotions.stream()
