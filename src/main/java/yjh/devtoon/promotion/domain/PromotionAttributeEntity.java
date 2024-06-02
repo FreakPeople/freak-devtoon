@@ -88,7 +88,9 @@ public class PromotionAttributeEntity extends BaseEntity {
     }
 
     /**
-     * attributeName에 따라 구체 클래스를 생성하는 메서드
+     * PromotionAttributeEntity 객체를 Attribute 모델 객체로 변환하는 메서드
+     * : PromotionAttributeEntity의 attributeName을 확인 후
+     * 그 값에 따라 적절한 Attribute 서브클래스를 생성
      */
     // TODO: 속성이 계속해서 추가될 수 있음. 리팩토링 필요.
     public Attribute toModel() {
