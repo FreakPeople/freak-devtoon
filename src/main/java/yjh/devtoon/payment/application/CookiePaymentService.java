@@ -57,7 +57,7 @@ public class CookiePaymentService {
 
         // 2. cookie policy에서 현재 cookie 가격 조회
         LocalDateTime now = LocalDateTime.now();
-        Price activeCookie = Price.of(cookiePolicyRepository.activeCookiePrice(now));
+        Price activeCookie = Price.of(cookiePolicyRepository.findActiveCookiePrice());
 
         // 3. 현재 활성 프로모션 조회 (캐시)
         List<PromotionEntity> activePromotions = promotionService.retrieveActivePromotions();
