@@ -17,18 +17,17 @@ import yjh.devtoon.payment.domain.WebtoonPaymentEntity;
 import yjh.devtoon.payment.dto.request.WebtoonPaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.WebtoonPaymentRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
+import yjh.devtoon.promotion.application.PromotionService;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.domain.attribute.Attribute;
 import yjh.devtoon.promotion.domain.promotion.CookiePromotion;
 import yjh.devtoon.promotion.domain.promotion.Promotion;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
-import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
 import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +42,9 @@ public class WebtoonPaymentService {
     private final CookieWalletService cookieWalletService;
     private final CookieWalletRepository cookieWalletRepository;
     private final WebtoonPaymentRepository webtoonPaymentRepository;
-    private final PromotionRepository promotionRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
     private final WebtoonService webtoonService;
+    private final PromotionService promotionService;
 
     /**
      * 웹툰 미리보기 결제
@@ -65,8 +64,7 @@ public class WebtoonPaymentService {
                 cookiePolicyRepository.findActiveCookieQuantityPerEpisode();
 
         // 4. 현재 적용 가능한 프로모션 중
-        LocalDateTime now = LocalDateTime.now();
-        List<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(now);
+        List<PromotionEntity> activePromotions = promotionService.retrieveActivePromotions();
 
         // 4-1. COOKIE_QUANTITY_DISCOUNT에 해당하는 프로모션 조회
         List<PromotionEntity> cookieQuantityDiscountActivePromotion = activePromotions.stream()
@@ -80,8 +78,10 @@ public class WebtoonPaymentService {
                             .map(PromotionAttributeEntity::toModel)
                             .toList();
 
-            Promotion promotion = new CookiePromotion(promotionEntity.getDiscountQuantity(),
-                    attributes);
+            Promotion promotion = new CookiePromotion(
+                    promotionEntity.getDiscountQuantity(),
+                    attributes
+            );
             promotions.add(promotion);
         }
 

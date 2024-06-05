@@ -22,7 +22,6 @@ import yjh.devtoon.promotion.application.PromotionService;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
-import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
 import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
@@ -40,7 +39,6 @@ public class CookiePaymentService {
     private final CookiePaymentRepository cookiePaymentRepository;
     private final WebtoonViewerRepository webtoonViewerRepository;
     private final CookiePolicyRepository cookiePolicyRepository;
-    private final PromotionRepository promotionRepository;
     private final CookieWalletService cookieWalletService;
     private final CookieWalletRepository cookieWalletRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
@@ -59,13 +57,9 @@ public class CookiePaymentService {
 
         // 2. cookie policy에서 현재 cookie 가격 조회
         LocalDateTime now = LocalDateTime.now();
-        Price activeCookie = Price.of(cookiePolicyRepository.activeCookiePrice(now));
+        Price activeCookie = Price.of(cookiePolicyRepository.findActiveCookiePrice());
 
-        // TODO: [기존 코드 , 캐시 적용] 성능테스트 필요
-        // 3. 현재 활성 프로모션 조회
-        // 기존 코드
-        //List<PromotionEntity> activePromotions = promotionRepository.findActivePromotions(now);
-        // 캐시 적용
+        // 3. 현재 활성 프로모션 조회 (캐시)
         List<PromotionEntity> activePromotions = promotionService.retrieveActivePromotions();
 
         // 4. 3번 중 DiscountType이 CASH_DISCOUNT 인것만 골라냄
