@@ -25,11 +25,12 @@ import java.util.List;
 @Service
 public class PromotionService {
 
+    private static final String CACHE_KEY = "promotion:active:list";
+    private static final Duration CACHE_DURATION = Duration.ofHours(24);
+
     private final PromotionRepository promotionRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
     private final RedisTemplate<String, List<PromotionEntity>> promotionRedisTemplate;
-    private static final String CACHE_KEY = "promotion:active:list";
-    private static final Duration CACHE_DURATION = Duration.ofHours(24);
 
     /**
      * 프로모션 등록
