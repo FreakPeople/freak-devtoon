@@ -45,17 +45,20 @@ WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 3');
 
 -- 프로모션 4
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 4', 'COOKIE_QUANTITY_DISCOUNT', 10, TRUE, '2024-05-01 00:00:00', '2024-06-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 4', 'COOKIE_QUANTITY_DISCOUNT', 10, TRUE, '2024-06-01 00:00:00', '2024-06-29
+00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 4');
 
 -- 프로모션 5
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 5', 'COOKIE_QUANTITY_DISCOUNT', 5, FALSE, '2024-05-15 00:00:00', '2024-06-15 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 5', 'COOKIE_QUANTITY_DISCOUNT', 5, FALSE, '2024-06-02 00:00:00', '2024-06-30
+00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 5');
 
 -- 프로모션 6
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 6', 'COOKIE_QUANTITY_DISCOUNT', 7, TRUE, '2024-05-01 00:00:00', '2024-06-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 6', 'COOKIE_QUANTITY_DISCOUNT', 7, TRUE, '2024-05-01 00:00:00', '2024-06-28
+00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 6');
 
 -- 프로모션 7 (미래 프로모션)
