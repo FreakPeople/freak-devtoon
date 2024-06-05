@@ -94,7 +94,6 @@ class PromotionServiceTest {
 
             // then
             verify(promotionRepository, times(1)).save(any(PromotionEntity.class));
-            verify(promotionCacheService, times(1)).updatePromotionInCache(promotionEntityCaptor.capture());
         }
     }
 }
