@@ -25,7 +25,7 @@ public class PromotionCacheController {
 
     /**
      * 임시 API
-     * : 프로모션 등록, 조회 API 요청시 캐시에 데이터가 잘 들어갔는지 확인하는 메서드.
+     * : 로컬 캐시 사용시 프로모션 등록, 조회 API 요청시 캐시에 데이터가 잘 들어갔는지 확인하는 메서드.
      */
     @GetMapping("/now/cache-details")
     public ResponseEntity<ApiResponse<List<Map<String, List<String>>>>> getPromotionCacheData() {
