@@ -2,7 +2,7 @@ package yjh.devtoon.promotion.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
@@ -15,6 +15,7 @@ import yjh.devtoon.promotion.dto.request.PromotionAttributeCreateRequest;
 import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -26,7 +27,9 @@ public class PromotionService {
 
     private final PromotionRepository promotionRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
-    private final PromotionCacheService promotionCacheService;
+    private final RedisTemplate<String, List<PromotionEntity>> promotionRedisTemplate;
+    private static final String CACHE_KEY = "promotion:active:list";
+    private static final Duration CACHE_DURATION = Duration.ofHours(24);
 
     /**
      * 프로모션 등록
@@ -51,8 +54,6 @@ public class PromotionService {
                 .map(promotionAttributeRequest -> toEntity(savedPromotion,
                         promotionAttributeRequest))
                 .forEach(promotionAttributeRepository::save);
-
-        promotionCacheService.updatePromotionInCache(savedPromotion);
     }
 
     private PromotionAttributeEntity toEntity(
@@ -77,7 +78,6 @@ public class PromotionService {
                         ErrorMessage.getResourceNotFound(ResourceType.PROMOTION, id)
                 ));
         promotion.recordDeletion(LocalDateTime.now());
-        promotionCacheService.evictPromotionFromCache(id);
         return promotionRepository.save(promotion);
     }
 
@@ -86,14 +86,33 @@ public class PromotionService {
      * : 프로모션만 조회합니다. 프로모션이 없는 경우 빈 리스트를 반환합니다.
      */
     @Transactional(readOnly = true)
-    @Cacheable(value = "promotion", key = "'active'")
     public List<PromotionEntity> retrieveActivePromotions() {
-        List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
+        List<PromotionEntity> promotions = getCachedPromotions();
+        if (promotions == null) {
+            promotions = fetchAndCachePromotions();
+        }
+        return promotions;
+    }
 
-        List<PromotionEntity> currentPromotions =
-                filterCurrentPromotions(promotions);
-        currentPromotions.forEach(promotion -> log.info("프로모션: {}", promotion));
-        return currentPromotions;
+    /**
+     * 캐시에서 프로모션 조회
+     */
+    private List<PromotionEntity> getCachedPromotions() {
+        List<PromotionEntity> cachedPromotions =
+                promotionRedisTemplate.opsForValue().get(CACHE_KEY);
+        if (cachedPromotions != null) {
+            return filterCurrentPromotions(cachedPromotions);
+        }
+        return null;
+    }
+
+    /**
+     * DB에서 프로모션 조회 후 캐시에 저장
+     */
+    private List<PromotionEntity> fetchAndCachePromotions() {
+        List<PromotionEntity> promotions = retrieveCurrentOrFuturePromotion();
+        promotionRedisTemplate.opsForValue().set(CACHE_KEY, promotions, CACHE_DURATION);
+        return filterCurrentPromotions(promotions);
     }
 
     private List<PromotionEntity> retrieveCurrentOrFuturePromotion() {
@@ -105,13 +124,6 @@ public class PromotionService {
             return Collections.emptyList();
         }
         return promotions;
-    }
-
-    private List<PromotionEntity> filterCurrentOrFuturePromotions(final List<PromotionEntity> promotions) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        return promotions.stream()
-                .filter(p -> p.isCurrentOrFuture(currentTime))
-                .toList();
     }
 
     private List<PromotionEntity> filterCurrentPromotions(final List<PromotionEntity> currentAndFuturePromotions) {
