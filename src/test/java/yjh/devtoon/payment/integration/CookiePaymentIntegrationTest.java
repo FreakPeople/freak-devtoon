@@ -72,7 +72,7 @@ public class CookiePaymentIntegrationTest {
             WebtoonViewerEntity savedWebtoonViewer =
                     webtoonViewerRepository.save(WebtoonViewerEntity.builder()
                             .name("홍길동")
-                            .email("email@gmail.ocm")
+                            .email("email@gmail.com")
                             .password("password")
                             .membershipStatus(MembershipStatus.GENERAL)
                             .build()
@@ -85,7 +85,6 @@ public class CookiePaymentIntegrationTest {
                             .cookiePrice(BigDecimal.valueOf(200))
                             .cookieQuantityPerEpisode(5)
                             .startDate(LocalDateTime.parse("2024-05-05T00:00"))
-                            .endDate(LocalDateTime.parse("2024-12-31T00:00"))
                             .build()
                     );
 
@@ -93,9 +92,8 @@ public class CookiePaymentIntegrationTest {
             PromotionEntity savedPromotion = promotionRepository.save(PromotionEntity.builder()
                     .id(1L)
                     .description("12월 로맨스 프로모션입니다.")
-                    .discountType(DiscountType.COOKIE_QUANTITY_DISCOUNT)
-                    .discountRate(null)
-                    .discountQuantity(2)
+                    .discountType(DiscountType.CASH_DISCOUNT)
+                    .discountRate(BigDecimal.valueOf(10))
                     .isDiscountDuplicatable(true)
                     .startDate(LocalDateTime.parse("2024-05-01T00:00"))
                     .endDate(LocalDateTime.parse("2024-12-29T00:00"))
@@ -105,7 +103,7 @@ public class CookiePaymentIntegrationTest {
             CookieWalletEntity savedCookieWallet =
                     cookieWalletRepository.save(CookieWalletEntity.builder()
                             .webtoonViewerId(savedWebtoonViewer.getId())
-                            .quantity(4)
+                            .quantity(100)
                             .build());
 
 
