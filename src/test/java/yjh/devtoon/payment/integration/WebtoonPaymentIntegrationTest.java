@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static yjh.devtoon.promotion.domain.DiscountType.COOKIE_QUANTITY_DISCOUNT;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,10 @@ import yjh.devtoon.payment.dto.request.WebtoonPaymentCreateRequest;
 import yjh.devtoon.payment.infrastructure.WebtoonPaymentRepository;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
+import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
+import yjh.devtoon.promotion.domain.PromotionEntity;
+import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
+import yjh.devtoon.promotion.infrastructure.PromotionRepository;
 import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
@@ -57,6 +62,12 @@ public class WebtoonPaymentIntegrationTest {
     private CookieWalletRepository cookieWalletRepository;
 
     @Autowired
+    private PromotionRepository promotionRepository;
+
+    @Autowired
+    private PromotionAttributeRepository promotionAttributeRepository;
+
+    @Autowired
     private WebtoonPaymentRepository webtoonPaymentRepository;
 
     @Nested
@@ -66,7 +77,6 @@ public class WebtoonPaymentIntegrationTest {
         @DisplayName("웹툰 미리보기 결제 등록 성공")
         @Test
         void registerWebtoonPayment_successfully() throws Exception {
-
             // given
             // 1. webtoon_viewer 등록
             WebtoonViewerEntity savedWebtoonViewer =
@@ -74,7 +84,7 @@ public class WebtoonPaymentIntegrationTest {
                             .name("홍길동")
                             .email("email@gmail.ocm")
                             .password("password")
-                            .membershipStatus(MembershipStatus.GENERAL)
+                            .membershipStatus(MembershipStatus.PREMIUM)
                             .build()
                     );
 
@@ -91,10 +101,27 @@ public class WebtoonPaymentIntegrationTest {
                     cookiePolicyRepository.save(CookiePolicyEntity.builder()
                             .cookiePrice(BigDecimal.valueOf(200))
                             .cookieQuantityPerEpisode(3)
-                            .startDate(LocalDateTime.parse("2024-05-02T00:00"))
+                            .startDate(LocalDateTime.parse("2024-05-02T00:00:00"))
                             .build());
 
-            // 4. cookieWallet 등록
+            // 4. promotion 등록
+            PromotionEntity savedPromotion = promotionRepository.save(PromotionEntity.builder()
+                    .description("작가 프로모션입니다.")
+                    .isDiscountDuplicatable(true)
+                    .discountType(COOKIE_QUANTITY_DISCOUNT)
+                    .discountQuantity(1)
+                    .startDate(LocalDateTime.parse("2024-06-01T00:00:00"))
+                    .endDate(LocalDateTime.parse("2024-08-31T23:59:59"))
+                    .build());
+
+            PromotionAttributeEntity savedPromotionAttribute =
+                    promotionAttributeRepository.save(PromotionAttributeEntity.builder()
+                    .promotionEntity(savedPromotion)
+                    .attributeName("target_author")
+                    .attributeValue("오성대")
+                    .build());
+
+            // 5. cookieWallet 등록
             CookieWalletEntity savedCookieWallet =
                     cookieWalletRepository.save(CookieWalletEntity.builder()
                             .webtoonViewerId(savedWebtoonViewer.getId())
@@ -118,8 +145,7 @@ public class WebtoonPaymentIntegrationTest {
             // then
             CookieWalletEntity cookieWallet =
                     cookieWalletRepository.findById(savedWebtoonViewer.getId()).get();
-            assertThat(cookieWallet.getQuantity()).isEqualTo(2);
-
+            assertThat(cookieWallet.getQuantity()).isEqualTo(3);
         }
 
         @DisplayName("특정 회원 웹툰 결제 내역 단건 조회 성공")
