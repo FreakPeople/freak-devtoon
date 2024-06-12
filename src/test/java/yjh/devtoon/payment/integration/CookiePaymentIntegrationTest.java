@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
@@ -35,6 +36,7 @@ import java.time.LocalDateTime;
 @DisplayName("통합 테스트 [CookiePaymentIntegration]")
 @Transactional
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CookiePaymentIntegrationTest {
 
@@ -92,11 +94,10 @@ public class CookiePaymentIntegrationTest {
             PromotionEntity savedPromotion = promotionRepository.save(PromotionEntity.builder()
                     .id(1L)
                     .description("12월 로맨스 프로모션입니다.")
-                    .discountType(DiscountType.CASH_DISCOUNT)
-                    .discountRate(BigDecimal.valueOf(10))
+                    .discountType(DiscountType.COOKIE_QUANTITY_DISCOUNT)
+                    .discountQuantity(2)
                     .isDiscountDuplicatable(true)
                     .startDate(LocalDateTime.parse("2024-05-01T00:00"))
-                    .endDate(LocalDateTime.parse("2024-12-29T00:00"))
                     .build());
 
             // 4. cookie wallet 저장
@@ -158,7 +159,6 @@ public class CookiePaymentIntegrationTest {
                     .andExpect(jsonPath("$.data.totalPrice").value(1000))
                     .andExpect(jsonPath("$.data.totalDiscountRate").value(0.1))
                     .andExpect(jsonPath("$.data.paymentPrice").value(900));
-
         }
 
     }

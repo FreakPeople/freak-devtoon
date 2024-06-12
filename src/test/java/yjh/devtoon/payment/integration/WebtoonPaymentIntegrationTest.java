@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
@@ -40,6 +41,7 @@ import java.time.LocalDateTime;
 @DisplayName("통합 테스트 [WebtoonPaymentIntegration]")
 @Transactional
 @AutoConfigureMockMvc
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class WebtoonPaymentIntegrationTest {
 
@@ -111,15 +113,22 @@ public class WebtoonPaymentIntegrationTest {
                     .discountType(COOKIE_QUANTITY_DISCOUNT)
                     .discountQuantity(1)
                     .startDate(LocalDateTime.parse("2024-06-01T00:00:00"))
-                    .endDate(LocalDateTime.parse("2024-08-31T23:59:59"))
                     .build());
 
-            PromotionAttributeEntity savedPromotionAttribute =
+            // 4-1. promotion attributes 등록
+            PromotionAttributeEntity savedPromotionAttribute1 =
                     promotionAttributeRepository.save(PromotionAttributeEntity.builder()
-                    .promotionEntity(savedPromotion)
-                    .attributeName("target_author")
-                    .attributeValue("오성대")
-                    .build());
+                            .promotionEntity(savedPromotion)
+                            .attributeName("target_author")
+                            .attributeValue("오성대")
+                            .build());
+
+            PromotionAttributeEntity savedPromotionAttribute2 =
+                    promotionAttributeRepository.save(PromotionAttributeEntity.builder()
+                            .promotionEntity(savedPromotion)
+                            .attributeName("target_genre")
+                            .attributeValue(Genre.HORROR.getName())
+                            .build());
 
             // 5. cookieWallet 등록
             CookieWalletEntity savedCookieWallet =
@@ -183,7 +192,6 @@ public class WebtoonPaymentIntegrationTest {
                     .andExpect(jsonPath("$.data.webtoonNo").value(3L))
                     .andExpect(jsonPath("$.data.webtoonDetailNo").value(10L))
                     .andExpect(jsonPath("$.data.cookiePaymentAmount").value(3L));
-
         }
 
     }
