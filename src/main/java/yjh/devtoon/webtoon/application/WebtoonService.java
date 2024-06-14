@@ -1,6 +1,8 @@
 package yjh.devtoon.webtoon.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.common.exception.DevtoonException;
@@ -45,4 +47,7 @@ public class WebtoonService {
                 });
     }
 
+    public Page<WebtoonEntity> retrieveAll(Pageable pageable) {
+        return webtoonRepository.findAll(pageable);
+    }
 }

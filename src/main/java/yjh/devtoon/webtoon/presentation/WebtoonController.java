@@ -2,6 +2,8 @@ package yjh.devtoon.webtoon.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +45,16 @@ public class WebtoonController {
         WebtoonEntity webtoon = webtoonService.retrieve(id);
         WebtoonResponse response = WebtoonResponse.from(webtoon);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 웹툰 전체 조회
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> retrieveAll(Pageable pageable) {
+        Page<WebtoonEntity> webtoons = webtoonService.retrieveAll(pageable);
+        Page<WebtoonResponse> webtoonsResponse = webtoons.map(WebtoonResponse::from);
+        return ResponseEntity.ok(ApiResponse.success(webtoonsResponse));
     }
 
 }
