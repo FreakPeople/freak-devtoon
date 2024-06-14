@@ -211,4 +211,37 @@ public class WebtoonIntegrationTest {
 
     }
 
+    @Nested
+    @DisplayName("웹툰 전체 조회 테스트")
+    class WebtoonRetrieveAllTests {
+
+        @DisplayName("웹툰 전체 조회 성공")
+        @Test
+        void retrieveAllWebtoon_successfully() throws Exception {
+            // given
+            WebtoonEntity webtoonEntity1 = WebtoonEntity.builder()
+                    .title("쿠베라")
+                    .writerName("카레곰")
+                    .genre(Genre.HORROR)
+                    .build();
+            webtoonRepository.save(webtoonEntity1);
+
+            WebtoonEntity webtoonEntity2 = WebtoonEntity.builder()
+                    .title("기기괴괴")
+                    .writerName("오성대")
+                    .genre(Genre.HORROR)
+                    .build();
+            webtoonRepository.save(webtoonEntity2);
+
+            // when
+            mockMvc.perform(get("/v1/webtoons")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data.content").isArray())
+                    .andExpect(jsonPath("$.data.content[0].title").value("쿠베라"))
+                    .andExpect(jsonPath("$.data.content[1].title").value("기기괴괴"));
+        }
+    }
+
 }
