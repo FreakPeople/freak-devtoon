@@ -2,6 +2,9 @@ package yjh.devtoon.comment.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,6 +46,19 @@ public class CommentController {
         CommentEntity comment = commentService.retrieve(id);
         CommentResponse response = CommentResponse.from(comment);
         return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 특정 웹툰의 모든 댓글 조회
+     */
+    @GetMapping
+    public ResponseEntity<ApiResponse> retrieveAll(
+            @Param("webtoonId") Long webtoonId,
+            Pageable pageable
+    ) {
+        Page<CommentEntity> comments = commentService.retrieveAll(webtoonId, pageable);
+        Page<CommentResponse> commentsResponse = comments.map(CommentResponse::from);
+        return ResponseEntity.ok(ApiResponse.success(commentsResponse));
     }
 
 }
