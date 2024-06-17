@@ -292,6 +292,38 @@ public class CommentIntegrationTest {
                     .andExpect(jsonPath("$.data.status").value(HttpStatus.NOT_FOUND.value()));
         }
 
+        @DisplayName("특정 웹툰에 대한 모든 댓글 조회 성공")
+        @Test
+        void retrieveAllCommentByWebtoonId_successfully() throws Exception {
+            // given
+            long webtoonId = 2L;
+            CommentEntity comment1 = CommentEntity.builder()
+                    .webtoonId(webtoonId)
+                    .detailId(2L)
+                    .webtoonViewerId(2L)
+                    .content("재밌어요!")
+                    .build();
+            commentRepository.save(comment1);
+
+            CommentEntity comment2 = CommentEntity.builder()
+                    .webtoonId(webtoonId)
+                    .detailId(2L)
+                    .webtoonViewerId(2L)
+                    .content("최고에요!")
+                    .build();
+            commentRepository.save(comment2);
+
+            // when
+            mockMvc.perform(get("/v1/comments")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .param("webtoonId", "2"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data.content").isArray())
+                    .andExpect(jsonPath("$.data.content[0].content").value("재밌어요!"))
+                    .andExpect(jsonPath("$.data.content[1].content").value("최고에요!"));
+        }
+
     }
 
 }

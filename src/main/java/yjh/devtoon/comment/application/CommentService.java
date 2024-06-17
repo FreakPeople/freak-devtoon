@@ -2,6 +2,8 @@ package yjh.devtoon.comment.application;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.comment.constant.ErrorMessage;
@@ -47,4 +49,10 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    public Page<CommentEntity> retrieveAll(
+            final Long webtoonId,
+            final Pageable pageable
+    ) {
+        return commentRepository.findByWebtoonId(webtoonId, pageable);
+    }
 }
