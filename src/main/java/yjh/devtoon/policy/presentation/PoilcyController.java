@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiResponse;
 import yjh.devtoon.policy.application.PolicyService;
+import yjh.devtoon.policy.domain.BadWordsPolicyEntity;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.dto.request.PolicyCreateRequest;
+import yjh.devtoon.policy.dto.response.RetrieveBadWordsPolicyResponse;
 import yjh.devtoon.policy.dto.response.RetrieveCookiePolicyResponse;
 
 @Slf4j
@@ -40,6 +42,17 @@ public class PoilcyController {
     public ResponseEntity<ApiResponse> retrieveCookiePolicy() {
         CookiePolicyEntity cookiePolicy = policyService.retrieveCookiePolicy();
         RetrieveCookiePolicyResponse response = RetrieveCookiePolicyResponse.from(cookiePolicy);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 비속어 정책 조회
+     */
+    @GetMapping("/bad-words-policy")
+    public ResponseEntity<ApiResponse> retrieveBadWordsPolicy() {
+        BadWordsPolicyEntity badWordsPolicy = policyService.retrieveBadWordsPolicyPolicy();
+        RetrieveBadWordsPolicyResponse response =
+                RetrieveBadWordsPolicyResponse.from(badWordsPolicy);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
