@@ -138,12 +138,13 @@ public class CookiePaymentService {
     }
 
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
-        return webtoonViewerRepository.findById(webtoonViewerId)
+        WebtoonViewerEntity webtoonViewer =  webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
                                 webtoonViewerId))
-                ).getId();
+                );
+        return webtoonViewer.getId();
     }
 
     /**
