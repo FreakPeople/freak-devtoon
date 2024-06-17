@@ -3,7 +3,7 @@ INSERT INTO `bad_words_policy` (`warning_threshold`, `start_date`, `end_date`, `
 SELECT
     3,  -- 경고 임계값: 누적 3회 경고시 조치
     '2024-05-01 00:00:00',  -- 정책 시작 날짜
-    '2024-12-31 23:59:59',  -- 정책 종료 날짜
+    null,  -- 정책 종료 날짜
     CURRENT_TIMESTAMP,  -- 생성 시간
     CURRENT_TIMESTAMP  -- 업데이트 시간
 WHERE NOT EXISTS (
