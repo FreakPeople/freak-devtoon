@@ -29,18 +29,24 @@ WHERE NOT EXISTS (
 
 -- 프로모션 데이터 삽입
 -- 프로모션 1 (과거 프로모션)
-INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 1', 'COOKIE_QUANTITY_DISCOUNT', 3, TRUE, '2024-04-01 00:00:00', '2024-05-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
+                       start_date, end_date, deleted_at, created_at, updated_at)
+SELECT '프로모션 1', 'COOKIE_QUANTITY_DISCOUNT', 3, TRUE, '2024-04-01 00:00:00', '2024-05-01
+00:00:00', '2024-06-15 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 1');
 
 -- 프로모션 2 (과거 프로모션)
-INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 2', 'COOKIE_QUANTITY_DISCOUNT', 2, FALSE, '2024-03-01 00:00:00', '2024-03-31 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
+                       start_date, end_date, deleted_at, created_at, updated_at)
+SELECT '프로모션 2', 'COOKIE_QUANTITY_DISCOUNT', 2, FALSE, '2024-03-01 00:00:00', '2024-03-31
+00:00:00', '2024-06-16 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 2');
 
 -- 프로모션 3 (과거 프로모션)
-INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 3', 'COOKIE_QUANTITY_DISCOUNT', 4, TRUE, '2024-02-01 00:00:00', '2024-02-28 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
+                       start_date, end_date, deleted_at, created_at, updated_at)
+SELECT '프로모션 3', 'COOKIE_QUANTITY_DISCOUNT', 4, TRUE, '2024-02-01 00:00:00', '2024-02-28
+00:00:00', '2024-06-17 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 3');
 
 -- 프로모션 4

@@ -29,4 +29,10 @@ public interface PromotionRepository extends JpaRepository<PromotionEntity, Long
     @Query("SELECT p FROM PromotionEntity p WHERE p.startDate <= :now AND p.endDate >= :now")
     Page<PromotionEntity> activePromotions(@Param("now") LocalDateTime now, Pageable pageable);
 
+    /**
+     * 종료된 모든 프로모션 조회
+     */
+    @Query("SELECT p FROM PromotionEntity p WHERE p.deletedAt IS NOT NULL")
+    List<PromotionEntity> findEndedPromotions();
+
 }

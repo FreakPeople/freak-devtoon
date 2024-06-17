@@ -378,6 +378,44 @@ public class PromotionIntegrationTest {
             );
         }
 
+        @DisplayName("종료된 모든 프로모션 조회")
+        @Test
+        void retrieveAllEndedPromotions_successfully() throws Exception {
+            // given
+            PromotionEntity endedPromotion1 = PromotionEntity.builder()
+                    .id(1L)
+                    .description("1월 할인 프로모션")
+                    .discountType(COOKIE_QUANTITY_DISCOUNT)
+                    .discountQuantity(3)
+                    .isDiscountDuplicatable(true)
+                    .startDate(LocalDateTime.now().minusMonths(1))
+                    .deletedAt(LocalDateTime.parse("2024-06-01T00:00:00"))
+                    .build();
+            promotionRepository.save(endedPromotion1);
+
+            PromotionEntity endedPromotion2 = PromotionEntity.builder()
+                    .id(2L)
+                    .description("2월 할인 프로모션")
+                    .discountType(CASH_DISCOUNT)
+                    .discountRate(BigDecimal.valueOf(30))
+                    .isDiscountDuplicatable(true)
+                    .startDate(LocalDateTime.now().minusMonths(2))
+                    .deletedAt(LocalDateTime.parse("2024-06-02T00:00:00"))
+                    .build();
+            promotionRepository.save(endedPromotion2);
+
+            // when, then
+            mockMvc.perform(get("/v1/promotions/ended")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data").isArray())
+                    .andExpect(jsonPath("$.data[0].description").value("1월 할인 프로모션"))
+                    .andExpect(jsonPath("$.data[0].deletedAt").value("2024-06-01T00:00:00"))
+                    .andExpect(jsonPath("$.data[1].description").value("2월 할인 프로모션"))
+                    .andExpect(jsonPath("$.data[1].deletedAt").value("2024-06-02T00:00:00"));
+        }
+
     }
 
 }
