@@ -10,10 +10,12 @@ import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.policy.common.Policy;
 import yjh.devtoon.policy.constant.ErrorMessage;
+import yjh.devtoon.policy.domain.BadWordsPolicyEntity;
 import yjh.devtoon.policy.domain.CookiePolicyEntity;
 import yjh.devtoon.policy.domain.PolicyFactory;
 import yjh.devtoon.policy.domain.PolicyType;
 import yjh.devtoon.policy.dto.request.PolicyCreateRequest;
+import yjh.devtoon.policy.infrastructure.BadWordsPolicyRepository;
 import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
 import yjh.devtoon.policy.infrastructure.PolicyRepositoryRegistry;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class PolicyService {
 
     private final PolicyRepositoryRegistry policyRepositoryRegistry;
     private final CookiePolicyRepository cookiePolicyRepository;
+    private final BadWordsPolicyRepository badWordsPolicyRepository;
 
     /**
      * 정책 등록
@@ -63,6 +66,21 @@ public class PolicyService {
                         ErrorMessage.getResourceNotFound(
                                 ResourceType.POLICY,
                                 cookiePolicyRepository.findActiveCookiePolicy()
+                        )
+                ));
+    }
+
+    /**
+     * 비속어 정책 조회
+     */
+    @Transactional(readOnly = true)
+    public BadWordsPolicyEntity retrieveBadWordsPolicyPolicy() {
+        return badWordsPolicyRepository.findActiveBadWordsPolicy()
+                .orElseThrow(() -> new DevtoonException(
+                        ErrorCode.NOT_FOUND,
+                        ErrorMessage.getResourceNotFound(
+                                ResourceType.POLICY,
+                                badWordsPolicyRepository.findActiveBadWordsPolicy()
                         )
                 ));
     }
