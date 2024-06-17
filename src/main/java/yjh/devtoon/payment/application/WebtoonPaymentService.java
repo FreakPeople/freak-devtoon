@@ -27,6 +27,7 @@ import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
+import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
 import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,20 +111,22 @@ public class WebtoonPaymentService {
     }
 
     private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
-        return webtoonViewerRepository.findById(webtoonViewerId)
+        WebtoonViewerEntity webtoonViewer = webtoonViewerRepository.findById(webtoonViewerId)
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
                                 webtoonViewerId))
-                ).getId();
+                );
+        return webtoonViewer.getId();
     }
 
     private Long getWebtoonIdOrThrow(final Long webtoonId) {
-        return webtoonRepository.findById(webtoonId)
+        WebtoonEntity webtoon = webtoonRepository.findById(webtoonId)
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.WEBTOON, webtoonId))
-                ).getId();
+                );
+        return webtoon.getId();
     }
 
     /**
