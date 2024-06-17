@@ -19,6 +19,7 @@ import yjh.devtoon.promotion.dto.request.PromotionCreateRequest;
 import yjh.devtoon.promotion.dto.response.PromotionSoftDeleteResponse;
 import yjh.devtoon.promotion.dto.response.RetrieveActivePromotionAttributesResponse;
 import yjh.devtoon.promotion.dto.response.RetrieveActivePromotionsResponse;
+import yjh.devtoon.promotion.dto.response.RetrieveEndedPromotionsResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,7 @@ public class PromotionController {
     }
 
     /**
-     * 프로모션 삭제
+     * 프로모션 삭제(종료)
      * : 삭제 시간을 통해 로직상에서 삭제 처리를 구분합니다.
      */
     @DeleteMapping("/{id}")
@@ -82,6 +83,18 @@ public class PromotionController {
                 activePromotionAttributes.stream()
                         .map(RetrieveActivePromotionAttributesResponse::from)
                         .collect(Collectors.toList());
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 종료된 모든 프로모션 조회
+     */
+    @GetMapping("/ended")
+    public ResponseEntity<ApiResponse> retrieveAllEndedPromotions() {
+        List<PromotionEntity> endedPromotions = promotionService.retrieveAllEndedPromotions();
+        List<RetrieveEndedPromotionsResponse> response = endedPromotions.stream()
+                .map(RetrieveEndedPromotionsResponse::from)
+                .toList();
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 

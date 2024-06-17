@@ -134,4 +134,12 @@ public class PromotionService {
         return promotionAttributes;
     }
 
+    /**
+     * 종료된 모든 프로모션 조회
+     */
+    @Transactional(readOnly = true)
+    public List<PromotionEntity> retrieveAllEndedPromotions() {
+        return promotionRepository.findEndedPromotions();
+    }
+
 }
