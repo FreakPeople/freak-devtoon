@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class WebtoonPaymentCreateRequest {
 
-    private final Long webtoonViewerId;
+    private final Long memberId;
 
     private final Long webtoonId;
 

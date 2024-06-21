@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class CookiePaymentCreateRequest {
 
-    private final Long webtoonViewerId;
+    private final Long getMemberId;
 
     @Size(min = 1)
     private final Integer quantity;

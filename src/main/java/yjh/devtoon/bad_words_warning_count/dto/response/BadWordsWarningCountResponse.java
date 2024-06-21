@@ -8,12 +8,12 @@ import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
 @Getter
 public class BadWordsWarningCountResponse {
 
-    private final Long webtoonViewerNo;
+    private final Long memberId;
     private final int count;
 
     public static BadWordsWarningCountResponse from(final BadWordsWarningCountEntity badWordsWarningCountEntity) {
         return new BadWordsWarningCountResponse(
-                badWordsWarningCountEntity.getWebtoonViewerId(),
+                badWordsWarningCountEntity.getMemberId(),
                 badWordsWarningCountEntity.getCount()
         );
     }

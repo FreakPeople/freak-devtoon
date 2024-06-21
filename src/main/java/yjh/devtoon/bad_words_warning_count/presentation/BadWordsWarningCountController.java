@@ -24,7 +24,7 @@ public class BadWordsWarningCountController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse> retrieve(
-            @RequestParam("webtoonViewerNo") final Long id
+            @RequestParam("memberId") final Long id
     ) {
         BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.retrieve(id);
         BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);
@@ -36,7 +36,7 @@ public class BadWordsWarningCountController {
      */
     @PutMapping("/increase")
     public ResponseEntity<ApiResponse> increase(
-            @RequestParam("webtoonViewerNo") final Long id
+            @RequestParam("memberId") final Long id
     ) {
         BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.increase(id);
         BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);

@@ -39,11 +39,11 @@ public class CookiePaymentController {
     /**
      * 특정 회원 쿠키 결제 내역 단건 조회
      */
-    @GetMapping("/{webtoonViewerId}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponse> retrieve(
-            @PathVariable final Long webtoonViewerId
+            @PathVariable final Long memberId
     ) {
-        CookiePaymentEntity cookiePayment = cookiePaymentService.retrieve(webtoonViewerId);
+        CookiePaymentEntity cookiePayment = cookiePaymentService.retrieve(memberId);
         CookiePaymentDetailDto cookiePaymentDetailDto = CookiePaymentDetailDto.from(cookiePayment);
         CookiePaymentRetrieveResponse response =
                 CookiePaymentRetrieveResponse.from(cookiePaymentDetailDto);

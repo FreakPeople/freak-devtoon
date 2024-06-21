@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.comment.domain.CommentEntity;
 import yjh.devtoon.comment.dto.request.CommentCreateRequest;
 import yjh.devtoon.comment.infrastructure.CommentRepository;
+import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
-import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 
 @DisplayName("통합 테스트 [Comment]")
 @Transactional
@@ -48,7 +48,7 @@ public class CommentIntegrationTest {
     private WebtoonRepository webtoonRepository;
 
     @Autowired
-    private WebtoonViewerRepository webtoonViewerRepository;
+    private MemberRepository memberRepository;
 
     @Nested
     @DisplayName("댓글 등록 테스트")
@@ -70,8 +70,8 @@ public class CommentIntegrationTest {
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name(VALID_FILED_TITLE)
                             .email(VALID_FILED_EMAIL)
                             .password(VALID_FILED_PASSWORD)
@@ -83,7 +83,7 @@ public class CommentIntegrationTest {
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
                     detailId,
-                    savedViewer.getId(),
+                    savedMember.getId(),
                     "정말 레전드 작화 네요!"
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -109,8 +109,8 @@ public class CommentIntegrationTest {
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name(VALID_FILED_TITLE)
                             .email(VALID_FILED_EMAIL)
                             .password(VALID_FILED_PASSWORD)
@@ -122,7 +122,7 @@ public class CommentIntegrationTest {
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
                     detailId,
-                    savedViewer.getId(),
+                    savedMember.getId(),
                     null
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -149,8 +149,8 @@ public class CommentIntegrationTest {
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name(VALID_FILED_TITLE)
                             .email(VALID_FILED_EMAIL)
                             .password(VALID_FILED_PASSWORD)
@@ -162,7 +162,7 @@ public class CommentIntegrationTest {
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
                     detailId,
-                    savedViewer.getId(),
+                    savedMember.getId(),
                     ""
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -188,8 +188,8 @@ public class CommentIntegrationTest {
                     .build()
             );
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name(VALID_FILED_TITLE)
                             .email(VALID_FILED_EMAIL)
                             .password(VALID_FILED_PASSWORD)
@@ -201,7 +201,7 @@ public class CommentIntegrationTest {
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
                     detailId,
-                    savedViewer.getId(),
+                    savedMember.getId(),
                     "문" .repeat(101)
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -222,8 +222,8 @@ public class CommentIntegrationTest {
             long NotExistWebtoonId = 99999999999L;
 
             // 웹툰 구독자 저장
-            WebtoonViewerEntity savedViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name(VALID_FILED_TITLE)
                             .email(VALID_FILED_EMAIL)
                             .password(VALID_FILED_PASSWORD)
@@ -235,7 +235,7 @@ public class CommentIntegrationTest {
             final CommentCreateRequest request = new CommentCreateRequest(
                     NotExistWebtoonId,
                     detailId,
-                    savedViewer.getId(),
+                    savedMember.getId(),
                     "정말 레전드 작화 네요!"
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -262,7 +262,7 @@ public class CommentIntegrationTest {
             CommentEntity comment = CommentEntity.builder()
                     .webtoonId(2L)
                     .detailId(2L)
-                    .webtoonViewerId(2L)
+                    .memberId(2L)
                     .content("재밌어요!")
                     .build();
             CommentEntity saved = commentRepository.save(comment);
@@ -274,7 +274,7 @@ public class CommentIntegrationTest {
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
                     .andExpect(jsonPath("$.data.webtoonNo").value(saved.getWebtoonId()))
                     .andExpect(jsonPath("$.data.webtoonDetailNo").value(saved.getDetailId()))
-                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(saved.getWebtoonViewerId()))
+                    .andExpect(jsonPath("$.data.writerId").value(saved.getMemberId()))
                     .andExpect(jsonPath("$.data.content").value(saved.getContent()));
         }
 
@@ -300,7 +300,7 @@ public class CommentIntegrationTest {
             CommentEntity comment1 = CommentEntity.builder()
                     .webtoonId(webtoonId)
                     .detailId(2L)
-                    .webtoonViewerId(2L)
+                    .memberId(2L)
                     .content("재밌어요!")
                     .build();
             commentRepository.save(comment1);
@@ -308,7 +308,7 @@ public class CommentIntegrationTest {
             CommentEntity comment2 = CommentEntity.builder()
                     .webtoonId(webtoonId)
                     .detailId(2L)
-                    .webtoonViewerId(2L)
+                    .memberId(2L)
                     .content("최고에요!")
                     .build();
             commentRepository.save(comment2);

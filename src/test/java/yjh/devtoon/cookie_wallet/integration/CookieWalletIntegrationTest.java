@@ -16,12 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
-import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 
 @DisplayName("통합 테스트 [CookieWalletIntegration]")
 @Transactional
@@ -33,7 +32,7 @@ public class CookieWalletIntegrationTest {
     private CookieWalletRepository cookieWalletRepository;
 
     @Autowired
-    private WebtoonViewerRepository webtoonViewerRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -50,7 +49,7 @@ public class CookieWalletIntegrationTest {
         @Test
         void retrieveCookieWallet_successfully() throws Exception {
             // given
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity member = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -58,7 +57,7 @@ public class CookieWalletIntegrationTest {
                     .build()
             );
             CookieWalletEntity cookieWallet = new CookieWalletEntity(
-                    savedViewer.getId(),
+                    member.getId(),
                     10,
                     null
             );
@@ -66,23 +65,23 @@ public class CookieWalletIntegrationTest {
 
             // when
             mockMvc.perform(get("/v1/cookie-wallets")
-                            .param("webtoonViewerNo", String.valueOf(savedViewer.getId()))
+                            .param("memberId", String.valueOf(member.getId()))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
-                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(savedViewer.getId()))
+                    .andExpect(jsonPath("$.data.memberId").value(member.getId()))
                     .andExpect(jsonPath("$.data.quantity").value("10"));
         }
 
         @DisplayName("쿠키 지갑 조회 실패 - 해당 id의 회원이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerId_whenRetrieveCookieWallet_thenThrowException() throws Exception {
+        void givenNotExistMemberId_whenRetrieveCookieWallet_thenThrowException() throws Exception {
             // given
-            final long notExistWebtoonViewerId = 999999999999999L;
+            final long notExistMemberId = 999999999999999L;
 
             // when
             mockMvc.perform(get("/v1/cookie-wallets")
-                            .param("webtoonViewerNo", String.valueOf(notExistWebtoonViewerId))
+                            .param("memberId", String.valueOf(notExistMemberId))
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
@@ -103,7 +102,7 @@ public class CookieWalletIntegrationTest {
         @Test
         void increaseCookie_successfully() throws Exception {
             // given
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity member = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -111,7 +110,7 @@ public class CookieWalletIntegrationTest {
                     .build()
             );
             CookieWalletEntity cookieWallet = new CookieWalletEntity(
-                    savedViewer.getId(),
+                    member.getId(),
                     10,
                     null
             );
@@ -121,25 +120,25 @@ public class CookieWalletIntegrationTest {
 
             // when
             mockMvc.perform(put("/v1/cookie-wallets/increase")
-                            .param("webtoonViewerNo", String.valueOf(savedViewer.getId()))
+                            .param("memberId", String.valueOf(member.getId()))
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
-                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(savedViewer.getId()))
+                    .andExpect(jsonPath("$.data.memberId").value(member.getId()))
                     .andExpect(jsonPath("$.data.quantity").value("15"));
         }
 
         @DisplayName("쿠키 증가 실패 - 대상 id의 회원이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerId_whenIncreaseCookie_thenThrowException() throws Exception {
+        void givenNotExistMemberId_whenIncreaseCookie_thenThrowException() throws Exception {
             // given
-            final long notExistWebtoonViewerId = 999999999999999L;
+            final long notExistMemberId = 999999999999999L;
             String requestBody = "{\"quantity\": 5}";
 
             // when
             mockMvc.perform(put("/v1/cookie-wallets/increase")
-                            .param("webtoonViewerNo", String.valueOf(notExistWebtoonViewerId))
+                            .param("memberId", String.valueOf(notExistMemberId))
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -161,7 +160,7 @@ public class CookieWalletIntegrationTest {
         @Test
         void decreaseCookie_successfully() throws Exception {
             // given
-            WebtoonViewerEntity savedViewer = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity member = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -169,7 +168,7 @@ public class CookieWalletIntegrationTest {
                     .build()
             );
             CookieWalletEntity cookieWallet = new CookieWalletEntity(
-                    savedViewer.getId(),
+                    member.getId(),
                     10,
                     null
             );
@@ -179,25 +178,25 @@ public class CookieWalletIntegrationTest {
 
             // when
             mockMvc.perform(put("/v1/cookie-wallets/decrease")
-                            .param("webtoonViewerNo", String.valueOf(savedViewer.getId()))
+                            .param("memberId", String.valueOf(member.getId()))
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
-                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(savedViewer.getId()))
+                    .andExpect(jsonPath("$.data.memberId").value(member.getId()))
                     .andExpect(jsonPath("$.data.quantity").value("5"));
         }
 
         @DisplayName("쿠키 감소 실패 - 대상 id의 회원이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerId_whenDecreaseCookie_thenThrowException() throws Exception {
+        void givenNotExistMemberId_whenDecreaseCookie_thenThrowException() throws Exception {
             // given
-            final long notExistWebtoonViewerId = 999999999999999L;
+            final long notExistMemberId = 999999999999999L;
             String requestBody = "{\"quantity\": 5}";
 
             // when
             mockMvc.perform(put("/v1/cookie-wallets/decrease")
-                            .param("webtoonViewerNo", String.valueOf(notExistWebtoonViewerId))
+                            .param("memberId", String.valueOf(notExistMemberId))
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())

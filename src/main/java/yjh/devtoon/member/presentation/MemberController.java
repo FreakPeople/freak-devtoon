@@ -1,4 +1,4 @@
-package yjh.devtoon.webtoon_viewer.presentation;
+package yjh.devtoon.member.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,27 +11,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yjh.devtoon.common.response.ApiResponse;
-import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.dto.request.MembershipStatusChangeRequest;
-import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
-import yjh.devtoon.webtoon_viewer.dto.response.WebtoonViewerResponse;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.dto.request.MemberRegisterRequest;
+import yjh.devtoon.member.dto.request.MembershipStatusChangeRequest;
+import yjh.devtoon.member.dto.response.MemberResponse;
 
-@RequestMapping("/v1/webtoon-viewers")
+@RequestMapping("/v1/members")
 @RequiredArgsConstructor
 @RestController
-public class WebtoonViewerController {
+public class MemberController {
 
-    private final WebtoonViewerService webtoonViewerService;
+    private final MemberService memberService;
 
     /**
      * 웹툰 구독자 회원 등록
      */
     @PostMapping
     public ResponseEntity<ApiResponse> register(
-            @RequestBody @Valid final WebtoonViewerRegisterRequest request
+            @RequestBody @Valid final MemberRegisterRequest request
     ) {
-        webtoonViewerService.register(request);
+        memberService.register(request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
@@ -42,8 +42,8 @@ public class WebtoonViewerController {
     public ResponseEntity<ApiResponse> retrieve(
             @PathVariable final Long id
     ) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(id);
-        WebtoonViewerResponse response = WebtoonViewerResponse.from(webtoonViewer);
+        MemberEntity member = memberService.retrieve(id);
+        MemberResponse response = MemberResponse.from(member);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
@@ -55,7 +55,7 @@ public class WebtoonViewerController {
             @PathVariable final Long id,
             @RequestBody @Valid final MembershipStatusChangeRequest request
     ) {
-        webtoonViewerService.changeMembershipStatus(id, request);
+        memberService.changeMembershipStatus(id, request);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 

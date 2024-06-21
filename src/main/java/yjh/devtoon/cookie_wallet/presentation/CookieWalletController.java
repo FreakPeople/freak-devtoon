@@ -26,7 +26,7 @@ public class CookieWalletController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse> retrieve(
-            @RequestParam("webtoonViewerNo") final Long id
+            @RequestParam("memberId") final Long id
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.retrieve(id);
         CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
@@ -38,7 +38,7 @@ public class CookieWalletController {
      */
     @PutMapping("/increase")
     public ResponseEntity<ApiResponse> increase(
-            @RequestParam("webtoonViewerNo") final Long id,
+            @RequestParam("memberId") final Long id,
             @RequestBody final CookieRequest request
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.increase(id, request);
@@ -51,7 +51,7 @@ public class CookieWalletController {
      */
     @PutMapping("/decrease")
     public ResponseEntity<ApiResponse> decrease(
-            @RequestParam("webtoonViewerNo") final Long id,
+            @RequestParam("memberId") final Long id,
             @RequestBody final CookieRequest request
     ) {
         CookieWalletEntity cookieWallet = cookieWalletService.decrease(id, request);

@@ -12,7 +12,7 @@ public enum ResourceType {
     POLICY("Policy"),
     PROMOTION("Promotion"),
     WEBTOON("Webtoon"),
-    WEBTOON_VIEWER("WebtoonViewer");
+    MEMBER("Member");
 
     private final String resourceName;
 

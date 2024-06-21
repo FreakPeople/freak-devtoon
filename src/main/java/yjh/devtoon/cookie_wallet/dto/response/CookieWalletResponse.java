@@ -8,12 +8,12 @@ import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 @Getter
 public class CookieWalletResponse {
 
-    private final Long webtoonViewerNo;
+    private final Long memberId;
     private final int quantity;
 
     public static CookieWalletResponse from(final CookieWalletEntity cookieWallet) {
         return new CookieWalletResponse(
-                cookieWallet.getWebtoonViewerId(),
+                cookieWallet.getMemberId(),
                 cookieWallet.getQuantity()
         );
     }

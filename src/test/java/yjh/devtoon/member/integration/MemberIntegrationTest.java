@@ -1,4 +1,4 @@
-package yjh.devtoon.webtoon_viewer.integration;
+package yjh.devtoon.member.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -27,23 +27,23 @@ import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
 import yjh.devtoon.bad_words_warning_count.infrastructure.BadWordsWarningCountRepository;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
-import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.dto.request.WebtoonViewerRegisterRequest;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.dto.request.MemberRegisterRequest;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@DisplayName("통합 테스트 [WebtoonViewer]")
+@DisplayName("통합 테스트 [Member]")
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class WebtoonViewerIntegrationTest {
+public class MemberIntegrationTest {
 
     private static final String NULL = null;
 
     @Autowired
-    private WebtoonViewerRepository webtoonViewerRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private BadWordsWarningCountRepository badWordsWarningCountRepository;
@@ -59,7 +59,7 @@ public class WebtoonViewerIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 독자 회원가입 기능 테스트")
-    class WebtoonViewerRegisterTests {
+    class MemberRegisterTests {
 
         private static final String VALID_FILED_TITLE = "홍길동";
         private static final String VALID_FILED_EMAIL = "email@gmail.ocm";
@@ -67,9 +67,9 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원가입 성공")
         @Test
-        void registerWebtoonViewer_successfully() throws Exception {
+        void registerMember_successfully() throws Exception {
             // given
-            final WebtoonViewerRegisterRequest request = new WebtoonViewerRegisterRequest(
+            final MemberRegisterRequest request = new MemberRegisterRequest(
                     VALID_FILED_TITLE,
                     VALID_FILED_EMAIL,
                     VALID_FILED_PASSWORD
@@ -77,7 +77,7 @@ public class WebtoonViewerIntegrationTest {
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
-            mockMvc.perform(post("/v1/webtoon-viewers")
+            mockMvc.perform(post("/v1/members")
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -87,9 +87,9 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원가입 성공 시 비속어 카운트 테이블, 쿠키 지갑 테이블도 함께 생성되어야 한다.")
         @Test
-        void given_whenRegisterWebtoonViewer_thenCreateBadWordsWarningCount_and_CookieWallet() throws Exception {
+        void given_whenRegisterMember_thenCreateBadWordsWarningCount_and_CookieWallet() throws Exception {
             // given
-            final WebtoonViewerRegisterRequest request = new WebtoonViewerRegisterRequest(
+            final MemberRegisterRequest request = new MemberRegisterRequest(
                     VALID_FILED_TITLE,
                     VALID_FILED_EMAIL,
                     VALID_FILED_PASSWORD
@@ -97,7 +97,7 @@ public class WebtoonViewerIntegrationTest {
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
-            mockMvc.perform(post("/v1/webtoon-viewers")
+            mockMvc.perform(post("/v1/members")
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -105,13 +105,13 @@ public class WebtoonViewerIntegrationTest {
                     .andExpect(jsonPath("$.data").value(NULL));
 
             // then
-            Optional<WebtoonViewerEntity> saved = webtoonViewerRepository.findByEmail(VALID_FILED_EMAIL);
+            Optional<MemberEntity> saved = memberRepository.findByEmail(VALID_FILED_EMAIL);
 
             assertThat(saved).isNotEmpty();
 
-            Long savedWebtoonViewerId = saved.get().getId();
-            Optional<BadWordsWarningCountEntity> createdBadWordsWarningCount = badWordsWarningCountRepository.findById(savedWebtoonViewerId);
-            Optional<CookieWalletEntity> createdCookieWallet = cookieWalletRepository.findById(savedWebtoonViewerId);
+            Long savedMemberId = saved.get().getId();
+            Optional<BadWordsWarningCountEntity> createdBadWordsWarningCount = badWordsWarningCountRepository.findById(savedMemberId);
+            Optional<CookieWalletEntity> createdCookieWallet = cookieWalletRepository.findById(savedMemberId);
 
             assertAll(
                     () -> assertThat(createdBadWordsWarningCount).isNotEmpty(),
@@ -122,9 +122,9 @@ public class WebtoonViewerIntegrationTest {
         @DisplayName("웹툰 독자 회원가입 실패 - 필드 유효성 검사")
         @ParameterizedTest
         @MethodSource("provideStringsForIsInvalidField")
-        void givenInvalidField_whenRegisterWebtoonViewer_thenThrowException(String name, String email, String password) throws Exception {
+        void givenInvalidField_whenRegisterMember_thenThrowException(String name, String email, String password) throws Exception {
             // given
-            final WebtoonViewerRegisterRequest request = new WebtoonViewerRegisterRequest(
+            final MemberRegisterRequest request = new MemberRegisterRequest(
                     name,
                     email,
                     password
@@ -132,7 +132,7 @@ public class WebtoonViewerIntegrationTest {
             final String requestBody = objectMapper.writeValueAsString(request);
 
             // when
-            mockMvc.perform(post("/v1/webtoon-viewers")
+            mockMvc.perform(post("/v1/members")
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -141,7 +141,7 @@ public class WebtoonViewerIntegrationTest {
         }
 
         /**
-         * webtoon-viewer 도메인의 WebtoonViewerRegisterRequest.class 의 필드 테스트
+         * member 도메인의 MemberRegisterRequest.class 의 필드 테스트
          */
         private static Stream<Arguments> provideStringsForIsInvalidField() {
             final String SIZE_4 = "0123";
@@ -170,7 +170,7 @@ public class WebtoonViewerIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 독자 회원 조회 기능 테스트")
-    class WebtoonViewerRetrieveTests {
+    class MemberRetrieveTests {
 
         private static final String VALID_FILED_TITLE = "홍길동";
         private static final String VALID_FILED_EMAIL = "email@gmail.ocm";
@@ -178,9 +178,9 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 조회 성공")
         @Test
-        void retrieveWebtoonViewer_successfully() throws Exception {
+        void retrieveMember_successfully() throws Exception {
             // given
-            WebtoonViewerEntity saved = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity saved = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -190,7 +190,7 @@ public class WebtoonViewerIntegrationTest {
             Long requestId = saved.getId();
 
             // when
-            mockMvc.perform(get("/v1/webtoon-viewers/" + requestId)
+            mockMvc.perform(get("/v1/members/" + requestId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
@@ -199,12 +199,12 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원 조회 실패 - 해당 id의 회원이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerId_whenRetrieveWebtoonViewer_thenThrowException() throws Exception {
+        void givenNotExistMemberId_whenRetrieveMember_thenThrowException() throws Exception {
             // given
-            final Long notExistWebtoonViewerId = 999999999999999L;
+            final Long notExistMemberId = 999999999999999L;
 
             // when
-            mockMvc.perform(get("/v1/webtoon-viewers/" + notExistWebtoonViewerId)
+            mockMvc.perform(get("/v1/members/" + notExistMemberId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
@@ -215,7 +215,7 @@ public class WebtoonViewerIntegrationTest {
 
     @Nested
     @DisplayName("웹툰 독자 회원 등급 변경 테스트")
-    class WebtoonViewerMembershipStatusChangeTests {
+    class MembershipStatusChangeTests {
 
         private static final String VALID_FILED_TITLE = "홍길동";
         private static final String VALID_FILED_EMAIL = "email@gmail.ocm";
@@ -223,9 +223,9 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원 등급 변경 성공")
         @Test
-        void changeWebtoonViewerMembershipStatus_successfully() throws Exception {
+        void changeMembershipStatus_successfully() throws Exception {
             // given
-            WebtoonViewerEntity saved = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity saved = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -238,7 +238,7 @@ public class WebtoonViewerIntegrationTest {
                     """;
 
             // when
-            mockMvc.perform(patch("/v1/webtoon-viewers/" + requestId)
+            mockMvc.perform(patch("/v1/members/" + requestId)
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -250,15 +250,15 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원 등급 변경 실패 - 요청 id의 회원이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerId_whenChangeWebtoonViewerMembershipStatus_thenThrowException() throws Exception {
+        void givenNotExistMemberId_whenChangeMembershipStatus_thenThrowException() throws Exception {
             // given
-            long notExistWebtoonViewerId = 999999999999999L;
+            long notExistMemberId = 999999999999999L;
             String requestBody = """
                     {"membershipStatus" : "premium"}
                     """;
 
             // when
-            mockMvc.perform(patch("/v1/webtoon-viewers/" + notExistWebtoonViewerId)
+            mockMvc.perform(patch("/v1/members/" + notExistMemberId)
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
@@ -268,9 +268,9 @@ public class WebtoonViewerIntegrationTest {
 
         @DisplayName("웹툰 독자 회원 등급 변경 실패 - 요청 status의 회원등급이 존재 하지 않음")
         @Test
-        void givenNotExistWebtoonViewerMembershipStatus_whenChangeWebtoonViewerMembershipStatus_thenThrowException() throws Exception {
+        void givenNotExistMembershipStatus_whenChangeMembershipStatus_thenThrowException() throws Exception {
             // given
-            WebtoonViewerEntity saved = webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            MemberEntity saved = memberRepository.save(MemberEntity.builder()
                     .name(VALID_FILED_TITLE)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
@@ -283,7 +283,7 @@ public class WebtoonViewerIntegrationTest {
                     """;
 
             // when
-            mockMvc.perform(patch("/v1/webtoon-viewers/" + requestId)
+            mockMvc.perform(patch("/v1/members/" + requestId)
                             .content(requestBody)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())

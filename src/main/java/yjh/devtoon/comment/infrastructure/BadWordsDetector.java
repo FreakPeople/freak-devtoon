@@ -24,7 +24,7 @@ public class BadWordsDetector {
         int badWordsCount = detectUsingExternalApi(request.getContent());
 
         if (badWordsCount > 0) {
-            badWordsWarningCountService.increase(request.getWebtoonViewerId());
+            badWordsWarningCountService.increase(request.getWriterId());
         }
     }
 

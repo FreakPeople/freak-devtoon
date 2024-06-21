@@ -1,4 +1,4 @@
-package yjh.devtoon.webtoon_viewer.domain;
+package yjh.devtoon.member.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,12 +18,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table(name = "webtoon_viewer")
-public class WebtoonViewerEntity extends BaseEntity {
+@Table(name = "member")
+public class MemberEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "webtoon_viewer_no", nullable = false)
+    @Column(name = "member_no", nullable = false)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -43,7 +43,7 @@ public class WebtoonViewerEntity extends BaseEntity {
     protected LocalDateTime deletedAt;
 
     @Builder
-    public WebtoonViewerEntity(
+    public MemberEntity(
             final Long id,
             final String name,
             final String email,
@@ -59,18 +59,18 @@ public class WebtoonViewerEntity extends BaseEntity {
         this.deletedAt = deletedAt;
     }
 
-    public static WebtoonViewerEntity create(
+    public static MemberEntity create(
             final String name,
             final String email,
             final String password,
             final MembershipStatus membershipStatus
     ) {
-        WebtoonViewerEntity webtoonViewer = new WebtoonViewerEntity();
-        webtoonViewer.name = name;
-        webtoonViewer.email = email;
-        webtoonViewer.password = password;
-        webtoonViewer.membershipStatus = membershipStatus;
-        return webtoonViewer;
+        MemberEntity member = new MemberEntity();
+        member.name = name;
+        member.email = email;
+        member.password = password;
+        member.membershipStatus = membershipStatus;
+        return member;
     }
 
     public void change(final MembershipStatus membershipStatus) {
@@ -84,7 +84,7 @@ public class WebtoonViewerEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return "WebtoonViewerEntity{" +
+        return "MemberEntity{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

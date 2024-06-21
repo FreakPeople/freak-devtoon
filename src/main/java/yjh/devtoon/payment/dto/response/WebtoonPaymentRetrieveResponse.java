@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Getter
 public class WebtoonPaymentRetrieveResponse {
 
-    private Long webtoonViewerNo;
+    private Long memberId;
     private Long webtoonNo;
     private Long webtoonDetailNo;
     private Long cookiePaymentAmount;
@@ -15,7 +15,7 @@ public class WebtoonPaymentRetrieveResponse {
 
     public static WebtoonPaymentRetrieveResponse from(final WebtoonPaymentEntity webtoonPayment) {
         WebtoonPaymentRetrieveResponse response = new WebtoonPaymentRetrieveResponse();
-        response.webtoonViewerNo = webtoonPayment.getWebtoonViewerId();
+        response.memberId = webtoonPayment.getMemberId();
         response.webtoonNo = webtoonPayment.getWebtoonId();
         response.webtoonDetailNo = webtoonPayment.getWebtoonDetailId();
         response.cookiePaymentAmount = webtoonPayment.getCookiePaymentAmount();

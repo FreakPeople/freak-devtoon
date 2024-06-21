@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface WebtoonPaymentRepository extends JpaRepository<WebtoonPaymentEntity, Long> {
 
-    Optional<WebtoonPaymentEntity> findByWebtoonViewerId(Long webtoonViewerId);
+    Optional<WebtoonPaymentEntity> findByMemberId(Long memberId);
 }

@@ -17,7 +17,7 @@ import yjh.devtoon.common.entity.BaseEntity;
 import yjh.devtoon.promotion.domain.attribute.Attribute;
 import yjh.devtoon.promotion.domain.attribute.Author;
 import yjh.devtoon.promotion.domain.attribute.Genre;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.domain.MemberEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -75,12 +75,12 @@ public class PromotionAttributeEntity extends BaseEntity {
      * 프로모션 할인 유형 중 '현금 할인'이 적용가능한지 확인하는 메서드
      */
     public boolean isCashDiscountApply(
-            final WebtoonViewerEntity webtoonViewer,
+            final MemberEntity member,
             final int quantity
     ) {
         // TODO : 속성이 계속해서 추가될 수 있음. 리팩토링 필요.
         if (attributeName.equals("premium_member_discount")) {
-            return webtoonViewer.isPremium();
+            return member.isPremium();
         } else if (attributeName.equals("cookie_purchase_quantity")) {
             return 10 < quantity;
         }

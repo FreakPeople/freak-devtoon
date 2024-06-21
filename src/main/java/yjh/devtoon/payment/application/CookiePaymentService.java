@@ -12,6 +12,7 @@ import yjh.devtoon.common.utils.ResourceType;
 import yjh.devtoon.cookie_wallet.application.CookieWalletService;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
+import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.payment.constant.ErrorMessage;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
 import yjh.devtoon.payment.domain.Price;
@@ -22,9 +23,8 @@ import yjh.devtoon.promotion.application.PromotionService;
 import yjh.devtoon.promotion.domain.PromotionAttributeEntity;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
-import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -37,12 +37,12 @@ import java.util.List;
 public class CookiePaymentService {
 
     private final CookiePaymentRepository cookiePaymentRepository;
-    private final WebtoonViewerRepository webtoonViewerRepository;
+    private final MemberRepository memberRepository;
     private final CookiePolicyRepository cookiePolicyRepository;
     private final CookieWalletService cookieWalletService;
     private final CookieWalletRepository cookieWalletRepository;
     private final PromotionAttributeRepository promotionAttributeRepository;
-    private final WebtoonViewerService webtoonViewerService;
+    private final MemberService memberService;
     private final PromotionService promotionService;
 
     /**
@@ -51,9 +51,9 @@ public class CookiePaymentService {
      */
     @Transactional
     public void register(final CookiePaymentCreateRequest request) {
-        // 1. webtoonViewerId가 DB에 존재하는지 확인
-        Long webtoonViewerId = getWebtoonViewerIdOrThrow(request.getWebtoonViewerId());
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(webtoonViewerId);
+        // 1. memberId가 DB에 존재하는지 확인
+        Long memberId = getMemberIdOrThrow(request.getGetMemberId());
+        MemberEntity member = memberService.retrieve(memberId);
 
         // 2. cookie policy에서 현재 cookie 가격 조회
         LocalDateTime now = LocalDateTime.now();
@@ -77,7 +77,7 @@ public class CookiePaymentService {
                     promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
 
             boolean isApplyPromotionAttributes = promotionAttributeEntities.stream()
-                    .anyMatch(a -> a.isCashDiscountApply(webtoonViewer, request.getQuantity()));
+                    .anyMatch(a -> a.isCashDiscountApply(member, request.getQuantity()));
             if (isApplyPromotionAttributes) {
                 isApplyDuplicatables.add(promotionEntity);
             }
@@ -95,7 +95,7 @@ public class CookiePaymentService {
                     promotionAttributeRepository.findByPromotionEntityId(promotionEntity.getId());
 
             boolean isApplyPromotionAttributes = promotionAttributeEntities.stream()
-                    .anyMatch(a -> a.isCashDiscountApply(webtoonViewer, request.getQuantity()));
+                    .anyMatch(a -> a.isCashDiscountApply(member, request.getQuantity()));
 
             if (isApplyPromotionAttributes) {
                 isApplyNotDuplicatables.add(promotionEntity);
@@ -124,38 +124,39 @@ public class CookiePaymentService {
 
         // 9. cookiePaymentEntity 생성 후 DB저장
         CookiePaymentEntity cookiePayment = CookiePaymentEntity.create(
-                webtoonViewerId,
+                memberId,
                 quantity,
                 activeCookie,
                 totalDiscountRate
         );
         cookiePaymentRepository.save(cookiePayment);
 
-        // 10. webtoonViewerId에 해당하는 cookie wallet 조회 후 quantity만큼 증가
-        CookieWalletEntity cookieWallet = cookieWalletService.retrieve(webtoonViewerId);
+
+        // 10. memberId에 해당하는 cookie wallet 조회 후 quantity만큼 증가
+        CookieWalletEntity cookieWallet = cookieWalletService.retrieve(memberId);
         cookieWallet.increase(quantity);
         cookieWalletRepository.save(cookieWallet);
     }
 
-    private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
-        WebtoonViewerEntity webtoonViewer =  webtoonViewerRepository.findById(webtoonViewerId)
+    private Long getMemberIdOrThrow(final Long memberId) {
+        MemberEntity member =  memberRepository.findById(memberId)
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
-                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
-                                webtoonViewerId))
+                        ErrorMessage.getResourceNotFound(ResourceType.MEMBER,
+                                memberId))
                 );
-        return webtoonViewer.getId();
+        return member.getId();
     }
 
     /**
      * 특정 회원 쿠키 결제 내역 조회
      */
-    public CookiePaymentEntity retrieve(final Long webtoonViewerId) {
-        return cookiePaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+    public CookiePaymentEntity retrieve(final Long memberId) {
+        return cookiePaymentRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(
                                 ResourceType.COOKIE_PAYMENT,
-                                webtoonViewerId
+                                memberId
                         )));
     }
 

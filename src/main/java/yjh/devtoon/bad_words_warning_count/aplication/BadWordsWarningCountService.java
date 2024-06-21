@@ -7,27 +7,27 @@ import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
 import yjh.devtoon.bad_words_warning_count.infrastructure.BadWordsWarningCountRepository;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
-import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
-import yjh.devtoon.webtoon_viewer.constant.ErrorMessage;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.constant.ErrorMessage;
+import yjh.devtoon.member.domain.MemberEntity;
 
 @RequiredArgsConstructor
 @Service
 public class BadWordsWarningCountService {
 
-    private final WebtoonViewerService webtoonViewerService;
+    private final MemberService memberService;
     private final BadWordsWarningCountRepository badWordsWarningCountRepository;
 
-    public BadWordsWarningCountEntity retrieve(final Long webtoonViewerId) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(webtoonViewerId);
+    public BadWordsWarningCountEntity retrieve(final Long memberId) {
+        MemberEntity member = memberService.retrieve(memberId);
 
-        return badWordsWarningCountRepository.findById(webtoonViewer.getId())
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(webtoonViewerId)));
+        return badWordsWarningCountRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(memberId)));
     }
 
     @Transactional
-    public BadWordsWarningCountEntity increase(final Long webtoonViewerId) {
-        BadWordsWarningCountEntity badWordsWarningCount = retrieve(webtoonViewerId);
+    public BadWordsWarningCountEntity increase(final Long memberId) {
+        BadWordsWarningCountEntity badWordsWarningCount = retrieve(memberId);
 
         badWordsWarningCount.increase();
 
