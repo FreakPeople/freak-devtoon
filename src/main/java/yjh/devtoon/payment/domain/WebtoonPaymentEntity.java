@@ -24,8 +24,8 @@ public class WebtoonPaymentEntity extends BaseEntity {
     @Column(name = "webtoon_payment_no", nullable = false)
     private Long webtoonPaymentId;
 
-    @Column(name = "webtoon_viewer_no", nullable = false)
-    private Long webtoonViewerId;
+    @Column(name = "member_no", nullable = false)
+    private Long memberId;
 
     @Column(name = "webtoon_no", nullable = false)
     private Long webtoonId;
@@ -42,14 +42,14 @@ public class WebtoonPaymentEntity extends BaseEntity {
     @Builder
     public WebtoonPaymentEntity(
             final Long webtoonPaymentId,
-            final Long webtoonViewerId,
+            final Long memberId,
             final Long webtoonId,
             final Long webtoonDetailId,
             final Long cookiePaymentAmount,
             final LocalDateTime deletedAt
     ) {
         this.webtoonPaymentId = webtoonPaymentId;
-        this.webtoonViewerId = webtoonViewerId;
+        this.memberId = memberId;
         this.webtoonId = webtoonId;
         this.webtoonDetailId = webtoonDetailId;
         this.cookiePaymentAmount = cookiePaymentAmount;
@@ -57,13 +57,13 @@ public class WebtoonPaymentEntity extends BaseEntity {
     }
 
     public static WebtoonPaymentEntity create(
-            final Long webtoonViewerId,
+            final Long memberId,
             final Long webtoonId,
             final Long webtoonDetailId,
             final Long cookiePaymentAmount
     ) {
         return WebtoonPaymentEntity.builder()
-                .webtoonViewerId(webtoonViewerId)
+                .memberId(memberId)
                 .webtoonId(webtoonId)
                 .webtoonDetailId(webtoonDetailId)
                 .cookiePaymentAmount(cookiePaymentAmount)
@@ -74,7 +74,7 @@ public class WebtoonPaymentEntity extends BaseEntity {
     public String toString() {
         return "WebtoonPaymentEntity{" +
                 "webtoonPaymentId=" + webtoonPaymentId +
-                ", webtoonViewerId=" + webtoonViewerId +
+                ", memberId=" + memberId +
                 ", webtoonId=" + webtoonId +
                 ", webtoonDetailId=" + webtoonDetailId +
                 ", cookiePaymentAmount=" + cookiePaymentAmount +

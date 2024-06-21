@@ -27,8 +27,8 @@ import yjh.devtoon.promotion.infrastructure.PromotionAttributeRepository;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +38,7 @@ import java.util.List;
 public class WebtoonPaymentService {
 
     private final WebtoonRepository webtoonRepository;
-    private final WebtoonViewerRepository webtoonViewerRepository;
+    private final MemberRepository memberRepository;
     private final CookiePolicyRepository cookiePolicyRepository;
     private final CookieWalletService cookieWalletService;
     private final CookieWalletRepository cookieWalletRepository;
@@ -53,8 +53,8 @@ public class WebtoonPaymentService {
      */
     @Transactional
     public void register(final WebtoonPaymentCreateRequest request) {
-        // 1. webtoonViewerId 조회
-        Long webtoonViewerId = getWebtoonViewerIdOrThrow(request.getWebtoonViewerId());
+        // 1. memberId 조회
+        Long memberId = getMemberIdOrThrow(request.getMemberId());
 
         // 2. webtoonId 조회
         Long webtoonId = getWebtoonIdOrThrow(request.getWebtoonId());
@@ -95,13 +95,13 @@ public class WebtoonPaymentService {
         int totalCookieQuantityPerEpisode = max(0, cookiePerEpisode - discount);
 
         // 7. cookieWallet 결제한 만큼 감소 후 DB 저장
-        CookieWalletEntity cookieWallet = cookieWalletService.retrieve(webtoonViewerId);
+        CookieWalletEntity cookieWallet = cookieWalletService.retrieve(memberId);
         cookieWallet.decrease(totalCookieQuantityPerEpisode);
         cookieWalletRepository.save(cookieWallet);
 
         // 8. webtoonPaymentEntity 생성 후 DB 저장
         WebtoonPaymentEntity webtoonPayment = WebtoonPaymentEntity.create(
-                webtoonViewerId,
+                memberId,
                 webtoonId,
                 request.getWebtoonDetailId(),
                 Long.valueOf(totalCookieQuantityPerEpisode)
@@ -110,14 +110,14 @@ public class WebtoonPaymentService {
 
     }
 
-    private Long getWebtoonViewerIdOrThrow(final Long webtoonViewerId) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerRepository.findById(webtoonViewerId)
+    private Long getMemberIdOrThrow(final Long memberId) {
+        MemberEntity member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new DevtoonException(
                         ErrorCode.NOT_FOUND,
-                        ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_VIEWER,
-                                webtoonViewerId))
+                        ErrorMessage.getResourceNotFound(ResourceType.MEMBER,
+                                memberId))
                 );
-        return webtoonViewer.getId();
+        return member.getId();
     }
 
     private Long getWebtoonIdOrThrow(final Long webtoonId) {
@@ -132,11 +132,11 @@ public class WebtoonPaymentService {
     /**
      * 특정 회원 웹툰 결제 내역 단건 조회
      */
-    public WebtoonPaymentEntity retrieve(final Long webtoonViewerId) {
-        return webtoonPaymentRepository.findByWebtoonViewerId(webtoonViewerId)
+    public WebtoonPaymentEntity retrieve(final Long memberId) {
+        return webtoonPaymentRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND,
                         ErrorMessage.getResourceNotFound(ResourceType.WEBTOON_PAYMENT,
-                                webtoonViewerId)));
+                                memberId)));
     }
 
 }

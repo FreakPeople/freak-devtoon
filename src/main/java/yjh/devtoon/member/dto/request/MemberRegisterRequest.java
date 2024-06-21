@@ -1,11 +1,11 @@
-package yjh.devtoon.webtoon_viewer.dto.request;
+package yjh.devtoon.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 
 @Getter
-public class WebtoonViewerRegisterRequest {
+public class MemberRegisterRequest {
 
     @NotBlank(message = "name을 확인해주세요. 빈값 혹은 null 일 수 없습니다.")
     @Size(min = 1, max = 20)
@@ -19,7 +19,7 @@ public class WebtoonViewerRegisterRequest {
     @Size(min = 5, max = 20)
     private final String password;
 
-    public WebtoonViewerRegisterRequest(
+    public MemberRegisterRequest(
             final String name,
             final String email,
             final String password

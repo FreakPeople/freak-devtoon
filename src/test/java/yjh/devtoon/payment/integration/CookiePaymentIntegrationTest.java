@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
+import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.payment.domain.CookiePaymentEntity;
 import yjh.devtoon.payment.domain.Price;
 import yjh.devtoon.payment.dto.request.CookiePaymentCreateRequest;
@@ -27,9 +28,8 @@ import yjh.devtoon.policy.infrastructure.CookiePolicyRepository;
 import yjh.devtoon.promotion.domain.DiscountType;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.infrastructure.PromotionRepository;
-import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
-import yjh.devtoon.webtoon_viewer.infrastructure.WebtoonViewerRepository;
+import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -44,7 +44,7 @@ public class CookiePaymentIntegrationTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private WebtoonViewerRepository webtoonViewerRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     private CookiePolicyRepository cookiePolicyRepository;
@@ -70,9 +70,9 @@ public class CookiePaymentIntegrationTest {
         void registerCookiePayment_successfully() throws Exception {
 
             // given
-            // 1. webtoon_viewer 등록
-            WebtoonViewerEntity savedWebtoonViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            // 1. member 등록
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name("홍길동")
                             .email("email@gmail.com")
                             .password("password")
@@ -103,13 +103,13 @@ public class CookiePaymentIntegrationTest {
             // 4. cookie wallet 저장
             CookieWalletEntity savedCookieWallet =
                     cookieWalletRepository.save(CookieWalletEntity.builder()
-                            .webtoonViewerId(savedWebtoonViewer.getId())
+                            .memberId(savedMember.getId())
                             .quantity(100)
                             .build());
 
 
             final CookiePaymentCreateRequest request = new CookiePaymentCreateRequest(
-                    savedWebtoonViewer.getId(),
+                    savedMember.getId(),
                     3
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -128,9 +128,9 @@ public class CookiePaymentIntegrationTest {
         void retrieveCookiePayment_forSpecificMember_successfully() throws Exception {
 
             // given
-            // 1. webtoon_viewer 등록
-            WebtoonViewerEntity savedWebtoonViewer =
-                    webtoonViewerRepository.save(WebtoonViewerEntity.builder()
+            // 1. member 등록
+            MemberEntity savedMember =
+                    memberRepository.save(MemberEntity.builder()
                             .name("둘리")
                             .email("email@gmail.ocm")
                             .password("password")
@@ -142,19 +142,19 @@ public class CookiePaymentIntegrationTest {
             CookiePaymentEntity savedCookiePayment =
                     cookiePaymentRepository.save(CookiePaymentEntity.builder()
                             .cookiesPaymentId(1L)
-                            .webtoonViewerId(savedWebtoonViewer.getId())
+                            .memberId(savedMember.getId())
                             .quantity(5)
                             .price(Price.of(200))
                             .totalDiscountRate(BigDecimal.valueOf(0.1))
                             .build());
-            Long requestId = savedWebtoonViewer.getId();
+            Long requestId = savedMember.getId();
 
             // when, then
             mockMvc.perform(get("/v1/cookie-payments/" + requestId)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
-                    .andExpect(jsonPath("$.data.webtoonViewerNo").value(savedWebtoonViewer.getId()))
+                    .andExpect(jsonPath("$.data.memberId").value(savedMember.getId()))
                     .andExpect(jsonPath("$.data.quantity").value(5))
                     .andExpect(jsonPath("$.data.totalPrice").value(1000))
                     .andExpect(jsonPath("$.data.totalDiscountRate").value(0.1))

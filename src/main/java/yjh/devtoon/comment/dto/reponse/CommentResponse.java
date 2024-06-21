@@ -13,7 +13,7 @@ public class CommentResponse {
 
     private Long webtoonNo;
     private Long webtoonDetailNo;
-    private Long webtoonViewerNo;
+    private Long writerId;
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
@@ -22,7 +22,7 @@ public class CommentResponse {
         CommentResponse commentResponse = new CommentResponse();
         commentResponse.webtoonNo = comment.getWebtoonId();
         commentResponse.webtoonDetailNo = comment.getDetailId();
-        commentResponse.webtoonViewerNo = comment.getWebtoonViewerId();
+        commentResponse.writerId = comment.getMemberId();
         commentResponse.content = comment.getContent();
         commentResponse.createAt = comment.getCreatedAt();
         commentResponse.updatedAt = comment.getUpdatedAt();

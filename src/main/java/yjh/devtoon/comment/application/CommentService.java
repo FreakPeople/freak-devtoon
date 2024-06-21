@@ -43,7 +43,7 @@ public class CommentService {
         CommentEntity comment = CommentEntity.create(
                 webtoon.getId(),
                 request.getDetailId(),
-                request.getWebtoonViewerId(),
+                request.getWriterId(),
                 request.getContent()
         );
         commentRepository.save(comment);

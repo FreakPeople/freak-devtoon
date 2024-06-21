@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface CookiePaymentRepository extends JpaRepository<CookiePaymentEntity, Long> {
 
-    Optional<CookiePaymentEntity> findByWebtoonViewerId(Long webtoonViewerId);
+    Optional<CookiePaymentEntity> findByMemberId(Long memberId);
 
 }

@@ -8,30 +8,30 @@ import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.dto.request.CookieRequest;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
-import yjh.devtoon.webtoon_viewer.application.WebtoonViewerService;
-import yjh.devtoon.webtoon_viewer.constant.ErrorMessage;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.constant.ErrorMessage;
+import yjh.devtoon.member.domain.MemberEntity;
 
 @RequiredArgsConstructor
 @Service
 public class CookieWalletService {
 
-    private final WebtoonViewerService webtoonViewerService;
+    private final MemberService memberService;
     private final CookieWalletRepository cookieWalletRepository;
 
-    public CookieWalletEntity retrieve(final Long webtoonViewerId) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(webtoonViewerId);
+    public CookieWalletEntity retrieve(final Long memberId) {
+        MemberEntity member = memberService.retrieve(memberId);
 
-        return cookieWalletRepository.findById(webtoonViewer.getId())
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(webtoonViewerId)));
+        return cookieWalletRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(memberId)));
     }
 
     @Transactional
-    public CookieWalletEntity increase(final Long webtoonViewerId, final CookieRequest request) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(webtoonViewerId);
+    public CookieWalletEntity increase(final Long memberId, final CookieRequest request) {
+        MemberEntity member = memberService.retrieve(memberId);
 
-        CookieWalletEntity cookieWallet = cookieWalletRepository.findById(webtoonViewer.getId())
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(webtoonViewerId)));
+        CookieWalletEntity cookieWallet = cookieWalletRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(memberId)));
 
         cookieWallet.increase(request.getQuantity());
 
@@ -39,11 +39,11 @@ public class CookieWalletService {
     }
 
     @Transactional
-    public CookieWalletEntity decrease(final Long webtoonViewerId, final CookieRequest request) {
-        WebtoonViewerEntity webtoonViewer = webtoonViewerService.retrieve(webtoonViewerId);
+    public CookieWalletEntity decrease(final Long memberId, final CookieRequest request) {
+        MemberEntity member = memberService.retrieve(memberId);
 
-        CookieWalletEntity cookieWallet = cookieWalletRepository.findById(webtoonViewer.getId())
-                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getWebtoonViewerNotFound(webtoonViewerId)));
+        CookieWalletEntity cookieWallet = cookieWalletRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(memberId)));
 
         cookieWallet.decrease(request.getQuantity());
 

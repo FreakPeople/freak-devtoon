@@ -1,4 +1,4 @@
-package yjh.devtoon.webtoon_viewer.dto.request;
+package yjh.devtoon.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

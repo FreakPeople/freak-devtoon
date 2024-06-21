@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import yjh.devtoon.webtoon_viewer.domain.MembershipStatus;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.domain.MembershipStatus;
 
 @DisplayName("도메인 단위 테스트 [CookieWallet]")
 class CookieWalletEntityTest {
@@ -15,7 +15,7 @@ class CookieWalletEntityTest {
     @Test
     void createCookieWallet_successfully() {
         // given
-        WebtoonViewerEntity webtoonViewer = new WebtoonViewerEntity(
+        MemberEntity member = new MemberEntity(
                 1L,
                 "홍길동",
                 "emai@gmail.com",
@@ -25,7 +25,7 @@ class CookieWalletEntityTest {
         );
 
         // when
-        assertThatCode(() -> CookieWalletEntity.create(webtoonViewer)
+        assertThatCode(() -> CookieWalletEntity.create(member)
         ).doesNotThrowAnyException();
     }
 

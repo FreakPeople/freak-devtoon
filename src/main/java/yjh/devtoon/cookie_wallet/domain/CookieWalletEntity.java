@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.domain.MemberEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 public class CookieWalletEntity extends BaseEntity {
 
     @Id
-    @Column(name = "webtoon_viewer_no", nullable = false)
-    private Long webtoonViewerId;
+    @Column(name = "member_no", nullable = false)
+    private Long memberId;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -30,18 +30,18 @@ public class CookieWalletEntity extends BaseEntity {
 
     @Builder
     public CookieWalletEntity(
-            final Long webtoonViewerId,
+            final Long memberId,
             final Integer quantity,
             final LocalDateTime deletedAt
     ) {
-        this.webtoonViewerId = webtoonViewerId;
+        this.memberId = memberId;
         this.quantity = quantity;
         this.deletedAt = deletedAt;
     }
 
-    public static CookieWalletEntity create(final WebtoonViewerEntity webtoonViewerEntity) {
+    public static CookieWalletEntity create(final MemberEntity memberEntity) {
         return CookieWalletEntity.builder()
-                .webtoonViewerId(webtoonViewerEntity.getId())
+                .memberId(memberEntity.getId())
                 .quantity(0)
                 .build();
     }
@@ -57,7 +57,7 @@ public class CookieWalletEntity extends BaseEntity {
     @Override
     public String toString() {
         return "CookieWalletEntity{" +
-                "webtoonViewerId=" + webtoonViewerId +
+                "memberId=" + memberId +
                 ", quantity=" + quantity +
                 ", deletedAt=" + deletedAt +
                 '}';

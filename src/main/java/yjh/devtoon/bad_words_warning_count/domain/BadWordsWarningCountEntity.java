@@ -9,7 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yjh.devtoon.common.entity.BaseEntity;
-import yjh.devtoon.webtoon_viewer.domain.WebtoonViewerEntity;
+import yjh.devtoon.member.domain.MemberEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,8 +19,8 @@ import java.time.LocalDateTime;
 public class BadWordsWarningCountEntity extends BaseEntity {
 
     @Id
-    @Column(name = "webtoon_viewer_no", nullable = false)
-    private Long webtoonViewerId;
+    @Column(name = "member_no", nullable = false)
+    private Long memberId;
 
     @Column(name = "count", nullable = false)
     private Integer count;
@@ -30,18 +30,18 @@ public class BadWordsWarningCountEntity extends BaseEntity {
 
     @Builder
     public BadWordsWarningCountEntity(
-            final Long webtoonViewerId,
+            final Long memberId,
             final Integer count,
             final LocalDateTime deletedAt
     ) {
-        this.webtoonViewerId = webtoonViewerId;
+        this.memberId = memberId;
         this.count = count;
         this.deletedAt = deletedAt;
     }
 
-    public static BadWordsWarningCountEntity create(final WebtoonViewerEntity webtoonViewerEntity) {
+    public static BadWordsWarningCountEntity create(final MemberEntity memberEntity) {
         return BadWordsWarningCountEntity.builder()
-                .webtoonViewerId(webtoonViewerEntity.getId())
+                .memberId(memberEntity.getId())
                 .count(0)
                 .build();
     }
@@ -54,7 +54,7 @@ public class BadWordsWarningCountEntity extends BaseEntity {
     @Override
     public String toString() {
         return "BadWordsWarningCountEntity{" +
-                "webtoonViewerId=" + webtoonViewerId +
+                "memberId=" + memberId +
                 ", count=" + count +
                 ", deletedAt=" + deletedAt +
                 '}';

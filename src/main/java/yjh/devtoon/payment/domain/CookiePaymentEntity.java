@@ -26,8 +26,8 @@ public class CookiePaymentEntity extends BaseEntity {
     @Column(name = "cookies_payment_no", nullable = false)
     private Long cookiesPaymentId;
 
-    @Column(name = "webtoon_viewer_no", nullable = false)
-    private Long webtoonViewerId;
+    @Column(name = "member_no", nullable = false)
+    private Long memberId;
 
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
@@ -45,14 +45,14 @@ public class CookiePaymentEntity extends BaseEntity {
     @Builder
     public CookiePaymentEntity(
             final Long cookiesPaymentId,
-            final Long webtoonViewerId,
+            final Long memberId,
             final Integer quantity,
             final Price price,
             final BigDecimal totalDiscountRate,
             final LocalDateTime deletedAt
     ) {
         this.cookiesPaymentId = cookiesPaymentId;
-        this.webtoonViewerId = webtoonViewerId;
+        this.memberId = memberId;
         this.quantity = quantity;
         this.price = price;
         this.totalDiscountRate = totalDiscountRate;
@@ -60,13 +60,13 @@ public class CookiePaymentEntity extends BaseEntity {
     }
 
     public static CookiePaymentEntity create(
-            final Long webtoonViewerId,
+            final Long memberId,
             final Integer quantity,
             final Price price,
             final BigDecimal totalDiscountRate
     ) {
         return CookiePaymentEntity.builder()
-                .webtoonViewerId(webtoonViewerId)
+                .memberId(memberId)
                 .quantity(quantity)
                 .price(price)
                 .totalDiscountRate(totalDiscountRate)
@@ -89,7 +89,7 @@ public class CookiePaymentEntity extends BaseEntity {
     public String toString() {
         return "CookiePaymentEntity{" +
                 "cookiesPaymentId=" + cookiesPaymentId +
-                ", webtoonViewerId=" + webtoonViewerId +
+                ", memberId=" + memberId +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", totalDiscountRate=" + totalDiscountRate +

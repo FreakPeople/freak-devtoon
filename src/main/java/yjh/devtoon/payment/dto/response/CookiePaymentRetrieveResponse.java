@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 @Getter
 public class CookiePaymentRetrieveResponse {
 
-    private Long webtoonViewerNo;
+    private Long memberId;
     private Integer quantity;
     private BigDecimal totalPrice;         // 총 금액
     private BigDecimal totalDiscountRate;  // 총 할인율
@@ -16,14 +16,14 @@ public class CookiePaymentRetrieveResponse {
     private LocalDateTime createdAt;
 
     public CookiePaymentRetrieveResponse(
-            Long webtoonViewerNo,
+            Long memberId,
             Integer quantity,
             BigDecimal totalPrice,
             BigDecimal totalDiscountRate,
             BigDecimal paymentPrice,
             LocalDateTime createdAt
     ) {
-        this.webtoonViewerNo = webtoonViewerNo;
+        this.memberId = memberId;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
         this.totalDiscountRate = totalDiscountRate;
@@ -35,7 +35,7 @@ public class CookiePaymentRetrieveResponse {
             final CookiePaymentDetailDto cookiePaymentDetailDto
     ) {
         return new CookiePaymentRetrieveResponse(
-                cookiePaymentDetailDto.getCookiePayment().getWebtoonViewerId(),
+                cookiePaymentDetailDto.getCookiePayment().getMemberId(),
                 cookiePaymentDetailDto.getCookiePayment().getQuantity(),
                 cookiePaymentDetailDto.getTotalPrice().getAmount(),
                 cookiePaymentDetailDto.getCookiePayment().getTotalDiscountRate(),

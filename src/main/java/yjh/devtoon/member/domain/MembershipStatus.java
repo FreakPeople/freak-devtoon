@@ -1,9 +1,9 @@
-package yjh.devtoon.webtoon_viewer.domain;
+package yjh.devtoon.member.domain;
 
 import lombok.Getter;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
-import yjh.devtoon.webtoon_viewer.constant.ErrorMessage;
+import yjh.devtoon.member.constant.ErrorMessage;
 import java.util.Arrays;
 
 @Getter

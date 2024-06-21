@@ -36,11 +36,11 @@ public class WebtoonPaymentController {
     /**
      * 특정 회원 웹툰 결제 내역 단건 조회
      */
-    @GetMapping("/{webtoonViewerId}")
+    @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponse> retrieve(
-            @PathVariable final Long webtoonViewerId
+            @PathVariable final Long memberId
     ) {
-        WebtoonPaymentEntity webtoonPayment = webtoonPaymentService.retrieve(webtoonViewerId);
+        WebtoonPaymentEntity webtoonPayment = webtoonPaymentService.retrieve(memberId);
         WebtoonPaymentRetrieveResponse response = WebtoonPaymentRetrieveResponse.from(webtoonPayment);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
