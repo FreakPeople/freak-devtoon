@@ -10,11 +10,14 @@ import yjh.devtoon.common.exception.ErrorCode;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
 import yjh.devtoon.cookie_wallet.infrastructure.CookieWalletRepository;
 import yjh.devtoon.member.constant.ErrorMessage;
+import yjh.devtoon.member.domain.Authority;
 import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.domain.Role;
 import yjh.devtoon.member.dto.request.MemberRegisterRequest;
 import yjh.devtoon.member.dto.request.MembershipStatusChangeRequest;
 import yjh.devtoon.member.infrastructure.MemberRepository;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -32,7 +35,8 @@ public class MemberService {
                 request.getName(),
                 request.getEmail(),
                 request.getPassword(),
-                MembershipStatus.GENERAL
+                MembershipStatus.GENERAL,
+                Set.of(new Authority(Role.MEMBER))
         );
         MemberEntity savedMember = memberRepository.save(member);
 

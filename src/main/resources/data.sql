@@ -1,3 +1,7 @@
+-- 권한(역할) 초기 데이터 삽입
+INSERT INTO authority (authority_name)
+VALUES ('ADMIN'), ('MEMBER');
+
 -- 비속어 정책 테이블에 초기 데이터 삽입
 INSERT INTO `bad_words_policy` (`warning_threshold`, `start_date`, `end_date`, `created_at`, `updated_at`)
 SELECT
