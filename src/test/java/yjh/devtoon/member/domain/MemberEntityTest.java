@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import java.util.Set;
 
 @DisplayName("도메인 단위 테스트 [Member]")
 class MemberEntityTest {
@@ -19,7 +20,9 @@ class MemberEntityTest {
                 "name",
                 "email@gmail.com",
                 "password",
-                MembershipStatus.GENERAL)
+                MembershipStatus.GENERAL,
+                Set.of(new Authority(Role.MEMBER))
+                )
         ).doesNotThrowAnyException();
     }
 
@@ -31,7 +34,8 @@ class MemberEntityTest {
                 "name",
                 "email@gmail.com",
                 "password",
-                MembershipStatus.GENERAL
+                MembershipStatus.GENERAL,
+                Set.of(new Authority(Role.MEMBER))
         );
 
         // then
@@ -52,7 +56,8 @@ class MemberEntityTest {
                 "name",
                 "email@gmail.com",
                 "password",
-                MembershipStatus.GENERAL
+                MembershipStatus.GENERAL,
+                Set.of(new Authority(Role.MEMBER))
         );
 
         // when

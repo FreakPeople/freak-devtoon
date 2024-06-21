@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import yjh.devtoon.member.domain.Authority;
 import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.domain.Role;
+import java.util.Set;
 
 @DisplayName("도메인 단위 테스트 [CookieWallet]")
 class CookieWalletEntityTest {
@@ -21,6 +24,7 @@ class CookieWalletEntityTest {
                 "emai@gmail.com",
                 "password",
                 MembershipStatus.GENERAL,
+                Set.of(new Authority(Role.MEMBER)),
                 null
         );
 
