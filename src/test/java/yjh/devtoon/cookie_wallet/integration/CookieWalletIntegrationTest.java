@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.cookie_wallet.domain.CookieWalletEntity;
@@ -37,6 +38,7 @@ public class CookieWalletIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("쿠키 지갑 조회 기능 테스트")
     class CookieWalletRetrieveTests {
@@ -90,6 +92,7 @@ public class CookieWalletIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("쿠기 증가 기능 테스트")
     class CookieIncreaseTests {
@@ -148,6 +151,7 @@ public class CookieWalletIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("쿠기 감소 기능 테스트")
     class CookieDecreaseTests {

@@ -20,8 +20,11 @@ spring:
         show-sql: true
     sql:
         init:
-            mode: always # data.sql 파일 실행
+            mode: never # data.sql 파일 실행
     cache:
         type: caffeine
 
+jwt:
+    secret: ${JWT_SECRET}
+    token-validity-in-seconds: ${JWT_EXPIRED_SECONDS}
 
