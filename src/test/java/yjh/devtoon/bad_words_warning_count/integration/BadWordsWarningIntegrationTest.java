@@ -23,7 +23,7 @@ import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.member.domain.MembershipStatus;
 import yjh.devtoon.member.infrastructure.MemberRepository;
 
-@DisplayName("통합 테스트 [Member]")
+@DisplayName("통합 테스트 [BadWordsWarning]")
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
