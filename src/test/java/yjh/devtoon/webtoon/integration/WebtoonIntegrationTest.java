@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.webtoon.domain.Genre;
@@ -47,6 +48,7 @@ public class WebtoonIntegrationTest {
     @Autowired
     private WebtoonRepository webtoonRepository;
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 등록 테스트")
     class WebtoonRegisterTests {
@@ -173,6 +175,7 @@ public class WebtoonIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 조회 테스트")
     class WebtoonRetrieveTests {
@@ -211,6 +214,7 @@ public class WebtoonIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 전체 조회 테스트")
     class WebtoonRetrieveAllTests {

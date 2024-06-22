@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
@@ -22,7 +23,7 @@ import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.member.domain.MembershipStatus;
 import yjh.devtoon.member.infrastructure.MemberRepository;
 
-@DisplayName("통합 테스트 [Member]")
+@DisplayName("통합 테스트 [BadWordsWarning]")
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -37,6 +38,7 @@ public class BadWordsWarningIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("비속어 카운트 조회 기능 테스트")
     class BadWordsWarningRetrieveTests {
@@ -92,6 +94,7 @@ public class BadWordsWarningIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("비속어 카운트 증가 기능 테스트")
     class BadWordsWarningIncreaseTests {

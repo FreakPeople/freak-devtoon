@@ -1,8 +1,11 @@
 package yjh.devtoon.member.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Role {
-    MEMBER("member"),
-    ADMIN("admin");
+    MEMBER("MEMBER"),
+    ADMIN("ADMIN");
 
     private final String role;
 

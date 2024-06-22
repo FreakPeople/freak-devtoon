@@ -1,6 +1,7 @@
 package yjh.devtoon.member.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Service
 public class MemberService {
 
+    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final BadWordsWarningCountRepository badWordsWarningCountRepository;
     private final CookieWalletRepository cookieWalletRepository;
@@ -34,7 +36,7 @@ public class MemberService {
         MemberEntity member = MemberEntity.create(
                 request.getName(),
                 request.getEmail(),
-                request.getPassword(),
+                passwordEncoder.encode(request.getPassword()),
                 MembershipStatus.GENERAL,
                 Set.of(new Authority(Role.MEMBER))
         );

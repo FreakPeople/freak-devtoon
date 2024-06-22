@@ -22,6 +22,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.promotion.domain.DiscountType;
@@ -56,6 +57,7 @@ public class PromotionIntegrationTest {
     @Autowired
     private PromotionAttributeRepository promotionAttributeRepository;
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("프로모션 등록 테스트")
     class PromotionRegisterTests {
@@ -171,6 +173,7 @@ public class PromotionIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("프로모션 삭제 테스트")
     class PromotionSoftDeleteTests {
@@ -248,6 +251,7 @@ public class PromotionIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("프로모션 조회 테스트")
     class RetrieveActivePromotionsTests {

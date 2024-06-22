@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.bad_words_warning_count.domain.BadWordsWarningCountEntity;
@@ -168,6 +169,7 @@ public class MemberIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 독자 회원 조회 기능 테스트")
     class MemberRetrieveTests {
@@ -213,20 +215,22 @@ public class MemberIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 독자 회원 등급 변경 테스트")
     class MembershipStatusChangeTests {
 
-        private static final String VALID_FILED_TITLE = "홍길동";
+        private static final String VALID_NAME = "홍길동";
         private static final String VALID_FILED_EMAIL = "email@gmail.ocm";
         private static final String VALID_FILED_PASSWORD = "password";
 
+//        @WithMockUser(username = VALID_FILED_EMAIL, password = VALID_FILED_PASSWORD, authorities = {"MEMBER"})
         @DisplayName("웹툰 독자 회원 등급 변경 성공")
         @Test
         void changeMembershipStatus_successfully() throws Exception {
             // given
             MemberEntity saved = memberRepository.save(MemberEntity.builder()
-                    .name(VALID_FILED_TITLE)
+                    .name(VALID_NAME)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
                     .membershipStatus(MembershipStatus.GENERAL)
@@ -271,7 +275,7 @@ public class MemberIntegrationTest {
         void givenNotExistMembershipStatus_whenChangeMembershipStatus_thenThrowException() throws Exception {
             // given
             MemberEntity saved = memberRepository.save(MemberEntity.builder()
-                    .name(VALID_FILED_TITLE)
+                    .name(VALID_NAME)
                     .email(VALID_FILED_EMAIL)
                     .password(VALID_FILED_PASSWORD)
                     .membershipStatus(MembershipStatus.GENERAL)

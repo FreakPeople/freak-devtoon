@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.comment.domain.CommentEntity;
@@ -50,6 +51,7 @@ public class CommentIntegrationTest {
     @Autowired
     private MemberRepository memberRepository;
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("댓글 등록 테스트")
     class CommentRegisterTests {
@@ -251,6 +253,7 @@ public class CommentIntegrationTest {
 
     }
 
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("댓글 조회 테스트")
     class CommentRetrieveTests {

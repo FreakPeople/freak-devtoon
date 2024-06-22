@@ -19,9 +19,9 @@ public class Authority {
     @Id
     @Column(name = "authority_name", length = 50)
     @Enumerated(EnumType.STRING)
-    private Role authorityName;
+    private Role role;
 
-    public Authority(final Role authorityName) {
-        this.authorityName = authorityName;
+    public Authority(final Role role) {
+        this.role = role;
     }
 }
