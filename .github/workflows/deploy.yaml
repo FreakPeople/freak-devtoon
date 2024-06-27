@@ -1,0 +1,58 @@
+name: Run Test
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    Run Test:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+            - uses: actions/checkout@v4
+
+            - name: java setup
+              uses: actions/setup-java@v2
+              with:
+                  distribution: 'corretto'
+                  java-version: '21'
+
+            - name: setup application.yaml
+              run: |
+                  mkdir -p src/test/resources
+                  echo "${{ secrets.APPLICATION_TEST_YML }}" | base64 --decode > src/test/resources/application.yml
+                  find src
+
+            - name: setup docker-compose.yaml
+              run: |
+                  echo "${{ secrets.DOCKER_COMPOSE_YAML }}" | base64 --decode > docker-compose.yml
+
+            - name: test db setup(with docker)
+              run: docker-compose up -d
+
+            - name: make executable gradlew
+              run: chmod +x ./gradlew
+
+            - name: run test
+            - run: ./gradlew clean test
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
