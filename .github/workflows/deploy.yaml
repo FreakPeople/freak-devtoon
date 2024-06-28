@@ -36,23 +36,3 @@ jobs:
 
             - name: run test
               run: ./gradlew clean test
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
