@@ -8,6 +8,18 @@ on:
 jobs:
     Run_Test:
         runs-on: ubuntu-latest
+
+        services:
+            mysql:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: admin
+                    MYSQL_DATABASE: devtoon_db
+                    MYSQL_USER: local_user
+                    MYSQL_PASSWORD: local_password
+                ports:
+                    - 3307:3306
+
         steps:
             - name: checkout
               uses: actions/checkout@v4
@@ -22,13 +34,6 @@ jobs:
               run: |
                   mkdir -p src/test/resources
                   echo "${{ secrets.APPLICATION_TEST_YML }}" | base64 --decode > src/test/resources/application.yml
-
-            - name: setup docker-compose.yaml
-              run: |
-                  echo "${{ secrets.DOCKER_COMPOSE_YAML }}" | base64 --decode > docker-compose.yml
-
-            - name: test db setup(with docker)
-              run: docker-compose up -d
 
             - name: make executable gradlew
               run: chmod +x ./gradlew
