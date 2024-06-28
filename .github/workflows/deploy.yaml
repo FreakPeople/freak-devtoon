@@ -46,5 +46,11 @@ jobs:
             - name: Gradle을 통해 빌드합니다.
               run: ./gradlew build
 
-            - name: 테스트를 실행합니다.
+            - name: 테스트를 실행합니다.a
               run: ./gradlew clean test
+
+            - name: 테스트 결과를 표시합니다.
+              run: |
+                TEST_RESULTS=$(./gradlew test --info | grep -E "Tests run: [0-9]+, Failures: [0-9]+, Errors: [0-9]+, Skipped: [0-9]+")
+                echo "$TEST_RESULTS"
+                echo "$TEST_RESULTS" >> $GITHUB_STEP_SUMMARY
