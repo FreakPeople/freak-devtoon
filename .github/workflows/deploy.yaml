@@ -6,23 +6,22 @@ on:
             - develop
 
 jobs:
-    Run_Test:
+    Run Test:
         runs-on: ubuntu-latest
         steps:
             - name: checkout
-              uses: actions/checkout@v4
+            - uses: actions/checkout@v4
 
             - name: java setup
-              uses: actions/setup-java@v4
+              uses: actions/setup-java@v2
               with:
-                  distribution: 'temurin'
+                  distribution: 'corretto'
                   java-version: '21'
 
             - name: setup application.yaml
               run: |
                   mkdir -p src/test/resources
                   echo "${{ secrets.APPLICATION_TEST_YML }}" | base64 --decode > src/test/resources/application.yml
-                  find src
 
             - name: setup docker-compose.yaml
               run: |
@@ -35,4 +34,24 @@ jobs:
               run: chmod +x ./gradlew
 
             - name: run test
-              run: ./gradlew clean test
+            - run: ./gradlew clean test
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
