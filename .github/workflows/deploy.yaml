@@ -6,7 +6,7 @@ on:
             - develop
 
 jobs:
-    Run Test:
+    Run_Test:
         runs-on: ubuntu-latest
         steps:
             - name: checkout
