@@ -30,6 +30,9 @@ jobs:
                   distribution: 'temurin'
                   java-version: '21'
 
+            - name: Setup Gradle
+              uses: gradle/actions/setup-gradle@v3
+
             - name: setup application.yaml
               run: |
                   mkdir -p src/test/resources
