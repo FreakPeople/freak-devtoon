@@ -38,13 +38,13 @@ jobs:
             - name: gradlew 권한을 부여합니다.
               run: chmod +x ./gradlew
 
-            - name: Gradle을 통해 빌드합니다.
-              run: ./gradlew build
-
             - name: 테스트용 application.yaml을 작성합니다.
               run: |
                   mkdir -p src/test/resources
                   echo "${{ secrets.APPLICATION_TEST_YML }}" | base64 --decode > src/test/resources/application.yaml
 
-            - name: run test
-              run: ./gradlew clean test
+            - name: Gradle을 통해 빌드합니다.
+              run: ./gradlew build
+
+#            - name: run test
+#              run: ./gradlew clean test
