@@ -3,11 +3,12 @@ package yjh.devtoon.webtoon.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Nested;
@@ -16,18 +17,24 @@ import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
+import yjh.devtoon.webtoon.infrastructure.LocalImageRepository;
 import yjh.devtoon.webtoon.infrastructure.WebtoonRepository;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -48,6 +55,18 @@ public class WebtoonIntegrationTest {
     @Autowired
     private WebtoonRepository webtoonRepository;
 
+    @Autowired
+    private LocalImageRepository localImageRepository;
+
+    @Value("${file.local.upload.path}")
+    private String uploadPath;
+
+    @AfterEach
+    public void tearDown() throws IOException {
+        Path path = Paths.get(uploadPath);
+        localImageRepository.deleteDirectory(path);
+    }
+
     @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
     @Nested
     @DisplayName("웹툰 등록 테스트")
@@ -62,12 +81,26 @@ public class WebtoonIntegrationTest {
                     "카레곰",
                     "horror"
             );
-            final String requestBody = objectMapper.writeValueAsString(request);
+            String requestBody = objectMapper.writeValueAsString(request);
+
+            MockMultipartFile imageFile = new MockMultipartFile(
+                    "image",
+                    "test-image.jpg",
+                    MediaType.IMAGE_JPEG_VALUE,
+                    "Test Image Content".getBytes()
+            );
+
+            MockMultipartFile jsonFile = new MockMultipartFile(
+                    "request",
+                    "",
+                    MediaType.APPLICATION_JSON_VALUE,
+                    requestBody.getBytes()
+            );
 
             // when
-            mockMvc.perform(post("/v1/webtoons")
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(multipart("/v1/webtoons")
+                            .file(imageFile)
+                            .file(jsonFile))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
                     .andExpect(jsonPath("$.data").value(NULL));
@@ -80,13 +113,31 @@ public class WebtoonIntegrationTest {
                                                                    String writerName,
                                                                    String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
-            final String requestBody = objectMapper.writeValueAsString(request);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(
+                    title,
+                    writerName,
+                    genre
+            );
+            String requestBody = objectMapper.writeValueAsString(request);
+
+            MockMultipartFile imageFile = new MockMultipartFile(
+                    "image",
+                    "test-image.jpg",
+                    MediaType.IMAGE_JPEG_VALUE,
+                    "Test Image Content".getBytes()
+            );
+
+            MockMultipartFile jsonFile = new MockMultipartFile(
+                    "request",
+                    "",
+                    MediaType.APPLICATION_JSON_VALUE,
+                    requestBody.getBytes()
+            );
 
             // when
-            mockMvc.perform(post("/v1/webtoons")
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(multipart("/v1/webtoons")
+                            .file(imageFile)
+                            .file(jsonFile))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
                     .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
@@ -99,13 +150,31 @@ public class WebtoonIntegrationTest {
                                                                     String writerName,
                                                                     String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
-            final String requestBody = objectMapper.writeValueAsString(request);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(
+                    title,
+                    writerName,
+                    genre
+            );
+            String requestBody = objectMapper.writeValueAsString(request);
+
+            MockMultipartFile imageFile = new MockMultipartFile(
+                    "image",
+                    "test-image.jpg",
+                    MediaType.IMAGE_JPEG_VALUE,
+                    "Test Image Content".getBytes()
+            );
+
+            MockMultipartFile jsonFile = new MockMultipartFile(
+                    "request",
+                    "",
+                    MediaType.APPLICATION_JSON_VALUE,
+                    requestBody.getBytes()
+            );
 
             // when
-            mockMvc.perform(post("/v1/webtoons")
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(multipart("/v1/webtoons")
+                            .file(imageFile)
+                            .file(jsonFile))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
                     .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
@@ -119,13 +188,31 @@ public class WebtoonIntegrationTest {
                                                                        String writerName,
                                                                        String genre) throws Exception {
             // given
-            final WebtoonCreateRequest request = new WebtoonCreateRequest(title, writerName, genre);
-            final String requestBody = objectMapper.writeValueAsString(request);
+            final WebtoonCreateRequest request = new WebtoonCreateRequest(
+                    title,
+                    writerName,
+                    genre
+            );
+            String requestBody = objectMapper.writeValueAsString(request);
+
+            MockMultipartFile imageFile = new MockMultipartFile(
+                    "image",
+                    "test-image.jpg",
+                    MediaType.IMAGE_JPEG_VALUE,
+                    "Test Image Content".getBytes()
+            );
+
+            MockMultipartFile jsonFile = new MockMultipartFile(
+                    "request",
+                    "",
+                    MediaType.APPLICATION_JSON_VALUE,
+                    requestBody.getBytes()
+            );
 
             // when
-            mockMvc.perform(post("/v1/webtoons")
-                            .content(requestBody)
-                            .contentType(MediaType.APPLICATION_JSON))
+            mockMvc.perform(multipart("/v1/webtoons")
+                            .file(imageFile)
+                            .file(jsonFile))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("실패"))
                     .andExpect(jsonPath("$.data.status").value(HttpStatus.BAD_REQUEST.value()));
@@ -160,12 +247,26 @@ public class WebtoonIntegrationTest {
                                 "짜장곰",
                                 "horror"
                         );
-                        final String requestBody = objectMapper.writeValueAsString(request);
+                        String requestBody = objectMapper.writeValueAsString(request);
+
+                        MockMultipartFile imageFile = new MockMultipartFile(
+                                "image",
+                                "test-image.jpg",
+                                MediaType.IMAGE_JPEG_VALUE,
+                                "Test Image Content".getBytes()
+                        );
+
+                        MockMultipartFile jsonFile = new MockMultipartFile(
+                                "request",
+                                "",
+                                MediaType.APPLICATION_JSON_VALUE,
+                                requestBody.getBytes()
+                        );
 
                         // when
-                        mockMvc.perform(post("/v1/webtoons")
-                                        .content(requestBody)
-                                        .contentType(MediaType.APPLICATION_JSON))
+                        mockMvc.perform(multipart("/v1/webtoons")
+                                        .file(imageFile)
+                                        .file(jsonFile))
                                 .andExpect(status().isOk())
                                 .andExpect(jsonPath("$.statusMessage").value("실패"))
                                 .andExpect(jsonPath("$.data.status").value(HttpStatus.CONFLICT.value()));

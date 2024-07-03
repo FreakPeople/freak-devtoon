@@ -184,3 +184,6 @@ src/test/resources/application.yaml
 
 # api 테스트 요청 파일 관리
 /api_test/**
+
+# local 이미지 저장소
+/local_img_storage

@@ -29,6 +29,9 @@ public class WebtoonEntity extends BaseEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @Column(name = "writerName", nullable = false)
     private String writerName;
 
@@ -44,12 +47,14 @@ public class WebtoonEntity extends BaseEntity {
             final Long id,
             final String title,
             final String writerName,
+            final String imageUrl,
             final Genre genre,
             final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.title = title;
         this.writerName = writerName;
+        this.imageUrl = imageUrl;
         this.genre = genre;
         this.deletedAt = deletedAt;
     }
@@ -57,11 +62,13 @@ public class WebtoonEntity extends BaseEntity {
     public static WebtoonEntity create(
             final String title,
             final String writerName,
+            final String imageUrl,
             final Genre genre
     ) {
         return WebtoonEntity.builder()
                 .title(title)
                 .writerName(writerName)
+                .imageUrl(imageUrl)
                 .genre(genre)
                 .build();
     }
