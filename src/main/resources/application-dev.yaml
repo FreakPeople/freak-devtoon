@@ -4,27 +4,31 @@ spring:
     config:
         activate:
             on-profile: dev
-#    data:
-#        redis:
-#            host: ${DEV_REDIS_HOST}
-#            port: ${DEV_REDIS_PORT}
     datasource:
         url: jdbc:mysql://${DEV_MYSQL_URL}
         username: ${DEV_MYSQL_USER}
         password: ${DEV_MYSQL_PASSWORD}
     jpa:
+        defer-datasource-initialization: true
+        hibernate:
+            ddl-auto: create
         properties:
             hibernate:
-                show_sql: false
-                format_sql: false
+                show_sql: true
+                format_sql: true
         show-sql: true
     sql:
         init:
-            mode: never # data.sql 파일 실행
+            mode: always # data.sql 파일 실행
     cache:
         type: caffeine
 
 jwt:
     secret: ${JWT_SECRET}
     token-validity-in-seconds: ${JWT_EXPIRED_SECONDS}
+
+file:
+    local:
+        upload:
+            path: ${LOCAL_IMAGE_STORAGE_URL}
 

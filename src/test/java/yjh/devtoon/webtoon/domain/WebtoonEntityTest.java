@@ -13,7 +13,7 @@ class WebtoonEntityTest {
     @DisplayName("[create() 테스트] : 웬툰 엔티티 생성 테스트")
     @Test
     void createWebtoon_successfully() {
-        assertThatCode(() -> WebtoonEntity.create("title", "writer_name", Genre.HORROR))
+        assertThatCode(() -> WebtoonEntity.create("title", "writer_name", "image_url", Genre.HORROR))
                 .doesNotThrowAnyException();
     }
 
@@ -21,7 +21,7 @@ class WebtoonEntityTest {
     @Test
     void createWebtoon_successfully_and_validateField() {
         // when
-        WebtoonEntity webtoonEntity = WebtoonEntity.create("title", "writer_name", Genre.HORROR);
+        WebtoonEntity webtoonEntity = WebtoonEntity.create("title", "writer_name", "image_url", Genre.HORROR);
 
         // then
         assertAll(
