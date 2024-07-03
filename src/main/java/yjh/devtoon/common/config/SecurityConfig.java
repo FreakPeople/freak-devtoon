@@ -50,6 +50,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "/v1/auth/authenticate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/members").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/bad-words-warning-count").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/cookie-wallets").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/webtoons").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/webtoons/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/comments").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/comments/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/promotions/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/promotions/*/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/policies/*").permitAll()
                         .anyRequest().authenticated())
 
                 .sessionManagement(sessionManagement ->
