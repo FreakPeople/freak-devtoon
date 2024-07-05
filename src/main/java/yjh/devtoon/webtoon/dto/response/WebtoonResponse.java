@@ -14,6 +14,7 @@ public class WebtoonResponse {
     private Long webtoonId;
     private String title;
     private String writerName;
+    private String imageUrl;
     private String genre;
     private LocalDateTime createdAt;
 
@@ -22,6 +23,7 @@ public class WebtoonResponse {
         webtoonResponse.webtoonId = webtoonEntity.getId();
         webtoonResponse.title = webtoonEntity.getTitle();
         webtoonResponse.writerName = webtoonEntity.getWriterName();
+        webtoonResponse.imageUrl = webtoonEntity.getImageUrl();
         webtoonResponse.genre = webtoonEntity.getGenre().getName();
         webtoonResponse.createdAt = webtoonEntity.getCreatedAt();
         return webtoonResponse;
