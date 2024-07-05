@@ -2,6 +2,7 @@ package yjh.devtoon.cookie_wallet.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +33,21 @@ public class CookieWalletController {
         CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
         return ResponseEntity.ok(ApiResponse.success(response));
     }
+
+
+    /**
+     * 내 쿠키 지갑 조회
+     */
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> retrieveMyInfo(Authentication authentication) {
+        String memberEmail = authentication.getName();
+
+        CookieWalletEntity cookieWallet = cookieWalletService.retrieveMyInfo(memberEmail);
+        CookieWalletResponse response = CookieWalletResponse.from(cookieWallet);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+
 
     /**
      * 쿠키 증가
