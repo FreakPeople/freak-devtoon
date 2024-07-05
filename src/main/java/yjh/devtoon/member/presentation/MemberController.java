@@ -3,6 +3,7 @@ package yjh.devtoon.member.presentation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,4 +60,16 @@ public class MemberController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    /**
+     * 내 정보 조회
+     */
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> retrieveMyInfo(Authentication authentication) {
+        // 사용자 이메일이 저장된다.(security에서는 name이라고 칭함)
+        String memberEmail = authentication.getName();
+
+        MemberEntity member = memberService.retrieveMyInfo(memberEmail);
+        MemberResponse response = MemberResponse.from(member);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
 }

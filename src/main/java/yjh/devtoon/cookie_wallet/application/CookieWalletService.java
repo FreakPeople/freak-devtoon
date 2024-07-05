@@ -50,4 +50,10 @@ public class CookieWalletService {
         return cookieWalletRepository.save(cookieWallet);
     }
 
+    public CookieWalletEntity retrieveMyInfo(final String memberEmail) {
+        MemberEntity member = memberService.retrieveMyInfo(memberEmail);
+
+        return cookieWalletRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(member.getId())));
+    }
 }

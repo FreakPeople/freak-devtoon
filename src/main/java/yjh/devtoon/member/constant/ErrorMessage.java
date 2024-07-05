@@ -16,6 +16,10 @@ public class ErrorMessage {
         return String.format(ID_NOT_FOUND, id);
     }
 
+    public static String getMemberNotFound(final String email) {
+        return String.format(ID_NOT_FOUND, email);
+    }
+
     public static String getMembershipStatusNotFound(final String status) {
         return String.format(MEMBERSHIP_STATUS_NOT_FOUND, status);
     }

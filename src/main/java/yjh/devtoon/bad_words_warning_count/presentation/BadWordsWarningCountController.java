@@ -2,6 +2,7 @@ package yjh.devtoon.bad_words_warning_count.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,18 @@ public class BadWordsWarningCountController {
             @RequestParam("memberId") final Long id
     ) {
         BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.increase(id);
+        BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
+    /**
+     * 내 비속어 카운트 조회
+     */
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> retrieveMyInfo(Authentication authentication) {
+        String memberEmail = authentication.getName();
+
+        BadWordsWarningCountEntity badWordsWarningCount = badWordsWarningCountService.retrieveMyInfo(memberEmail);
         BadWordsWarningCountResponse response = BadWordsWarningCountResponse.from(badWordsWarningCount);
         return ResponseEntity.ok(ApiResponse.success(response));
     }

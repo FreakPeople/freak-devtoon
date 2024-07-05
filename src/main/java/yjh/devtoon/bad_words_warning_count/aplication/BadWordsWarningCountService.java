@@ -34,4 +34,10 @@ public class BadWordsWarningCountService {
         return badWordsWarningCountRepository.save(badWordsWarningCount);
     }
 
+    public BadWordsWarningCountEntity retrieveMyInfo(final String memberEmail) {
+        MemberEntity member = memberService.retrieveMyInfo(memberEmail);
+
+        return badWordsWarningCountRepository.findById(member.getId())
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(member.getId())));
+    }
 }

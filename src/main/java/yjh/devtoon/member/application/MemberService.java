@@ -70,4 +70,8 @@ public class MemberService {
         member.change(MembershipStatus.create(targetStatus));
     }
 
+    public MemberEntity retrieveMyInfo(final String memberEmail) {
+        return memberRepository.findByEmail(memberEmail)
+                .orElseThrow(() -> new DevtoonException(ErrorCode.NOT_FOUND, ErrorMessage.getMemberNotFound(memberEmail)));
+    }
 }
