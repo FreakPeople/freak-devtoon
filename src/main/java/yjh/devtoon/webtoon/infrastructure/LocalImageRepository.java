@@ -1,8 +1,11 @@
 package yjh.devtoon.webtoon.infrastructure;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -35,6 +38,11 @@ public class LocalImageRepository implements ImageRepository {
         } finally {
             return savePath.getFileName().toString();
         }
+    }
+
+    @Override
+    public Resource get(final String fileName) {
+        return new FileSystemResource(uploadPath + File.separator + fileName);
     }
 
     public void deleteDirectory(Path path) throws IOException {

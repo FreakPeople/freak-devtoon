@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/v1/cookie-wallets").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/webtoons").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/webtoons/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v1/webtoons/*/images/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/comments").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/comments/*").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/promotions/*").permitAll()
