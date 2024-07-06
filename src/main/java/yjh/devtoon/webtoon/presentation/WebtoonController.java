@@ -2,8 +2,10 @@ package yjh.devtoon.webtoon.presentation;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
 import yjh.devtoon.webtoon.dto.response.WebtoonResponse;
+import java.nio.file.Files;
 
 @RequestMapping("/v1/webtoons")
 @RequiredArgsConstructor
@@ -36,6 +39,24 @@ public class WebtoonController {
     ) {
         webtoonService.createWebtoon(request, multipartFile);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    /**
+     * 웹툰 이미지 조회
+     */
+    @GetMapping("/{id}/images/{fileName}")
+    public ResponseEntity<Resource> retrieveImage(
+            @PathVariable final Long id,
+            @PathVariable final String fileName
+    ) {
+        Resource resource =  webtoonService.retrieveImage(id, fileName);
+        HttpHeaders headers = new HttpHeaders();
+        try {
+            headers.add("Content-Type", Files.probeContentType(resource.getFile().toPath()));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("[Error] Image reference failed");
+        }
+        return ResponseEntity.ok().headers(headers).body(resource);
     }
 
     /**

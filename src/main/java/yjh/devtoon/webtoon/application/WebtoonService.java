@@ -1,6 +1,7 @@
 package yjh.devtoon.webtoon.application;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,9 @@ public class WebtoonService {
 
     public Page<WebtoonEntity> retrieveAll(Pageable pageable) {
         return webtoonRepository.findAll(pageable);
+    }
+
+    public Resource retrieveImage(final Long id, final String fileName) {
+        return imageRepository.get(fileName);
     }
 }
