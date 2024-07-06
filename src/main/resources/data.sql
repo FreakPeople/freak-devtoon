@@ -2,6 +2,23 @@
 INSERT INTO authority (authority_name)
 VALUES ('ADMIN'), ('MEMBER');
 
+-- 회원 초기 데이터 삽입
+INSERT INTO member (member_no, email, name, password, membership_status, created_at, deleted_at)
+VALUES (1, 'email_1@naver.com','회원1', '$2a$10$57KKBJtMH.oJbOB97htDVO2DakBvfzZALHpbQ3er7k/BNFX.GKMMW', 'GENERAL', '2024-07-06 16:26:03.835477', null);
+
+INSERT INTO member (member_no, email, name, password, membership_status, created_at, deleted_at)
+VALUES (2, 'email_2@naver.com','회원2', '$2a$10$nReEDQ9T/eURLvTbgneaBu3hiRFo/l09C5WdLc4qO6jydidPcn336', 'GENERAL', '2024-07-07 16:26:03.835477', null);
+
+-- 회원 권한 테이블
+INSERT INTO member_authority (member_no, authority_name)
+VALUES (1, 'MEMBER');
+
+INSERT INTO member_authority (member_no, authority_name)
+VALUES (2, 'ADMIN');
+
+
+-- $2a$10$nReEDQ9T/eURLvTbgneaBu3hiRFo/l09C5WdLc4qO6jydidPcn336
+
 -- 비속어 정책 테이블에 초기 데이터 삽입
 INSERT INTO `bad_words_policy` (`warning_threshold`, `start_date`, `end_date`, `created_at`, `updated_at`)
 SELECT
