@@ -14,7 +14,6 @@ class CommentEntityTest {
         assertThatCode(() -> CommentEntity.create(
                         1L,
                         1L,
-                        1L,
                         "작화가 너무 좋아요!"
                 )
         ).doesNotThrowAnyException();

@@ -56,8 +56,8 @@ public class CommentIntegrationTest {
     @DisplayName("댓글 등록 테스트")
     class CommentRegisterTests {
 
-        private static final String VALID_FILED_TITLE = "홍길동";
-        private static final String VALID_FILED_EMAIL = "email@gmail.ocm";
+        private static final String VALID_FILED_NAME = "홍길동";
+        private static final String VALID_FILED_EMAIL = "email@gmail.com";
         private static final String VALID_FILED_PASSWORD = "password";
 
         @DisplayName("댓글 등록 성공")
@@ -71,21 +71,17 @@ public class CommentIntegrationTest {
                     .genre(Genre.HORROR)
                     .build()
             );
-            // 웹툰 구독자 저장
-            MemberEntity savedMember =
-                    memberRepository.save(MemberEntity.builder()
-                            .name(VALID_FILED_TITLE)
-                            .email(VALID_FILED_EMAIL)
-                            .password(VALID_FILED_PASSWORD)
-                            .membershipStatus(MembershipStatus.GENERAL)
-                            .build()
-                    );
-            long detailId = 1L;
+            // 댓글 작성자 저장
+            memberRepository.save(MemberEntity.builder()
+                    .name(VALID_FILED_NAME)
+                    .email(VALID_FILED_EMAIL)
+                    .password(VALID_FILED_PASSWORD)
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
-                    detailId,
-                    savedMember.getId(),
                     "정말 레전드 작화 네요!"
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -110,21 +106,17 @@ public class CommentIntegrationTest {
                     .genre(Genre.HORROR)
                     .build()
             );
-            // 웹툰 구독자 저장
-            MemberEntity savedMember =
-                    memberRepository.save(MemberEntity.builder()
-                            .name(VALID_FILED_TITLE)
-                            .email(VALID_FILED_EMAIL)
-                            .password(VALID_FILED_PASSWORD)
-                            .membershipStatus(MembershipStatus.GENERAL)
-                            .build()
-                    );
-            long detailId = 1L;
+            // 댓글 작성자 저장
+            memberRepository.save(MemberEntity.builder()
+                    .name(VALID_FILED_NAME)
+                    .email(VALID_FILED_EMAIL)
+                    .password(VALID_FILED_PASSWORD)
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
-                    detailId,
-                    savedMember.getId(),
                     null
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -142,7 +134,6 @@ public class CommentIntegrationTest {
         @Test
         void givenEmptyField_whenRegisterComment_thenThrowException() throws Exception {
             // given
-            // given
             // 웹툰 저장
             WebtoonEntity savedWebtoon = webtoonRepository.save(WebtoonEntity.builder()
                     .title("쿠베라")
@@ -150,21 +141,17 @@ public class CommentIntegrationTest {
                     .genre(Genre.HORROR)
                     .build()
             );
-            // 웹툰 구독자 저장
-            MemberEntity savedMember =
-                    memberRepository.save(MemberEntity.builder()
-                            .name(VALID_FILED_TITLE)
-                            .email(VALID_FILED_EMAIL)
-                            .password(VALID_FILED_PASSWORD)
-                            .membershipStatus(MembershipStatus.GENERAL)
-                            .build()
-                    );
-            long detailId = 1L;
+            // 댓글 작성자 저장
+            memberRepository.save(MemberEntity.builder()
+                    .name(VALID_FILED_NAME)
+                    .email(VALID_FILED_EMAIL)
+                    .password(VALID_FILED_PASSWORD)
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
-                    detailId,
-                    savedMember.getId(),
                     ""
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -189,21 +176,17 @@ public class CommentIntegrationTest {
                     .genre(Genre.HORROR)
                     .build()
             );
-            // 웹툰 구독자 저장
-            MemberEntity savedMember =
-                    memberRepository.save(MemberEntity.builder()
-                            .name(VALID_FILED_TITLE)
-                            .email(VALID_FILED_EMAIL)
-                            .password(VALID_FILED_PASSWORD)
-                            .membershipStatus(MembershipStatus.GENERAL)
-                            .build()
-                    );
-            long detailId = 1L;
+            // 댓글 작성자 저장
+            memberRepository.save(MemberEntity.builder()
+                    .name(VALID_FILED_NAME)
+                    .email(VALID_FILED_EMAIL)
+                    .password(VALID_FILED_PASSWORD)
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     savedWebtoon.getId(),
-                    detailId,
-                    savedMember.getId(),
                     "문" .repeat(101)
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -223,21 +206,17 @@ public class CommentIntegrationTest {
             // given
             long NotExistWebtoonId = 99999999999L;
 
-            // 웹툰 구독자 저장
-            MemberEntity savedMember =
-                    memberRepository.save(MemberEntity.builder()
-                            .name(VALID_FILED_TITLE)
-                            .email(VALID_FILED_EMAIL)
-                            .password(VALID_FILED_PASSWORD)
-                            .membershipStatus(MembershipStatus.GENERAL)
-                            .build()
-                    );
-            long detailId = 1L;
+            // 댓글 작성자 저장
+            memberRepository.save(MemberEntity.builder()
+                    .name(VALID_FILED_NAME)
+                    .email(VALID_FILED_EMAIL)
+                    .password(VALID_FILED_PASSWORD)
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .build()
+            );
 
             final CommentCreateRequest request = new CommentCreateRequest(
                     NotExistWebtoonId,
-                    detailId,
-                    savedMember.getId(),
                     "정말 레전드 작화 네요!"
             );
             final String requestBody = objectMapper.writeValueAsString(request);
@@ -264,7 +243,6 @@ public class CommentIntegrationTest {
             // given
             CommentEntity comment = CommentEntity.builder()
                     .webtoonId(2L)
-                    .detailId(2L)
                     .memberId(2L)
                     .content("재밌어요!")
                     .build();
@@ -276,7 +254,6 @@ public class CommentIntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
                     .andExpect(jsonPath("$.data.webtoonNo").value(saved.getWebtoonId()))
-                    .andExpect(jsonPath("$.data.webtoonDetailNo").value(saved.getDetailId()))
                     .andExpect(jsonPath("$.data.writerId").value(saved.getMemberId()))
                     .andExpect(jsonPath("$.data.content").value(saved.getContent()));
         }
@@ -302,7 +279,6 @@ public class CommentIntegrationTest {
             long webtoonId = 2L;
             CommentEntity comment1 = CommentEntity.builder()
                     .webtoonId(webtoonId)
-                    .detailId(2L)
                     .memberId(2L)
                     .content("재밌어요!")
                     .build();
@@ -310,7 +286,6 @@ public class CommentIntegrationTest {
 
             CommentEntity comment2 = CommentEntity.builder()
                     .webtoonId(webtoonId)
-                    .detailId(2L)
                     .memberId(2L)
                     .content("최고에요!")
                     .build();
