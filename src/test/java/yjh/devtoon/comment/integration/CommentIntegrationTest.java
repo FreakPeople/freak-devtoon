@@ -243,7 +243,8 @@ public class CommentIntegrationTest {
             // given
             CommentEntity comment = CommentEntity.builder()
                     .webtoonId(2L)
-                    .memberId(2L)
+                    .writerId(2L)
+                    .writerName("작성자 이름")
                     .content("재밌어요!")
                     .build();
             CommentEntity saved = commentRepository.save(comment);
@@ -254,7 +255,8 @@ public class CommentIntegrationTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.statusMessage").value("성공"))
                     .andExpect(jsonPath("$.data.webtoonNo").value(saved.getWebtoonId()))
-                    .andExpect(jsonPath("$.data.writerId").value(saved.getMemberId()))
+                    .andExpect(jsonPath("$.data.writerNo").value(saved.getWriterId()))
+                    .andExpect(jsonPath("$.data.writerName").value(saved.getWriterName()))
                     .andExpect(jsonPath("$.data.content").value(saved.getContent()));
         }
 
@@ -279,14 +281,16 @@ public class CommentIntegrationTest {
             long webtoonId = 2L;
             CommentEntity comment1 = CommentEntity.builder()
                     .webtoonId(webtoonId)
-                    .memberId(2L)
+                    .writerId(2L)
+                    .writerName("작성자1")
                     .content("재밌어요!")
                     .build();
             commentRepository.save(comment1);
 
             CommentEntity comment2 = CommentEntity.builder()
                     .webtoonId(webtoonId)
-                    .memberId(2L)
+                    .writerId(2L)
+                    .writerName("작성자2")
                     .content("최고에요!")
                     .build();
             commentRepository.save(comment2);

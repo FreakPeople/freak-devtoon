@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 public class CommentResponse {
 
     private Long webtoonNo;
-    private Long writerId;
+    private Long writerNo;
+    private String writerName;
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime updatedAt;
@@ -20,7 +21,8 @@ public class CommentResponse {
     public static CommentResponse from(final CommentEntity comment) {
         CommentResponse commentResponse = new CommentResponse();
         commentResponse.webtoonNo = comment.getWebtoonId();
-        commentResponse.writerId = comment.getMemberId();
+        commentResponse.writerNo = comment.getWriterId();
+        commentResponse.writerName = comment.getWriterName();
         commentResponse.content = comment.getContent();
         commentResponse.createAt = comment.getCreatedAt();
         commentResponse.updatedAt = comment.getUpdatedAt();

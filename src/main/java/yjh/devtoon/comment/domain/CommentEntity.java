@@ -28,7 +28,10 @@ public class CommentEntity extends BaseEntity {
     private Long webtoonId;
 
     @Column(name = "member_no", nullable = false)
-    private Long memberId;
+    private Long writerId;
+
+    @Column(name = "writer_name", nullable = false)
+    private String writerName;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -40,13 +43,15 @@ public class CommentEntity extends BaseEntity {
     public CommentEntity(
             final Long id,
             final Long webtoonId,
-            final Long memberId,
+            final Long writerId,
+            final String writerName,
             final String content,
             final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.webtoonId = webtoonId;
-        this.memberId = memberId;
+        this.writerId = writerId;
+        this.writerName = writerName;
         this.content = content;
         this.deletedAt = deletedAt;
     }
@@ -54,11 +59,13 @@ public class CommentEntity extends BaseEntity {
     public static CommentEntity create(
             final Long webtoonId,
             final Long writerId,
+            final String writerName,
             final String content
     ) {
         return CommentEntity.builder()
                 .webtoonId(webtoonId)
-                .memberId(writerId)
+                .writerId(writerId)
+                .writerName(writerName)
                 .content(content)
                 .build();
     }
@@ -68,7 +75,8 @@ public class CommentEntity extends BaseEntity {
         return "CommentEntity{" +
                 "id=" + id +
                 ", webtoonId=" + webtoonId +
-                ", memberId=" + memberId +
+                ", writerId=" + writerId +
+                ", writerName='" + writerName + '\'' +
                 ", content='" + content + '\'' +
                 ", deletedAt=" + deletedAt +
                 '}';
