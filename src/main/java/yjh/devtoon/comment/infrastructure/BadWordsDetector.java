@@ -20,11 +20,14 @@ public class BadWordsDetector {
     private final BadWordsWarningCountService badWordsWarningCountService;
 
     @Async("EventThreadPool")
-    public void validateBadWords(final CommentCreateRequest request) {
+    public void validateBadWords(
+            final CommentCreateRequest request,
+            final Long writerId
+    ) {
         int badWordsCount = detectUsingExternalApi(request.getContent());
 
         if (badWordsCount > 0) {
-            badWordsWarningCountService.increase(request.getWriterId());
+            badWordsWarningCountService.increase(writerId);
         }
     }
 

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yjh.devtoon.auth.util.SecurityUtil;
 import yjh.devtoon.comment.constant.ErrorMessage;
 import yjh.devtoon.comment.domain.CommentEntity;
 import yjh.devtoon.comment.dto.request.CommentCreateRequest;
@@ -13,6 +14,8 @@ import yjh.devtoon.comment.infrastructure.BadWordsDetector;
 import yjh.devtoon.comment.infrastructure.CommentRepository;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.webtoon.application.WebtoonService;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 
@@ -22,6 +25,7 @@ import yjh.devtoon.webtoon.domain.WebtoonEntity;
 public class CommentService {
 
     private final WebtoonService webtoonService;
+    private final MemberService memberService;
     private final CommentRepository commentRepository;
     private final BadWordsDetector badWordsDetector;
 
@@ -32,18 +36,22 @@ public class CommentService {
 
     @Transactional
     public void create(final CommentCreateRequest request) {
+        String memberEmail = SecurityUtil.getCurrentUsername()
+                .orElseThrow(() -> new IllegalArgumentException("[Error] not found authentication username"));
+
+        MemberEntity writer = memberService.retrieveMyInfo(memberEmail);
 
         /**
          * @Async를 활용한 비동기 동작
          */
-        badWordsDetector.validateBadWords(request);
+        badWordsDetector.validateBadWords(request, writer.getId());
 
         WebtoonEntity webtoon = webtoonService.retrieve(request.getWebtoonId());
 
         CommentEntity comment = CommentEntity.create(
                 webtoon.getId(),
-                request.getDetailId(),
-                request.getWriterId(),
+                writer.getId(),
+                writer.getName(),
                 request.getContent()
         );
         commentRepository.save(comment);

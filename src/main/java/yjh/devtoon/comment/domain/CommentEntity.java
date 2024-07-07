@@ -27,11 +27,11 @@ public class CommentEntity extends BaseEntity {
     @Column(name = "webtoon_no", nullable = false)
     private Long webtoonId;
 
-    @Column(name = "webtoon_detail_no", nullable = false)
-    private Long detailId;
-
     @Column(name = "member_no", nullable = false)
-    private Long memberId;
+    private Long writerId;
+
+    @Column(name = "writer_name", nullable = false)
+    private String writerName;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -43,29 +43,29 @@ public class CommentEntity extends BaseEntity {
     public CommentEntity(
             final Long id,
             final Long webtoonId,
-            final Long detailId,
-            final Long memberId,
+            final Long writerId,
+            final String writerName,
             final String content,
             final LocalDateTime deletedAt
     ) {
         this.id = id;
         this.webtoonId = webtoonId;
-        this.detailId = detailId;
-        this.memberId = memberId;
+        this.writerId = writerId;
+        this.writerName = writerName;
         this.content = content;
         this.deletedAt = deletedAt;
     }
 
     public static CommentEntity create(
             final Long webtoonId,
-            final Long detailId,
             final Long writerId,
+            final String writerName,
             final String content
     ) {
         return CommentEntity.builder()
                 .webtoonId(webtoonId)
-                .detailId(detailId)
-                .memberId(writerId)
+                .writerId(writerId)
+                .writerName(writerName)
                 .content(content)
                 .build();
     }
@@ -75,8 +75,8 @@ public class CommentEntity extends BaseEntity {
         return "CommentEntity{" +
                 "id=" + id +
                 ", webtoonId=" + webtoonId +
-                ", detailId=" + detailId +
-                ", memberId=" + memberId +
+                ", writerId=" + writerId +
+                ", writerName='" + writerName + '\'' +
                 ", content='" + content + '\'' +
                 ", deletedAt=" + deletedAt +
                 '}';
