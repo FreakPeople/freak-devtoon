@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import yjh.devtoon.common.exception.DevtoonException;
 import yjh.devtoon.common.exception.ErrorCode;
+import yjh.devtoon.member.application.MemberService;
+import yjh.devtoon.member.domain.MemberEntity;
 import yjh.devtoon.webtoon.constant.ErrorMessage;
 import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
@@ -22,6 +24,7 @@ public class WebtoonService {
 
     private final WebtoonRepository webtoonRepository;
     private final ImageRepository imageRepository;
+    private final MemberService memberService;
 
     public WebtoonEntity retrieve(final Long id) {
         return webtoonRepository.findById(id)
@@ -65,5 +68,10 @@ public class WebtoonService {
 
     public Resource retrieveImage(final Long id, final String fileName) {
         return imageRepository.get(fileName);
+    }
+
+    public Page<WebtoonEntity> retrieveAllMy(final Pageable pageable, final String myEmail) {
+        MemberEntity my = memberService.retrieveMyInfo(myEmail);
+        return webtoonRepository.findAllByWriterName(pageable, my.getName());
     }
 }

@@ -24,9 +24,15 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import yjh.devtoon.member.domain.Authority;
+import yjh.devtoon.member.domain.MemberEntity;
+import yjh.devtoon.member.domain.MembershipStatus;
+import yjh.devtoon.member.domain.Role;
+import yjh.devtoon.member.infrastructure.MemberRepository;
 import yjh.devtoon.webtoon.domain.Genre;
 import yjh.devtoon.webtoon.domain.WebtoonEntity;
 import yjh.devtoon.webtoon.dto.request.WebtoonCreateRequest;
@@ -36,6 +42,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @DisplayName("통합 테스트 [Webtoon]")
@@ -45,6 +52,12 @@ import java.util.stream.Stream;
 public class WebtoonIntegrationTest {
 
     private static final String NULL = null;
+
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -346,6 +359,48 @@ public class WebtoonIntegrationTest {
                     .andExpect(jsonPath("$.data.content").isArray())
                     .andExpect(jsonPath("$.data.content[0].title").value("쿠베라"))
                     .andExpect(jsonPath("$.data.content[1].title").value("기기괴괴"));
+        }
+    }
+
+    @WithMockUser(username = "email@gmail.com", password = "password", authorities = {"MEMBER"})
+    @Nested
+    @DisplayName("나의 웹툰 전체 조회 테스트")
+    class WebtoonRetrieveAllMyTests {
+
+        @DisplayName("나의 웹툰 전체 조회 성공")
+        @Test
+        void retrieveAllWebtoon_successfully() throws Exception {
+            // given
+            MemberEntity member = MemberEntity.builder()
+                    .name("카레곰")
+                    .email("email@gmail.com")
+                    .password(passwordEncoder.encode("password"))
+                    .membershipStatus(MembershipStatus.GENERAL)
+                    .authorities(Set.of(new Authority(Role.MEMBER)))
+                    .build();
+            memberRepository.save(member);
+
+            WebtoonEntity webtoonEntity1 = WebtoonEntity.builder()
+                    .title("쿠베라")
+                    .writerName("카레곰")
+                    .genre(Genre.HORROR)
+                    .build();
+            webtoonRepository.save(webtoonEntity1);
+
+            WebtoonEntity webtoonEntity2 = WebtoonEntity.builder()
+                    .title("기기괴괴")
+                    .writerName("오성대")
+                    .genre(Genre.HORROR)
+                    .build();
+            webtoonRepository.save(webtoonEntity2);
+
+            // when
+            mockMvc.perform(get("/v1/webtoons/my")
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.statusMessage").value("성공"))
+                    .andExpect(jsonPath("$.data.content").isArray())
+                    .andExpect(jsonPath("$.data.content[0].title").value("쿠베라"));
         }
     }
 
