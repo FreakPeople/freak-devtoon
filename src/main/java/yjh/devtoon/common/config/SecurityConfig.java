@@ -48,6 +48,8 @@ public class SecurityConfig {
                 )
 
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/auth/authenticate").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/members").permitAll()
                         .requestMatchers(HttpMethod.GET, "/v1/bad-words-warning-count").permitAll()
