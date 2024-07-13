@@ -116,30 +116,16 @@ gradlew clean test
 
 
 ## 5. 시퀀스 다이어그램
-<style>
-  .scrollable-image-container {
-    overflow-x: auto;
-    overflow-y: hidden;
-    height: 400px;
-    white-space: nowrap;
-    width: 660px;
-  }
-  .scrollable-image-container img {
-    height: 100%;
-    border-radius: 10px;
-  }
-</style>
-
-<div class="scrollable-image-container">
-  <img src = "https://github.com/user-attachments/assets/93a3891d-8a3e-4804-976a-a6e587b9e66d">
-  <img src = "https://github.com/user-attachments/assets/8f673036-5e57-4ad3-9d6c-cce4a23638a2">
-  <img src = "https://github.com/user-attachments/assets/6177da44-a3a9-42b6-b8a5-12a512b24c9b">
-  <img src = "https://github.com/user-attachments/assets/fc5a5cf7-95c5-4f21-9aa0-1bee8b29e5f7">
-  <img src = "https://github.com/user-attachments/assets/d9a201e6-4b73-4b4b-b29f-e96b26261a5f">
-  <img src = "https://github.com/user-attachments/assets/ffea7fbd-e884-45ea-aab4-e6640b4f627c">
-  <img src = "https://github.com/user-attachments/assets/b61ada94-1972-4881-af65-af029dfc172c">
-  <img src = "https://github.com/user-attachments/assets/989b8372-41ba-4dac-8ac2-8edb0f30cd00">
-  <img src = "https://github.com/user-attachments/assets/e4b0677a-7092-41fd-b5cb-ea342e8ccd79">
+<div style="overflow-x: auto; overflow-y: hidden; height: 400px; white-space: nowrap; width: 660px;">
+  <img src="https://github.com/user-attachments/assets/93a3891d-8a3e-4804-976a-a6e587b9e66d" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/8f673036-5e57-4ad3-9d6c-cce4a23638a2" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/6177da44-a3a9-42b6-b8a5-12a512b24c9b" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/fc5a5cf7-95c5-4f21-9aa0-1bee8b29e5f7" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/d9a201e6-4b73-4b4b-b29f-e96b26261a5f" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/ffea7fbd-e884-45ea-aab4-e6640b4f627c" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/b61ada94-1972-4881-af65-af029dfc172c" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/989b8372-41ba-4dac-8ac2-8edb0f30cd00" style="height: 100%; border-radius: 10px;">
+  <img src="https://github.com/user-attachments/assets/e4b0677a-7092-41fd-b5cb-ea342e8ccd79" style="height: 100%; border-radius: 10px;">
 </div>
 
 
