@@ -118,7 +118,7 @@ gradlew clean test
 <br><br>
 
 ## 5. 시퀀스 다이어그램
-<div style="overflow-x: auto; overflow-y: hidden; height: 400px; white-space: nowrap; width: 660px;">
+<div>
   <kbd>
     <img src="https://github.com/user-attachments/assets/93a3891d-8a3e-4804-976a-a6e587b9e66d" width="32%">
     <img src="https://github.com/user-attachments/assets/8f673036-5e57-4ad3-9d6c-cce4a23638a2" width="32%">
@@ -251,7 +251,22 @@ Response / 200 OK
 
 <br><br>
 
-## 7. (GIF or IMAGE 프론트 구현 내용)
+## 7. 화면 구성
+|![회원가입](https://github.com/user-attachments/assets/37aeea37-3959-463f-b64f-743537c15658)|![웹툰조회](https://github.com/user-attachments/assets/8958f9ed-2f56-45d2-b6c8-c01d8662062b)|  
+| :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+|                                       회원가입                                             |                                         웹툰조회                                           |
+
+|![웹툰등록](https://github.com/user-attachments/assets/867c97bb-c382-4160-aee1-e394cd6236f0)|![웹툰등록완료](https://github.com/user-attachments/assets/693ad5da-7db7-4499-ac40-1bbfb9c09f69)|
+| :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+|                                       웹툰등록                                             |                                        웹툰등록완료                                         |
+
+|![댓글조회](https://github.com/user-attachments/assets/0395e25f-c754-4f4b-96a1-76cde47c09b4)|![댓글등록](https://github.com/user-attachments/assets/89bdc754-5804-4a22-9803-3835efdce28a)|
+| :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+|                                       댓글조회                                             |                                         댓글등록                                           |
+
+|![정책 및 프로모션 조회](https://github.com/user-attachments/assets/8d0c45e5-9cb6-44e7-93b9-196e139679f5)|![내정보조회](https://github.com/user-attachments/assets/c05d4a70-9451-42ac-9b11-de2d62f61042)|
+| :--------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
+|                                   정책 및 프로모션 조회                                       |                                        내정보조회                                          |
 
 <br><br>
 
