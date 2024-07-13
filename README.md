@@ -1,18 +1,17 @@
 # 📖 데브툰 백엔드 애플리케이션
 
-<div style="text-align: center">
+<div align='center'>
 
-<img src = "https://github.com/user-attachments/assets/e5287461-7551-4a25-939f-1440522865d9" style="border-radius: 10px;">
+  <kbd><img src = "https://github.com/user-attachments/assets/e5287461-7551-4a25-939f-1440522865d9"></kbd>
 
-<h3>개발자 유머짤 공유 플랫폼 구축 프로젝트 입니다.</h3>
+  <h3>개발자 유머짤 공유 플랫폼 구축 프로젝트 입니다.</h3>
+  
   <a href='https://topaz-raincoat-203.notion.site/79f0935cded3430385c781e0f1e8fe9c?pvs=74'>📒 팀 노션</a> | 
   <a href='https://github.com/FreakPeople/freak-devtoon-front'>🎨 프론트엔드 레포지토리</a> |
   <a href='https://github.com/FreakPeople/freak-devtoon-back/pulls?page=3&q=is%3Apr+is%3Aclosed'>🎨 이슈 & PR 관리</a>
 </div>
 
-
-
-
+<br><br>
 
 ## 1. 기술 스택
 - 백엔드
@@ -28,10 +27,12 @@
 - 프론트
   - React
 
+<br><br>
+
 ## 2. 프로젝트 구조
 
 ### 1. 아키텍처
-<img src = "https://github.com/user-attachments/assets/6f86e761-48d1-4683-bead-c2571dd4af1b" style="border-radius: 10px;">
+<kbd><img src = "https://github.com/user-attachments/assets/6f86e761-48d1-4683-bead-c2571dd4af1b" style="border-radius: 10px;"></kbd>
 
 
 ```
@@ -81,7 +82,7 @@ test...
   - integration : 데이터베이스와 연동된 통합 테스트 작성.
   - domain : 도메인별 핵심 비즈니스 로직 단위 테스트 작성.
 
-
+<br><br>
 
 ## 3. 개발 환경 구축
 - back-end 와 front-end 서버를 로컬환경에서 실행시키고 테스트할 수 있습니다.
@@ -109,25 +110,29 @@ docker-compose up -d
 gradlew clean test
 ```
 
+<br><br>
 
 ## 4. ERD 다이어그램
 <img width="928" alt="erd" src="https://github.com/user-attachments/assets/c96d56e7-7ab6-4d67-922e-4734e82c5d3b" style="border-radius: 10px;">
 
-
+<br><br>
 
 ## 5. 시퀀스 다이어그램
 <div style="overflow-x: auto; overflow-y: hidden; height: 400px; white-space: nowrap; width: 660px;">
-  <img src="https://github.com/user-attachments/assets/93a3891d-8a3e-4804-976a-a6e587b9e66d" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/8f673036-5e57-4ad3-9d6c-cce4a23638a2" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/6177da44-a3a9-42b6-b8a5-12a512b24c9b" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/fc5a5cf7-95c5-4f21-9aa0-1bee8b29e5f7" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/d9a201e6-4b73-4b4b-b29f-e96b26261a5f" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/ffea7fbd-e884-45ea-aab4-e6640b4f627c" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/b61ada94-1972-4881-af65-af029dfc172c" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/989b8372-41ba-4dac-8ac2-8edb0f30cd00" style="height: 100%; border-radius: 10px;">
-  <img src="https://github.com/user-attachments/assets/e4b0677a-7092-41fd-b5cb-ea342e8ccd79" style="height: 100%; border-radius: 10px;">
+  <kbd>
+    <img src="https://github.com/user-attachments/assets/93a3891d-8a3e-4804-976a-a6e587b9e66d" width="32%">
+    <img src="https://github.com/user-attachments/assets/8f673036-5e57-4ad3-9d6c-cce4a23638a2" width="32%">
+    <img src="https://github.com/user-attachments/assets/6177da44-a3a9-42b6-b8a5-12a512b24c9b" width="32%">
+    <img src="https://github.com/user-attachments/assets/fc5a5cf7-95c5-4f21-9aa0-1bee8b29e5f7" width="32%">
+    <img src="https://github.com/user-attachments/assets/d9a201e6-4b73-4b4b-b29f-e96b26261a5f" width="32%">
+    <img src="https://github.com/user-attachments/assets/ffea7fbd-e884-45ea-aab4-e6640b4f627c" width="32%">
+    <img src="https://github.com/user-attachments/assets/b61ada94-1972-4881-af65-af029dfc172c" width="32%">
+    <img src="https://github.com/user-attachments/assets/989b8372-41ba-4dac-8ac2-8edb0f30cd00" width="32%">
+    <img src="https://github.com/user-attachments/assets/e4b0677a-7092-41fd-b5cb-ea342e8ccd79" width="32%">
+  </kbd>
 </div>
 
+<br><br>
 
 ## 6. API 명세서
 
@@ -244,10 +249,11 @@ Response / 200 OK
 
 </details>
 
-
-
+<br><br>
 
 ## 7. (GIF or IMAGE 프론트 구현 내용)
+
+<br><br>
 
 ## 8. 스터디
 <a href='https://lealea.tistory.com/327'>✏️ 프로젝트 기획부터 설계까지</a>  
@@ -260,6 +266,7 @@ Response / 200 OK
 <a href='https://lealea.tistory.com/339'>✏️ 리팩토링: 쿠키 결제 로직 4단계로 개선하기 (feat. 원시값 포장)</a>  
 <a href='https://wlgns2305.tistory.com/category/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EB%8D%B0%EB%B8%8C%ED%88%B0'>✏️ 스프링 환경에서 비동기 프로그래밍 적용해보기</a>
 
+<br><br>
 
 ## 9. 팀원
 |                                   BackEnd                                    |                                    BackEnd                                    |
