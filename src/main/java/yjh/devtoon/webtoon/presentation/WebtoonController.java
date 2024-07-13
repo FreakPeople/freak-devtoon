@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -77,6 +78,21 @@ public class WebtoonController {
     @GetMapping
     public ResponseEntity<ApiResponse> retrieveAll(Pageable pageable) {
         Page<WebtoonEntity> webtoons = webtoonService.retrieveAll(pageable);
+        Page<WebtoonResponse> webtoonsResponse = webtoons.map(WebtoonResponse::from);
+        return ResponseEntity.ok(ApiResponse.success(webtoonsResponse));
+    }
+
+    /**
+     * 인증한 회원이 게시한 웹툰 전체 조회
+     */
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse> retrieveAllMy(
+            Pageable pageable,
+            Authentication authentication
+    ) {
+        String myEmail = authentication.getName();
+
+        Page<WebtoonEntity> webtoons = webtoonService.retrieveAllMy(pageable, myEmail);
         Page<WebtoonResponse> webtoonsResponse = webtoons.map(WebtoonResponse::from);
         return ResponseEntity.ok(ApiResponse.success(webtoonsResponse));
     }
