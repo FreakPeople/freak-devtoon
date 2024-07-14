@@ -46,6 +46,15 @@ main...
 │    ├── common
 │    ├── cookie_wallet
 │    ├── member
+│         ├── application
+│         ├── constant
+│         ├── docs
+│         ├── domain
+│         ├── dto
+│              ├── request
+│              ├── response
+│         ├── infrastructure
+│         ├── presentation
 │    ├── payment
 │    ├── policy
 │    ├── promotion
