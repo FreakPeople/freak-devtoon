@@ -150,13 +150,12 @@ gradlew clean test
 <summary>로그인</summary>
 
 `POST /v1/auth/authenticate`
-```가나다라
+```
 Request
 {
   "email" : "string",
-  "password" : "string": 
+  "password" : "string"
 }
-
 ```
 
 ```
@@ -171,18 +170,67 @@ Response / 200 OK
 
 ### 회원 API
 <details>
-<summary>로그인</summary>
+<summary>웹툰 구독자 회원 등록</summary>
 
-`POST /v1/auth/authenticate`
+`POST /v1/members`
 
 ```
 Request
 {
+  "name" : "string",
   "email" : "string",
-  "password" : "string": 
+  "password" : "string"
 }
+```
 
 ```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>웹툰 구독자 회원 조회</summary>
+
+`GET /v1/members/{id}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>웹툰 구독자 회원 등급 변경</summary>
+
+`PATCH /v1/members/{id}`
+
+```
+Request
+{
+  "membershipStatus" : "string"
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>내 정보 조회</summary>
+
+`GET /v1/members/my`
 
 ```
 Response / 200 OK
@@ -196,66 +244,497 @@ Response / 200 OK
 
 ### 웹툰 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>웹툰 등록</summary>
 
-여기가 자세한 내용?
+`POST /v1/webtoons`
 
+```
+Request
+{
+  "request": {
+    "title": "string",
+    "writerName": "string",
+    "genre": "string"
+  },
+  "image": "string"
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>웹툰 이미지 조회</summary>
+
+`GET /v1/webtoons/{id}/images/{fileName}`
+
+```
+Response / 200 OK
+{
+  string
+}
+```
+---
+</details>
+<details>
+<summary>웹툰 조회</summary>
+
+`GET /v1/webtoons/{id}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>웹툰 전체 조회</summary>
+
+`GET /v1/webtoons`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>인증한 회원이 게시한 웹툰 전체 조회</summary>
+
+`GET /v1/webtoons/my`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 댓글 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>댓글 등록</summary>
 
-여기가 자세한 내용?
+`POST /v1/comments`
 
+```
+Request
+{
+  "webtoonId": 0,
+  "content": "string"
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>댓글 조회</summary>
+
+`GET /v1/comments/{id}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>특정 웹툰의 모든 댓글 조회</summary>
+
+`GET /v1/comments`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 쿠키 지갑 API
 <details>
+<summary>쿠키 지갑 조회</summary>
+
+`GET /v1/cookie-wallets`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>내 쿠키 지갑 조회</summary>
+
+`GET /v1/cookie-wallets/my`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
 <summary>쿠키 증가</summary>
 
-여기가 자세한 내용?
+`PUT /v1/cookie-wallets/increase`
 
+```
+Request
+{
+  "quantity": 0
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>쿠키 감소</summary>
+
+`PUT /v1/cookie-wallets/decrease`
+
+```
+Request
+{
+   "quantity": 0
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 비속어 경고 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>비속어 카운트 조회</summary>
 
-여기가 자세한 내용?
+`GET /v1/bad-words-warning-count`
 
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>비속어 카운트 증가</summary>
+
+`PUT /v1/bad-words-warning-count/increase`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>내 비속어 카운트 조회</summary>
+
+`GET /v1/bad-words-warning-count/my`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 웹툰 결제 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>웹툰 미리보기 결제</summary>
 
-여기가 자세한 내용?
+`POST /v1/webtoon-payments`
 
+```
+Request
+{
+  "memberId": 0,
+  "webtoonId": 0,
+  "webtoonDetailId": 0
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>특정 회원 웹툰 결제 내역 단건 조회</summary>
+
+`GET /v1/webtoon-payments/{memberId}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 쿠키 결제 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>쿠키 결제</summary>
 
-여기가 자세한 내용?
+`POST /v1/cookie-payments`
 
+```
+Request
+{
+  "getMemberId": 0,
+  "quantity": 2147483647
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>특정 회원 쿠키 결제 내역 단건 조회</summary>
+
+`GET /v1/cookie-payments/{memberId}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 프로모션 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>프로모션 등록</summary>
 
-여기가 자세한 내용?
+`POST /v1/promotions`
 
+```
+Request
+{
+  "description": "string",
+  "discountType": "CASH_DISCOUNT",
+  "discountRate": 0,
+  "discountQuantity": 0,
+  "isDiscountDuplicatable": true,
+  "startDate": "2024-07-14T07:10:18.145Z",
+  "endDate": "2024-07-14T07:10:18.145Z",
+  "promotionAttributes": [
+    {
+      "attributeName": "string",
+      "attributeValue": "string"
+    }
+  ]
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>프로모션 삭제(종료)</summary>
+
+`DELETE /v1/promotions/{id}`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+<details>
+<summary>현재 적용 가능한 모든 프로모션 조회</summary>
+
+`GET /v1/promotions/now`
+
+```
+Response / 200 OK
+{
+  "statusMessage": "string",
+  "data": [
+    {
+      "promotionId": 0,
+      "description": "string",
+      "discountType": "CASH_DISCOUNT",
+      "discountRate": 0,
+      "discountQuantity": 0,
+      "isDiscountDuplicatable": true,
+      "startDate": "2024-07-14T07:39:29.607Z",
+      "endDate": "2024-07-14T07:39:29.607Z"
+    }
+  ]
+}
+```
+---
+</details>
+<details>
+<summary>현재 적용 가능한 프로모션에 포함된 모든 프로모션 속성 조회</summary>
+
+`GET /v1/promotions/now/{id}`
+
+```
+Response / 200 OK
+{
+  "statusMessage": "string",
+  "data": [
+    {
+      "attributeId": 0,
+      "promotionId": 0,
+      "attributeName": "string",
+      "attributeValue": "string"
+    }
+  ]
+}
+```
+---
+</details>
+<details>
+<summary>종료된 모든 프로모션 조회</summary>
+
+`GET /v1/promotions/ended`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 ### 정책 API
 <details>
-<summary>쿠키 증가</summary>
+<summary>정책 등록</summary>
 
-여기가 자세한 내용?
+`POST /v1/policies`
 
+```
+Request
+{
+  "policyName": "string",
+  "startDate": "2024-07-14T07:44:07.802Z",
+  "endDate": "2024-07-14T07:44:07.802Z",
+  "cookiePrice": 0,
+  "cookieQuantityPerEpisode": 0,
+  "warningThreshold": 0
+}
+```
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+
+<details>
+<summary>쿠키 정책 조회</summary>
+
+`GET /v1/policies/cookie-policy`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
+</details>
+
+<details>
+<summary>비속어 정책 조회</summary>
+
+`GET /v1/policies/bad-words-policy`
+
+```
+Response / 200 OK
+{
+  "statusMessage" : "string",
+  "data" : {}
+}
+```
+---
 </details>
 
 <br><br>
