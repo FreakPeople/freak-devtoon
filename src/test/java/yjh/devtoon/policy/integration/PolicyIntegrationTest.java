@@ -40,8 +40,8 @@ public class PolicyIntegrationTest {
 
         private static final String COOKIE_POLICY_NAME = "COOKIE_POLICY";
         private static final String BAD_WORDS_POLICY_NAME = "BAD_WORDS_POLICY";
-        private static final LocalDateTime START_DATE = LocalDateTime.parse("2024-05-02T00:00");
-        private static final LocalDateTime END_DATE = LocalDateTime.parse("2024-12-31T23:59:59");
+        private static final LocalDateTime START_DATE = LocalDateTime.now().minusDays(1);
+        private static final LocalDateTime END_DATE = LocalDateTime.now().plusMonths(12);
         private static final BigDecimal COOKIE_PRICE = BigDecimal.valueOf(200);
         private static final int COOKIE_QUANTITY_PER_EPISODE = 3;
         private static final int WARNING_THRESHOLD = 3;

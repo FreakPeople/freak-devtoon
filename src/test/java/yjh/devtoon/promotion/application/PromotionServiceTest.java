@@ -51,8 +51,8 @@ class PromotionServiceTest {
         private static final BigDecimal DISCOUNT_RATE = null;
         private static final Integer DISCOUNT_QUANTITY = 1;
         private static final Boolean IS_DISCOUNT_DUPLICATABLE = true;
-        private static final LocalDateTime STARTDATE = LocalDateTime.of(2024, 5, 13, 13, 50, 0);
-        private static final LocalDateTime ENDDATE = LocalDateTime.of(2024, 8, 15, 11, 59, 59);
+        private static final LocalDateTime STARTDATE = LocalDateTime.now().plusDays(1);
+        private static final LocalDateTime ENDDATE = LocalDateTime.now().plusDays(30);
         private static final List<PromotionAttributeCreateRequest> PROMOTION_ATTRIBUTES = List.of(
                 new PromotionAttributeCreateRequest("target-month", "7"),
                 new PromotionAttributeCreateRequest("target-genre", "thriller")
