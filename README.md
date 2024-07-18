@@ -759,15 +759,17 @@ Response / 200 OK
 
 
 ## 8. 스터디
-<a href='https://lealea.tistory.com/327'>✏️ 프로젝트 기획부터 설계까지</a>  
-<a href='https://lealea.tistory.com/328'>✏️ Git 활용하여 자신있게 프로젝트 협업하기</a>  
-<a href='https://lealea.tistory.com/332'>✏️ 다양한 정책을 쉽게 등록하고 삭제하기</a>  
-<a href='https://lealea.tistory.com/333'>✏️ 이제 너만 믿는다, 테스트 코드 작성하기</a>  
-<a href='https://lealea.tistory.com/336'>✏️ 리팩토링 모음.zip</a>  
-<a href='https://lealea.tistory.com/337'>✏️ 리팩토링: 프로모션 조회 설계 개선 및 성능 최적화 도전하기 - 설계 편</a>  
-<a href='https://lealea.tistory.com/338'>✏️ 리팩토링: 프로모션 조회 설계 개선 및 성능 최적화 도전하기 - 성능 최적화 편</a>  
-<a href='https://lealea.tistory.com/339'>✏️ 리팩토링: 쿠키 결제 로직 4단계로 개선하기 (feat. 원시값 포장)</a>  
-<a href='https://wlgns2305.tistory.com/category/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EB%8D%B0%EB%B8%8C%ED%88%B0'>✏️ 스프링 환경에서 비동기 프로그래밍 적용해보기</a>
+✏️ <a href='https://lealea.tistory.com/327'>프로젝트 기획부터 설계까지</a>  
+✏️ <a href='https://lealea.tistory.com/328'>Git 활용하여 자신있게 프로젝트 협업하기</a>  
+✏️ <a href='https://lealea.tistory.com/332'>다양한 정책을 쉽게 등록하고 삭제하기</a>  
+✏️ <a href='https://lealea.tistory.com/333'>이제 너만 믿는다, 테스트 코드 작성하기</a>  
+✏️ <a href='https://lealea.tistory.com/336'>리팩토링 모음.zip</a>  
+✏️ <a href='https://lealea.tistory.com/337'>리팩토링: 프로모션 조회 설계 개선 및 성능 최적화 도전하기 - 설계 편</a>  
+✏️ <a href='https://lealea.tistory.com/338'>리팩토링: 프로모션 조회 설계 개선 및 성능 최적화 도전하기 - 성능 최적화 편</a>  
+✏️ <a href='https://lealea.tistory.com/339'>리팩토링: 쿠키 결제 로직 4단계로 개선하기 (feat. 원시값 포장)</a>  
+✏️ <a href='https://wlgns2305.tistory.com/category/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8/%EB%8D%B0%EB%B8%8C%ED%88%B0'>스프링 환경에서 비동기 프로그래밍 적용해보기</a>  
+✏️ <a href='https://wlgns2305.tistory.com/entry/%EB%8D%B0%EB%B8%8C%ED%88%B0-CI-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0'>CI 적용하기</a>
+
 
 <br><br>
 
