@@ -52,58 +52,65 @@ WHERE NOT EXISTS (
 -- 프로모션 1 (과거 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
                        start_date, end_date, deleted_at, created_at, updated_at)
-SELECT '프로모션 1', 'COOKIE_QUANTITY_DISCOUNT', 3, TRUE, '2024-04-01 00:00:00', '2024-05-01
-00:00:00', '2024-06-15 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 1', 'COOKIE_QUANTITY_DISCOUNT', 3, TRUE, DATE_SUB(CURDATE(), INTERVAL 3 MONTH),
+       DATE_SUB(CURDATE(), INTERVAL 2 MONTH), DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 1');
 
 -- 프로모션 2 (과거 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
                        start_date, end_date, deleted_at, created_at, updated_at)
-SELECT '프로모션 2', 'COOKIE_QUANTITY_DISCOUNT', 2, FALSE, '2024-03-01 00:00:00', '2024-03-31
-00:00:00', '2024-06-16 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 2', 'COOKIE_QUANTITY_DISCOUNT', 2, FALSE, DATE_SUB(CURDATE(), INTERVAL 2 MONTH),
+       DATE_SUB(CURDATE(), INTERVAL 1 MONTH), DATE_SUB(CURDATE(), INTERVAL 1 MONTH),
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 2');
 
 -- 프로모션 3 (과거 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable,
                        start_date, end_date, deleted_at, created_at, updated_at)
-SELECT '프로모션 3', 'COOKIE_QUANTITY_DISCOUNT', 4, TRUE, '2024-02-01 00:00:00', '2024-02-28
-00:00:00', '2024-06-17 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 3', 'COOKIE_QUANTITY_DISCOUNT', 4, TRUE, DATE_SUB(CURDATE(), INTERVAL 1 MONTH),
+       DATE_SUB(CURDATE(), INTERVAL 1 DAY), DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 3');
 
--- 프로모션 4
+-- 프로모션 4 (현재 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 4', 'COOKIE_QUANTITY_DISCOUNT', 10, TRUE, '2024-06-01 00:00:00', '2024-06-29
-00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 4', 'COOKIE_QUANTITY_DISCOUNT', 10, TRUE, DATE_SUB(CURDATE(), INTERVAL 1 DAY),
+       DATE_ADD(CURDATE(), INTERVAL 1 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 4');
 
--- 프로모션 5
+-- 프로모션 5 (현재 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 5', 'COOKIE_QUANTITY_DISCOUNT', 5, FALSE, '2024-06-02 00:00:00', '2024-06-30
-00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 5', 'COOKIE_QUANTITY_DISCOUNT', 5, FALSE, DATE_SUB(CURDATE(), INTERVAL 5 DAY),
+       DATE_ADD(CURDATE(), INTERVAL 3 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 5');
 
--- 프로모션 6
+-- 프로모션 6 (현재 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 6', 'COOKIE_QUANTITY_DISCOUNT', 7, TRUE, '2024-05-01 00:00:00', '2024-06-28
-00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 6', 'COOKIE_QUANTITY_DISCOUNT', 7, TRUE, DATE_SUB(CURDATE(), INTERVAL 3 DAY),
+       DATE_ADD(CURDATE(), INTERVAL 6 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 6');
 
 -- 프로모션 7 (미래 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 7', 'COOKIE_QUANTITY_DISCOUNT', 8, FALSE, '2024-07-01 00:00:00', '2024-08-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 7', 'COOKIE_QUANTITY_DISCOUNT', 8, FALSE, DATE_ADD(CURDATE(), INTERVAL 1 MONTH),
+       DATE_ADD(CURDATE(), INTERVAL 2 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 7');
 
 -- 프로모션 8 (미래 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 8', 'COOKIE_QUANTITY_DISCOUNT', 6, FALSE, '2024-08-01 00:00:00', '2024-09-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 8', 'COOKIE_QUANTITY_DISCOUNT', 6, FALSE, DATE_ADD(CURDATE(), INTERVAL 1 MONTH),
+       DATE_ADD(CURDATE(), INTERVAL 3 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 8');
 
 -- 프로모션 9 (미래 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 9', 'COOKIE_QUANTITY_DISCOUNT', 9, TRUE, '2024-09-01 00:00:00', '2024-10-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 9', 'COOKIE_QUANTITY_DISCOUNT', 9, TRUE,DATE_ADD(CURDATE(), INTERVAL 2 MONTH),
+       DATE_ADD(CURDATE(), INTERVAL 4 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 9');
 
 -- 프로모션 10 (미래 프로모션)
 INSERT INTO promotion (description, discount_type, discount_quantity, is_discount_duplicatable, start_date, end_date, created_at, updated_at)
-SELECT '프로모션 10', 'COOKIE_QUANTITY_DISCOUNT', 1, TRUE, '2024-11-01 00:00:00', '2024-12-01 00:00:00', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+SELECT '프로모션 10', 'COOKIE_QUANTITY_DISCOUNT', 1, TRUE, DATE_ADD(CURDATE(), INTERVAL 1 DAY),
+       DATE_ADD(CURDATE(), INTERVAL 1 MONTH), CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 WHERE NOT EXISTS (SELECT 1 FROM promotion WHERE description = '프로모션 10');
