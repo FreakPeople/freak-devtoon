@@ -15,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.redis.core.RedisTemplate;
 import yjh.devtoon.promotion.domain.DiscountType;
 import yjh.devtoon.promotion.domain.PromotionEntity;
 import yjh.devtoon.promotion.dto.request.PromotionAttributeCreateRequest;
@@ -39,6 +40,9 @@ class PromotionServiceTest {
 
     @Mock
     private PromotionCacheService promotionCacheService;
+
+    @Mock
+    private RedisTemplate<String, List<PromotionEntity>> promotionRedisTemplate;
 
     @Captor
     private ArgumentCaptor<PromotionEntity> promotionEntityCaptor;
